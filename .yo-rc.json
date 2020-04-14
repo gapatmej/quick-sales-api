@@ -1,0 +1,39 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "ec.com.newsolutions",
+      "nativeLanguage": "es"
+    },
+    "jhipsterVersion": "6.7.1",
+    "applicationType": "monolith",
+    "baseName": "QuickSalesAPI",
+    "packageName": "ec.com.newsolutions",
+    "packageFolder": "ec/com/newsolutions",
+    "serverPort": "8080",
+    "authenticationType": "jwt",
+    "cacheProvider": "no",
+    "websocket": "spring-websocket",
+    "databaseType": "sql",
+    "devDatabaseType": "postgresql",
+    "prodDatabaseType": "postgresql",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": false,
+    "buildTool": "gradle",
+    "enableSwaggerCodegen": false,
+    "jwtSecretKey": "NmFmODZmZGM4MGRjYTJkODllMDMxMmRkYWE2YzMwOWYzY2Q2MmEyNDNjMmQ5ODVlYzhmMjQwMDFjZGZhZmRmYmQyYjQ4NWJlZGE1YmI4OTNkNWI2YmFmOTk1ZWU2NGNhN2ZlN2UzZDUyOWI4YjRiNDZlNGNhNTU5MWM2ZmM3MzE=",
+    "embeddableLaunchScript": false,
+    "creationTimestamp": 1586830804347,
+    "testFrameworks": ["cucumber"],
+    "jhiPrefix": "jhi",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [],
+    "enableTranslation": true,
+    "clientPackageManager": "npm",
+    "nativeLanguage": "es",
+    "languages": ["es", "en"],
+    "blueprints": [],
+    "skipClient": true
+  }
+}
