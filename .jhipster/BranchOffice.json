@@ -1,0 +1,54 @@
+{
+    "name": "BranchOffice",
+    "fields": [
+        {
+            "fieldName": "businessName",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "address",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "phone",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "movilPhone",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "establishmentCode",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "max"
+            ],
+            "fieldValidateRulesMax": "999"
+        },
+        {
+            "fieldName": "emissionPointCode",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "max"
+            ],
+            "fieldValidateRulesMax": "999"
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20200426222800",
+    "entityTableName": "branch_office",
+    "dto": "no",
+    "pagination": "infinite-scroll",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

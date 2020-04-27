@@ -1,0 +1,40 @@
+{
+    "name": "Document",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "prefix",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "documentType",
+            "fieldType": "DocumentTypeEnum",
+            "fieldValues": "INVOICE,CREDIT_NOTE,DEBIT_NOTE,REFERRAL_GUIDE,RETENTION_RECEIPT"
+        },
+        {
+            "fieldName": "sequential",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "max"
+            ],
+            "fieldValidateRulesMax": "99999999"
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20200426222900",
+    "entityTableName": "document",
+    "dto": "no",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

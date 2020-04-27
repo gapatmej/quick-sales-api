@@ -14,6 +14,28 @@
     <property name="uuidType" value="uuid" dbms="h2, postgresql"/>
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200426222700_added_entity_Organization.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200426222800_added_entity_BranchOffice.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200426222900_added_entity_Document.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200426223000_added_entity_Company.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200426223100_added_entity_SubCategory.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200426223200_added_entity_Category.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200426223300_added_entity_Cellar.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200426223400_added_entity_Product.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200426223500_added_entity_Tax.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200426223600_added_entity_Payment.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200426223700_added_entity_PayWay.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200426223800_added_entity_TaxInvoice.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200426223900_added_entity_InvoiceClient.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200426224000_added_entity_TaxDetailInvoice.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200426224100_added_entity_DetailInvoice.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
+    <include file="config/liquibase/changelog/20200426223100_added_entity_constraints_SubCategory.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200426223400_added_entity_constraints_Product.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200426223600_added_entity_constraints_Payment.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200426223800_added_entity_constraints_TaxInvoice.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200426223900_added_entity_constraints_InvoiceClient.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200426224000_added_entity_constraints_TaxDetailInvoice.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200426224100_added_entity_constraints_DetailInvoice.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 </databaseChangeLog>

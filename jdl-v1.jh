@@ -1,0 +1,264 @@
+enum TokenEnum {
+  EXPORTED_CERTIFICATE,
+  IKEY_2032,
+  ALADDIN_E_TOKEN_PRO,
+  BIO_PASS_300
+}
+
+enum SRIEnviromentEnum {
+	TEST ,
+	PRODUCTION 
+}
+
+enum DocumentTypeEnum {
+  INVOICE,
+  CREDIT_NOTE,
+  DEBIT_NOTE,
+  REFERRAL_GUIDE,
+  RETENTION_RECEIPT 
+}
+
+enum IdentificationTypeEnum {
+  RUC,
+  IDENTIFICATION_CARD,
+  PASSPORT
+}
+
+enum TimeUnitEnum {
+  DAY,
+  MONTH,
+  YEAR
+}
+
+enum ProductTypeEnum {
+	GOOD,
+    SERVICE
+}
+
+enum TaxTypeEnum {
+	IVA,
+    ICE
+}
+
+enum CurrencyEnum {
+	DOLAR,
+    EURO
+}
+
+enum EmissionTypeEnum {
+	NORMAL
+}
+
+entity Organization {
+	identification String required,
+    businessName String required,
+    tradename String required,
+    address String required,
+    phone String ,
+    movilPhone String ,  
+    specialTaxpayerNumber Integer max (99999),
+    isKeepAccounting Boolean required,
+    logo String ,
+    token TokenEnum required,
+    mail String required
+}
+paginate Organization with pagination
+
+entity BranchOffice{
+	businessName String required,
+    address String required,
+    phone String ,
+    movilPhone String ,
+    establishmentCode Integer max (999),
+    emissionPointCode Integer max (999)
+}
+paginate BranchOffice with pagination
+
+entity Document{
+	name String required,
+    prefix String ,
+    documentType DocumentTypeEnum,
+    sequential Integer max (99999999)
+}
+paginate Document with pagination
+
+entity Company{
+    businessName String required,
+    tradename String ,
+    identificationType IdentificationTypeEnum required,
+    isClient Boolean required,
+    isProvider Boolean required,
+    address String required,
+    phone String ,
+    movilPhone String ,  
+    email String required
+}
+paginate Company with pagination
+
+entity SubCategory{
+    predetermined Boolean required
+	code String required,
+    name String required,
+    description String,
+}
+paginate SubCategory with pagination
+
+entity Category{
+	predetermined Boolean required
+	code String required,
+    name String required,
+    description String,
+}
+paginate Category with pagination
+
+relationship OneToMany {
+	Category to SubCategory{category},
+}
+
+entity Cellar{
+	predetermined Boolean required
+	code String required,
+    name String required,
+    address String ,
+    description String,
+}
+paginate Cellar with pagination
+
+entity Product{
+	mainCode String required,
+    auxiliaryCode String,
+    barcode String,
+    productType ProductTypeEnum
+    name String required,
+    price BigDecimal required min (0),
+    attribute1 String ,
+    attribute2 String ,
+    attribute3 String ,
+}
+paginate Product with pagination
+
+// defining multiple oneToOne relationships
+relationship OneToOne {
+	Product{iva required} to Tax,
+    Product{ice} to Tax,
+    Product{category required} to Category,
+    Product{subCategory required} to SubCategory,
+}
+
+relationship ManyToOne {
+	Product{cellar} to Cellar,
+}
+
+entity Tax{
+	code String required unique,
+    description String required,
+    percentage Float required,
+    taxType TaxTypeEnum required,
+}
+paginate Tax with pagination
+
+entity Payment{
+	date Instant required,
+    amount BigDecimal required min(0), 
+    term Integer min (0),
+    timeUnit TimeUnitEnum,
+    decription String
+}
+paginate Payment with pagination
+
+relationship ManyToOne {
+	Payment{wayPay required} to PayWay 
+}
+
+entity PayWay{
+    code Integer required max(99) unique,
+	description String required
+}
+paginate PayWay with pagination
+
+entity TaxInvoice{
+	code Integer required,
+    percentageCode Integer required,
+    taxBase BigDecimal required,
+    amount BigDecimal required
+}
+paginate TaxInvoice with pagination
+
+entity InvoiceClient{
+	sRIEnviroment SRIEnviromentEnum required,
+    emissionType EmissionTypeEnum required,
+    businessName String required,
+    password String required,
+    codeDocument String required,
+  	dateIssue Instant required,
+    identificationType IdentificationTypeEnum
+    identification String required,
+    businessName String required,
+    address String ,
+    phone String ,
+    email String required,
+    totalTaxFree BigDecimal required min(0),
+    totalDiscount BigDecimal required min(0),
+    totalBaseTaxIVA BigDecimal required min(0),
+    totalBaseTaxICE BigDecimal required min(0),
+    totalTaxIVA BigDecimal required min (0),
+    totalTaxICE BigDecimal required min (0),
+    tip BigDecimal required min (0),
+    total BigDecimal required min(0),
+    currency CurrencyEnum required 
+}
+paginate InvoiceClient with pagination
+
+relationship OneToMany {
+	InvoiceClient to Payment{invoice},
+    InvoiceClient to DetailInvoice{invoice}
+    InvoiceClient to TaxInvoice{invoice}
+}
+
+relationship ManyToOne {
+	InvoiceClient{client} to Company,
+    InvoiceClient{document} to Document,
+}
+
+entity TaxDetailInvoice{
+	code Integer required,
+    percentageCode Integer required,
+    rate Integer required,
+    taxBase BigDecimal required,
+    amount BigDecimal required
+}
+paginate TaxDetailInvoice with pagination
+
+entity DetailInvoice{
+	mainCode String required,
+    auxiliaryCode String,
+    description String,
+	quantity BigDecimal required min(0),
+    unitPrice BigDecimal required min(0),
+    discount BigDecimal required min (0),
+    total BigDecimal required min (0)
+}
+paginate DetailInvoice with pagination
+
+relationship OneToMany {
+	DetailInvoice to TaxDetailInvoice{detailInvoice},
+}
+
+relationship ManyToOne {
+	DetailInvoice{product} to Product,
+}
+
+service all with serviceImpl 
+
+
+
+
+
+
+
+
+
+
+
+
+    
