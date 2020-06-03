@@ -1,11 +1,8 @@
 id;code;description;percentage;tax_type
-1;Soft;Pre-emptive portals Home Loan Account;7287;IVA
-2;Djibouti;Fantastic;61952;IVA
-3;Gourde US Dollar bypassing architectures;Gorgeous Cotton Table;57298;ICE
-4;Gorgeous Small deliverables;Facilitator;53844;IVA
-5;Computer;Corners olive Home Loan Account;69807;ICE
-6;Progressive red Fresh;connect RAM;71461;ICE
-7;Investment Account AI Intelligent Wooden Mouse;Computers;53518;ICE
-8;Hawaii Specialist Licensed Wooden Shirt;Russian Federation Granite;11795;ICE
-9;Licensed Granite Soap;multi-byte;59071;IVA
-10;hacking Bacon bifurcated;FTP systemic alliance;29392;IVA
+1;0;Impuesto al Valor Agregado 0%;0;IVA
+2;2;Impuesto al Valor Agregado 12%;12;IVA
+3;3;Impuesto al Valor Agregado 14%;14;IVA
+4;6;No objeto de Impuesto;0;IVA
+5;7;Exento de Impuesto al Valor Agregado;0;IVA
+6;3023;ICE Productos del Tabaco y Sucedáneos del Tabaco excepto Cigarrillos;150;ICE
+7;3031;ICE Bebidas Alcohólicas;75;ICE
