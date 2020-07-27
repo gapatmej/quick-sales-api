@@ -25,7 +25,7 @@ public class Product implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "main_code", nullable = false)
+    @Column(name = "main_code", nullable = false, unique = true)
     private String mainCode;
 
     @Column(name = "auxiliary_code")
@@ -56,27 +56,28 @@ public class Product implements Serializable {
     @Column(name = "attribute_3")
     private String attribute3;
 
-    @OneToOne(optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
-    @JoinColumn(unique = true)
+    @JoinColumn(name="tax_iva_id", nullable = false)
     private Tax iva;
 
-    @OneToOne
-    @JoinColumn(unique = true)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn( name="tax_ice_id")
     private Tax ice;
 
-    @OneToOne(optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
-    @JoinColumn(unique = true)
+    @JoinColumn(name="category_id" , nullable = false)
     private Category category;
 
-    @OneToOne(optional = false)
+    @ManyToOne(fetch = FetchType.LAZY)
     @NotNull
-    @JoinColumn(unique = true)
+    @JoinColumn(name="sub_category_id", nullable = false)
     private SubCategory subCategory;
 
     @ManyToOne
     @JsonIgnoreProperties("products")
+    @JoinColumn(name="cellar_id")
     private Cellar cellar;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

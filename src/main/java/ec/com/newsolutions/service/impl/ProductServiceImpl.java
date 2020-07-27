@@ -1,5 +1,6 @@
 package ec.com.newsolutions.service.impl;
 
+import com.google.common.base.Strings;
 import ec.com.newsolutions.service.ProductService;
 import ec.com.newsolutions.domain.Product;
 import ec.com.newsolutions.repository.ProductRepository;
@@ -48,9 +49,15 @@ public class ProductServiceImpl implements ProductService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<Product> findAll(Pageable pageable) {
+    public Page<Product> findAll(Pageable pageable, String query) {
         log.debug("Request to get all Products");
-        return productRepository.findAll(pageable);
+
+        if(Strings.isNullOrEmpty(query)){
+            return productRepository.findAll(pageable);
+        } else{
+            return productRepository.search(pageable, query);
+        }
+
     }
 
     /**

@@ -26,7 +26,7 @@ public interface ProductService {
      * @param pageable the pagination information.
      * @return the list of entities.
      */
-    Page<Product> findAll(Pageable pageable);
+    Page<Product> findAll(Pageable pageable, String query);
 
     /**
      * Get the "id" product.

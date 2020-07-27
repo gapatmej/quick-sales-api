@@ -36,7 +36,8 @@ public class SubCategory implements Serializable {
     @Column(name = "description")
     private String description;
 
-    @ManyToOne
+
+    @ManyToOne(optional = false)
     @JsonIgnoreProperties("subCategories")
     private Category category;
 

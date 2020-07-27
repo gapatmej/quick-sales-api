@@ -261,6 +261,7 @@ dependencies {
     implementation "org.springframework.security:spring-security-web"
     implementation "org.springframework.security:spring-security-messaging"
     implementation "io.jsonwebtoken:jjwt-api"
+    implementation("com.google.guava:guava:29.0-jre")
     if (!project.hasProperty("gae")) {
         runtimeOnly "io.jsonwebtoken:jjwt-impl"
         runtimeOnly "io.jsonwebtoken:jjwt-jackson"
