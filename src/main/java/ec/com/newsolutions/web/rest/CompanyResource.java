@@ -91,9 +91,9 @@ public class CompanyResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of companies in body.
      */
     @GetMapping("/companies")
-    public ResponseEntity<List<Company>> getAllCompanies(Pageable pageable) {
+    public ResponseEntity<List<Company>> getAllCompanies(@RequestParam(name = "query", required = false) String query, Pageable pageable) {
         log.debug("REST request to get a page of Companies");
-        Page<Company> page = companyService.findAll(pageable);
+        Page<Company> page = companyService.findAll(pageable, query);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

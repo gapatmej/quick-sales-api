@@ -26,7 +26,7 @@ public interface CompanyService {
      * @param pageable the pagination information.
      * @return the list of entities.
      */
-    Page<Company> findAll(Pageable pageable);
+    Page<Company> findAll(Pageable pageable, String query);
 
     /**
      * Get the "id" company.

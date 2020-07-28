@@ -1,5 +1,6 @@
 package ec.com.newsolutions.service.impl;
 
+import com.google.common.base.Strings;
 import ec.com.newsolutions.service.CompanyService;
 import ec.com.newsolutions.domain.Company;
 import ec.com.newsolutions.repository.CompanyRepository;
@@ -48,9 +49,15 @@ public class CompanyServiceImpl implements CompanyService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<Company> findAll(Pageable pageable) {
+    public Page<Company> findAll(Pageable pageable, String query) {
         log.debug("Request to get all Companies");
-        return companyRepository.findAll(pageable);
+
+        if(Strings.isNullOrEmpty(query)){
+            return companyRepository.findAll(pageable);
+        } else{
+            return companyRepository.search(pageable, query);
+        }
+
     }
 
     /**

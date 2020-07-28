@@ -35,6 +35,10 @@ public class Company implements Serializable {
     private IdentificationTypeEnum identificationType;
 
     @NotNull
+    @Column(name = "identification", nullable = false)
+    private String identification;
+
+    @NotNull
     @Column(name = "is_client", nullable = false)
     private Boolean isClient;
 
@@ -102,6 +106,14 @@ public class Company implements Serializable {
 
     public void setIdentificationType(IdentificationTypeEnum identificationType) {
         this.identificationType = identificationType;
+    }
+
+    public String getIdentification() {
+        return identification;
+    }
+
+    public void setIdentification(String identification) {
+        this.identification = identification;
     }
 
     public Boolean isIsClient() {
@@ -206,6 +218,7 @@ public class Company implements Serializable {
             ", businessName='" + getBusinessName() + "'" +
             ", tradename='" + getTradename() + "'" +
             ", identificationType='" + getIdentificationType() + "'" +
+            ", identification='" + getIdentification()+ "'" +
             ", isClient='" + isIsClient() + "'" +
             ", isProvider='" + isIsProvider() + "'" +
             ", address='" + getAddress() + "'" +

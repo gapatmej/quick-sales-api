@@ -1,3 +1,0 @@
-entity Region {
-	regionName String
-}
