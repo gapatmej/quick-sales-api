@@ -48,11 +48,11 @@ public class InvoiceClient implements Serializable {
     private String businessName;
 
     @NotNull
-    @Column(name = "password", nullable = false)
+    @Column(name = "password", nullable = false, unique = true)
     private String password;
 
     @NotNull
-    @Column(name = "code_document", nullable = false)
+    @Column(name = "code_document", nullable = false, unique = true)
     private String codeDocument;
 
     @NotNull
@@ -131,11 +131,13 @@ public class InvoiceClient implements Serializable {
     @OneToMany(mappedBy = "invoice")
     private Set<TaxInvoice> taxInvoices = new HashSet<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="company_id", nullable = false)
     @JsonIgnoreProperties("invoiceClients")
-    private Company client;
+    private Company company;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="document_id", nullable = false)
     @JsonIgnoreProperties("invoiceClients")
     private Document document;
 
@@ -483,17 +485,17 @@ public class InvoiceClient implements Serializable {
         this.taxInvoices = taxInvoices;
     }
 
-    public Company getClient() {
-        return client;
+    public Company getCompany() {
+        return company;
     }
 
     public InvoiceClient client(Company company) {
-        this.client = company;
+        this.company = company;
         return this;
     }
 
-    public void setClient(Company company) {
-        this.client = company;
+    public void setCompany(Company company) {
+        this.company = company;
     }
 
     public Document getDocument() {

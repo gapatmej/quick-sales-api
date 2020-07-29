@@ -75,7 +75,6 @@ public class Product implements Serializable {
     @JoinColumn(name="sub_category_id", nullable = false)
     private SubCategory subCategory;
 
-    @ManyToOne
     @JsonIgnoreProperties("products")
     @JoinColumn(name="cellar_id")
     private Cellar cellar;

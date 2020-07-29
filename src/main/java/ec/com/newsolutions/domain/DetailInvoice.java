@@ -31,7 +31,8 @@ public class DetailInvoice implements Serializable {
     @Column(name = "auxiliary_code")
     private String auxiliaryCode;
 
-    @Column(name = "description")
+    @NotNull
+    @Column(name = "description", nullable = false)
     private String description;
 
     @NotNull
@@ -57,12 +58,14 @@ public class DetailInvoice implements Serializable {
     @OneToMany(mappedBy = "detailInvoice")
     private Set<TaxDetailInvoice> taxDetailInvoices = new HashSet<>();
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="product_id", nullable = false)
     @JsonIgnoreProperties("detailInvoices")
     private Product product;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties("detailInvoices")
+    @JoinColumn(name="invoice_client_id", nullable = false)
     private InvoiceClient invoice;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

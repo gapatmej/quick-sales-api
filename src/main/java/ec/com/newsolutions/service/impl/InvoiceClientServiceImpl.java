@@ -1,5 +1,8 @@
 package ec.com.newsolutions.service.impl;
 
+import ec.com.newsolutions.domain.enumeration.CurrencyEnum;
+import ec.com.newsolutions.domain.enumeration.EmissionTypeEnum;
+import ec.com.newsolutions.domain.enumeration.SRIEnviromentEnum;
 import ec.com.newsolutions.service.InvoiceClientService;
 import ec.com.newsolutions.domain.InvoiceClient;
 import ec.com.newsolutions.repository.InvoiceClientRepository;
@@ -11,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 /**
@@ -37,6 +41,23 @@ public class InvoiceClientServiceImpl implements InvoiceClientService {
     @Override
     public InvoiceClient save(InvoiceClient invoiceClient) {
         log.debug("Request to save InvoiceClient : {}", invoiceClient);
+
+        /*Pruebas
+
+         */
+        invoiceClient.emissionType(EmissionTypeEnum.NORMAL);
+        invoiceClient.setTotal(new BigDecimal(10));
+        invoiceClient.setTotalBaseTaxICE (new BigDecimal(10));
+        invoiceClient.setTotalBaseTaxIVA(new BigDecimal(10));
+        invoiceClient.setTotalDiscount(new BigDecimal(10));
+        invoiceClient.setTotalTaxFree(new BigDecimal(10));
+        invoiceClient.setTotalTaxICE(new BigDecimal(10));
+        invoiceClient.setTotalTaxIVA(new BigDecimal(10));
+        invoiceClient.setCurrency(CurrencyEnum.DOLAR);
+        invoiceClient.setsRIEnviroment(SRIEnviromentEnum.PRODUCTION);
+        invoiceClient.setPassword("101606046406046490697979797461986456");
+
+
         return invoiceClientRepository.save(invoiceClient);
     }
 
