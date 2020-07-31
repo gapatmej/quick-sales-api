@@ -58,6 +58,8 @@ public class InvoiceClientServiceImpl implements InvoiceClientService {
         invoiceClient.setPassword("101606046406046490697979797461986456");
 
 
+        invoiceClient.getDetailInvoices().stream().forEach(d->d.setInvoice(invoiceClient));
+
         return invoiceClientRepository.save(invoiceClient);
     }
 

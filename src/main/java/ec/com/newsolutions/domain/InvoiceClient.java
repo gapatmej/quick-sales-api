@@ -125,7 +125,7 @@ public class InvoiceClient implements Serializable {
     @OneToMany(mappedBy = "invoice")
     private Set<Payment> payments = new HashSet<>();
 
-    @OneToMany(mappedBy = "invoice")
+    @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<DetailInvoice> detailInvoices = new HashSet<>();
 
     @OneToMany(mappedBy = "invoice")
