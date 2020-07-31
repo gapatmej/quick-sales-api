@@ -4,6 +4,7 @@ import com.google.common.base.Strings;
 import ec.com.newsolutions.service.ProductService;
 import ec.com.newsolutions.domain.Product;
 import ec.com.newsolutions.repository.ProductRepository;
+import org.checkerframework.checker.nullness.Opt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,7 +71,8 @@ public class ProductServiceImpl implements ProductService {
     @Transactional(readOnly = true)
     public Optional<Product> findOne(Long id) {
         log.debug("Request to get Product : {}", id);
-        return productRepository.findById(id);
+        Optional<Product> productOpt =  productRepository.findById2(id);
+        return productOpt;
     }
 
     /**
