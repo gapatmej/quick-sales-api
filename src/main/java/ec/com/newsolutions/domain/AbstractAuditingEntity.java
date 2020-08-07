@@ -1,4 +1,6 @@
 package ec.com.newsolutions.domain;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.envers.Audited;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.CreatedBy;
@@ -18,13 +20,14 @@ import javax.persistence.MappedSuperclass;
  * last modified by date.
  */
 @MappedSuperclass
+@Audited
 @EntityListeners(AuditingEntityListener.class)
 public abstract class AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @CreatedBy
-    @Column(name = "created_by", nullable = false, length = 50, updatable = false)
+    @Column(name = "created_by",  length = 50, updatable = false)
     @JsonIgnore
     private String createdBy;
 

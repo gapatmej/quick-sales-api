@@ -222,7 +222,7 @@ public class InvoiceClientResourceIT {
         assertThat(testInvoiceClient.getsRIEnviroment()).isEqualTo(DEFAULT_S_RI_ENVIROMENT);
         assertThat(testInvoiceClient.getEmissionType()).isEqualTo(DEFAULT_EMISSION_TYPE);
         assertThat(testInvoiceClient.getBusinessName()).isEqualTo(DEFAULT_BUSINESS_NAME);
-        assertThat(testInvoiceClient.getPassword()).isEqualTo(DEFAULT_PASSWORD);
+        assertThat(testInvoiceClient.getAccessKey()).isEqualTo(DEFAULT_PASSWORD);
         assertThat(testInvoiceClient.getCodeDocument()).isEqualTo(DEFAULT_CODE_DOCUMENT);
         assertThat(testInvoiceClient.getDateIssue()).isEqualTo(DEFAULT_DATE_ISSUE);
         assertThat(testInvoiceClient.getIdentificationType()).isEqualTo(DEFAULT_IDENTIFICATION_TYPE);
@@ -320,7 +320,7 @@ public class InvoiceClientResourceIT {
     public void checkPasswordIsRequired() throws Exception {
         int databaseSizeBeforeTest = invoiceClientRepository.findAll().size();
         // set the field null
-        invoiceClient.setPassword(null);
+        invoiceClient.setAccessKey(null);
 
         // Create the InvoiceClient, which fails.
 
@@ -599,7 +599,7 @@ public class InvoiceClientResourceIT {
             .andExpect(jsonPath("$.[*].total").value(hasItem(DEFAULT_TOTAL.intValue())))
             .andExpect(jsonPath("$.[*].currency").value(hasItem(DEFAULT_CURRENCY.toString())));
     }
-    
+
     @Test
     @Transactional
     public void getInvoiceClient() throws Exception {
@@ -687,7 +687,7 @@ public class InvoiceClientResourceIT {
         assertThat(testInvoiceClient.getsRIEnviroment()).isEqualTo(UPDATED_S_RI_ENVIROMENT);
         assertThat(testInvoiceClient.getEmissionType()).isEqualTo(UPDATED_EMISSION_TYPE);
         assertThat(testInvoiceClient.getBusinessName()).isEqualTo(UPDATED_BUSINESS_NAME);
-        assertThat(testInvoiceClient.getPassword()).isEqualTo(UPDATED_PASSWORD);
+        assertThat(testInvoiceClient.getAccessKey()).isEqualTo(UPDATED_PASSWORD);
         assertThat(testInvoiceClient.getCodeDocument()).isEqualTo(UPDATED_CODE_DOCUMENT);
         assertThat(testInvoiceClient.getDateIssue()).isEqualTo(UPDATED_DATE_ISSUE);
         assertThat(testInvoiceClient.getIdentificationType()).isEqualTo(UPDATED_IDENTIFICATION_TYPE);

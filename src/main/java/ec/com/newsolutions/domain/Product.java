@@ -15,7 +15,7 @@ import ec.com.newsolutions.domain.enumeration.ProductTypeEnum;
  */
 @Entity
 @Table(name = "product")
-public class Product implements Serializable {
+public class Product extends AbstractAuditingEntity  implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
