@@ -219,7 +219,7 @@ public class InvoiceClientResourceIT {
         List<InvoiceClient> invoiceClientList = invoiceClientRepository.findAll();
         assertThat(invoiceClientList).hasSize(databaseSizeBeforeCreate + 1);
         InvoiceClient testInvoiceClient = invoiceClientList.get(invoiceClientList.size() - 1);
-        assertThat(testInvoiceClient.getsRIEnviroment()).isEqualTo(DEFAULT_S_RI_ENVIROMENT);
+        assertThat(testInvoiceClient.getSriEnviroment()).isEqualTo(DEFAULT_S_RI_ENVIROMENT);
         assertThat(testInvoiceClient.getEmissionType()).isEqualTo(DEFAULT_EMISSION_TYPE);
         assertThat(testInvoiceClient.getBusinessName()).isEqualTo(DEFAULT_BUSINESS_NAME);
         assertThat(testInvoiceClient.getAccessKey()).isEqualTo(DEFAULT_PASSWORD);
@@ -266,7 +266,7 @@ public class InvoiceClientResourceIT {
     public void checksRIEnviromentIsRequired() throws Exception {
         int databaseSizeBeforeTest = invoiceClientRepository.findAll().size();
         // set the field null
-        invoiceClient.setsRIEnviroment(null);
+        invoiceClient.setSriEnviroment(null);
 
         // Create the InvoiceClient, which fails.
 
@@ -684,7 +684,7 @@ public class InvoiceClientResourceIT {
         List<InvoiceClient> invoiceClientList = invoiceClientRepository.findAll();
         assertThat(invoiceClientList).hasSize(databaseSizeBeforeUpdate);
         InvoiceClient testInvoiceClient = invoiceClientList.get(invoiceClientList.size() - 1);
-        assertThat(testInvoiceClient.getsRIEnviroment()).isEqualTo(UPDATED_S_RI_ENVIROMENT);
+        assertThat(testInvoiceClient.getSriEnviroment()).isEqualTo(UPDATED_S_RI_ENVIROMENT);
         assertThat(testInvoiceClient.getEmissionType()).isEqualTo(UPDATED_EMISSION_TYPE);
         assertThat(testInvoiceClient.getBusinessName()).isEqualTo(UPDATED_BUSINESS_NAME);
         assertThat(testInvoiceClient.getAccessKey()).isEqualTo(UPDATED_PASSWORD);

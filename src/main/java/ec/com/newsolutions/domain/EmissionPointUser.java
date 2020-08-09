@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "emission_point_user")
-public class EmissionPointUser extends AbstractAuditingEntity  implements Serializable {
+public class EmissionPointUser extends AbstractAuditingEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
@@ -14,16 +14,24 @@ public class EmissionPointUser extends AbstractAuditingEntity  implements Serial
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="emission_point_id", nullable = false)
+    @JoinColumn(name = "emission_point_id", nullable = false)
     private EmissionPoint emissionPoint;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @NotNull
     @Column(name = "is_main", nullable = false)
     private Boolean isMain = false;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public EmissionPoint getEmissionPoint() {
         return emissionPoint;

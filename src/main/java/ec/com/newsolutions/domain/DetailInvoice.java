@@ -1,5 +1,6 @@
 package ec.com.newsolutions.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
@@ -64,7 +65,7 @@ public class DetailInvoice implements Serializable {
     private Product product;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties("detailInvoices")
+    @JsonBackReference
     @JoinColumn(name="invoice_client_id", nullable = false)
     private InvoiceClient invoice;
 

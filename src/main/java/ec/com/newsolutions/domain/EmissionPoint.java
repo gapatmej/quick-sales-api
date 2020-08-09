@@ -34,6 +34,14 @@ public class EmissionPoint extends AbstractAuditingEntity  implements Serializab
     @JoinColumn(name="branch_office_id", nullable = false)
     private BranchOffice branchOffice;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }

@@ -1,5 +1,7 @@
 package ec.com.newsolutions.service.impl;
 
+import ec.com.newsolutions.domain.enumeration.EmissionTypeEnum;
+import ec.com.newsolutions.domain.enumeration.ReceiptTypeEnum;
 import ec.com.newsolutions.domain.enumeration.SRIEnviromentEnum;
 import ec.com.newsolutions.service.InvoiceClientService;
 import ec.com.newsolutions.domain.InvoiceClient;
@@ -42,8 +44,9 @@ public class InvoiceClientServiceImpl implements InvoiceClientService {
         /*Pruebas
 
          */
-        invoiceClient.setsRIEnviroment(SRIEnviromentEnum.PRODUCTION);
+        invoiceClient.setSriEnviroment(SRIEnviromentEnum.PRODUCTION);
         invoiceClient.setAccessKey("101606046406046490697979797461986456");
+        invoiceClient.setReceiptType(ReceiptTypeEnum.INVOICE);
 
 
         invoiceClient.getDetailInvoices().stream().forEach(d->d.setInvoice(invoiceClient));

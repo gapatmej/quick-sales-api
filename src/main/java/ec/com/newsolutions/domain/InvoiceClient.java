@@ -29,13 +29,11 @@ public class InvoiceClient extends AbstractAuditingEntity implements Serializabl
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="company_id", nullable = false)
-    @JsonIgnoreProperties("invoiceClients")
     private Company company;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "s_ri_enviroment", nullable = false)
-    private SRIEnviromentEnum sRIEnviroment;
+    @Column(name = "sri_enviroment", nullable = false)
+    private SRIEnviromentEnum sriEnviroment;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -46,11 +44,9 @@ public class InvoiceClient extends AbstractAuditingEntity implements Serializabl
     @Column(name = "business_name", nullable = false)
     private String businessName;
 
-    @NotNull
     @Column(name = "accessKey", nullable = false, unique = true)
     private String accessKey;
 
-    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "receipt_type", nullable = false)
     private ReceiptTypeEnum receiptType;
@@ -64,8 +60,8 @@ public class InvoiceClient extends AbstractAuditingEntity implements Serializabl
     private String emissionPointCode;
 
     @NotNull
-    @Column(name = "sequential", nullable = false)
-    private String sequential;
+    @Column(name = "sequence", nullable = false)
+    private String sequence;
 
     @NotNull
     @Column(name = "date_issue", nullable = false)
@@ -163,12 +159,12 @@ public class InvoiceClient extends AbstractAuditingEntity implements Serializabl
         this.company = company;
     }
 
-    public SRIEnviromentEnum getsRIEnviroment() {
-        return sRIEnviroment;
+    public SRIEnviromentEnum getSriEnviroment() {
+        return sriEnviroment;
     }
 
-    public void setsRIEnviroment(SRIEnviromentEnum sRIEnviroment) {
-        this.sRIEnviroment = sRIEnviroment;
+    public void setSriEnviroment(SRIEnviromentEnum sriEnviroment) {
+        this.sriEnviroment = sriEnviroment;
     }
 
     public EmissionTypeEnum getEmissionType() {
@@ -219,12 +215,12 @@ public class InvoiceClient extends AbstractAuditingEntity implements Serializabl
         this.emissionPointCode = emissionPointCode;
     }
 
-    public String getSequential() {
-        return sequential;
+    public String getSequence() {
+        return sequence;
     }
 
-    public void setSequential(String sequential) {
-        this.sequential = sequential;
+    public void setSequence(String sequence) {
+        this.sequence = sequence;
     }
 
     public Instant getDateIssue() {
