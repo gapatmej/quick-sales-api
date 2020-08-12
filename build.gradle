@@ -208,6 +208,9 @@ repositories {
     mavenLocal()
     mavenCentral()
     jcenter()
+    flatDir {
+        dirs 'src\\main\\resources\\lib'
+    }
     //jhipster-needle-gradle-repositories - JHipster will add additional repositories
 }
 
@@ -262,6 +265,10 @@ dependencies {
     implementation "org.springframework.security:spring-security-web"
     implementation "org.springframework.security:spring-security-messaging"
     implementation "io.jsonwebtoken:jjwt-api"
+    implementation "es.mityc.jumbo.adsi:MITyCLibXADES:1.0.5"
+    implementation "es.mityc.jumbo.adsi:MITyCLibAPI:1.0.5"
+    implementation "es.mityc.jumbo.adsi:MITyCLibCert:1.0.4"
+    implementation "es.mityc.jumbo.adsi:xmlsec-1.4.2-ADSI:1.0"
     implementation("com.google.guava:guava:29.0-jre")
     if (!project.hasProperty("gae")) {
         runtimeOnly "io.jsonwebtoken:jjwt-impl"
