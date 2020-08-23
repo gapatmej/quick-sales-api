@@ -1,9 +1,6 @@
 package ec.com.newsolutions.service.impl;
 
-import ec.com.newsolutions.domain.enumeration.EmissionTypeEnum;
-import ec.com.newsolutions.domain.enumeration.ReceiptTypeEnum;
-import ec.com.newsolutions.domain.enumeration.SRIEnviromentEnum;
-import ec.com.newsolutions.service.DocumentElectronicService;
+import ec.com.newsolutions.service.ElectronicDocumentService;
 import ec.com.newsolutions.service.InvoiceClientService;
 import ec.com.newsolutions.domain.InvoiceClient;
 import ec.com.newsolutions.repository.InvoiceClientRepository;
@@ -27,10 +24,10 @@ public class InvoiceClientServiceImpl implements InvoiceClientService {
     private final Logger log = LoggerFactory.getLogger(InvoiceClientServiceImpl.class);
 
     private final InvoiceClientRepository invoiceClientRepository;
-    private final DocumentElectronicService documentElectronicService;
+    private final ElectronicDocumentService documentElectronicService;
 
     public InvoiceClientServiceImpl(InvoiceClientRepository invoiceClientRepository,
-                                    DocumentElectronicService documentElectronicService) {
+                                    ElectronicDocumentService documentElectronicService) {
         this.invoiceClientRepository = invoiceClientRepository;
         this.documentElectronicService = documentElectronicService;
     }
@@ -47,8 +44,8 @@ public class InvoiceClientServiceImpl implements InvoiceClientService {
 
         /*Pruebas
 
-         */
-      /*  invoiceClient.setSriEnviroment(SRIEnviromentEnum.PRODUCTION);
+
+        invoiceClient.setSriEnviroment(SRIEnviromentEnum.PRODUCTION);
         invoiceClient.setAccessKey("101606046406046490697979797461986456");
         invoiceClient.setReceiptType(ReceiptTypeEnum.INVOICE);
 
@@ -56,8 +53,8 @@ public class InvoiceClientServiceImpl implements InvoiceClientService {
         invoiceClient.getDetailInvoices().stream().forEach(d->d.setInvoice(invoiceClient));
 
 
-        return invoiceClientRepository.save(invoiceClient);*/
-        invoiceClient.setId(new Long(1));
+        return invoiceClientRepository.save(invoiceClient);
+        invoiceClient.setId(new Long(1));*/
       this.documentElectronicService.generateXML(invoiceClient);
 
       return invoiceClient;

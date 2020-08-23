@@ -9,7 +9,7 @@ public class PaymentJaxb {
 
     private String payWay;
     private BigDecimal total;
-    private BigDecimal timeLimit;
+    private int timeLimit;
     private String timeUnit;
 
     @XmlElement(name = "formaPago")
@@ -31,11 +31,11 @@ public class PaymentJaxb {
     }
 
     @XmlElement(name = "plazo")
-    public BigDecimal getTimeLimit() {
+    public int getTimeLimit() {
         return timeLimit;
     }
 
-    public void setTimeLimit(BigDecimal timeLimit) {
+    public void setTimeLimit(int timeLimit) {
         this.timeLimit = timeLimit;
     }
 

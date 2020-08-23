@@ -35,8 +35,8 @@ public class Payment implements Serializable {
     private BigDecimal amount;
 
     @Min(value = 0)
-    @Column(name = "term")
-    private Integer term;
+    @Column(name = "time_limit")
+    private int timeLimit;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "time_unit")
@@ -54,7 +54,6 @@ public class Payment implements Serializable {
     @JsonIgnoreProperties("payments")
     private InvoiceClient invoice;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
     }
@@ -67,11 +66,6 @@ public class Payment implements Serializable {
         return date;
     }
 
-    public Payment date(Instant date) {
-        this.date = date;
-        return this;
-    }
-
     public void setDate(Instant date) {
         this.date = date;
     }
@@ -80,35 +74,20 @@ public class Payment implements Serializable {
         return amount;
     }
 
-    public Payment amount(BigDecimal amount) {
-        this.amount = amount;
-        return this;
-    }
-
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
-    public Integer getTerm() {
-        return term;
+    public int getTimeLimit() {
+        return timeLimit;
     }
 
-    public Payment term(Integer term) {
-        this.term = term;
-        return this;
-    }
-
-    public void setTerm(Integer term) {
-        this.term = term;
+    public void setTimeLimit(int timeLimit) {
+        this.timeLimit = timeLimit;
     }
 
     public TimeUnitEnum getTimeUnit() {
         return timeUnit;
-    }
-
-    public Payment timeUnit(TimeUnitEnum timeUnit) {
-        this.timeUnit = timeUnit;
-        return this;
     }
 
     public void setTimeUnit(TimeUnitEnum timeUnit) {
@@ -119,11 +98,6 @@ public class Payment implements Serializable {
         return decription;
     }
 
-    public Payment decription(String decription) {
-        this.decription = decription;
-        return this;
-    }
-
     public void setDecription(String decription) {
         this.decription = decription;
     }
@@ -132,54 +106,15 @@ public class Payment implements Serializable {
         return wayPay;
     }
 
-    public Payment wayPay(PayWay payWay) {
-        this.wayPay = payWay;
-        return this;
-    }
-
-    public void setWayPay(PayWay payWay) {
-        this.wayPay = payWay;
+    public void setWayPay(PayWay wayPay) {
+        this.wayPay = wayPay;
     }
 
     public InvoiceClient getInvoice() {
         return invoice;
     }
 
-    public Payment invoice(InvoiceClient invoiceClient) {
-        this.invoice = invoiceClient;
-        return this;
-    }
-
-    public void setInvoice(InvoiceClient invoiceClient) {
-        this.invoice = invoiceClient;
-    }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Payment)) {
-            return false;
-        }
-        return id != null && id.equals(((Payment) o).id);
-    }
-
-    @Override
-    public int hashCode() {
-        return 31;
-    }
-
-    @Override
-    public String toString() {
-        return "Payment{" +
-            "id=" + getId() +
-            ", date='" + getDate() + "'" +
-            ", amount=" + getAmount() +
-            ", term=" + getTerm() +
-            ", timeUnit='" + getTimeUnit() + "'" +
-            ", decription='" + getDecription() + "'" +
-            "}";
+    public void setInvoice(InvoiceClient invoice) {
+        this.invoice = invoice;
     }
 }

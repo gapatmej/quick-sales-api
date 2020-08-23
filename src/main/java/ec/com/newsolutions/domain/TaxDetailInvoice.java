@@ -24,7 +24,7 @@ public class TaxDetailInvoice implements Serializable {
 
     @NotNull
     @Column(name = "code", nullable = false)
-    private Integer code;
+    private int code;
 
     @NotNull
     @Column(name = "percentage_code", nullable = false)
@@ -43,10 +43,8 @@ public class TaxDetailInvoice implements Serializable {
     private BigDecimal amount;
 
     @ManyToOne
-    @JsonIgnoreProperties("taxDetailInvoices")
-    private DetailInvoice detailInvoice;
+    private DetailInvoice detailsInvoice;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
     }
@@ -55,26 +53,16 @@ public class TaxDetailInvoice implements Serializable {
         this.id = id;
     }
 
-    public Integer getCode() {
+    public int getCode() {
         return code;
     }
 
-    public TaxDetailInvoice code(Integer code) {
-        this.code = code;
-        return this;
-    }
-
-    public void setCode(Integer code) {
+    public void setCode(int code) {
         this.code = code;
     }
 
     public Integer getPercentageCode() {
         return percentageCode;
-    }
-
-    public TaxDetailInvoice percentageCode(Integer percentageCode) {
-        this.percentageCode = percentageCode;
-        return this;
     }
 
     public void setPercentageCode(Integer percentageCode) {
@@ -85,22 +73,12 @@ public class TaxDetailInvoice implements Serializable {
         return rate;
     }
 
-    public TaxDetailInvoice rate(Integer rate) {
-        this.rate = rate;
-        return this;
-    }
-
     public void setRate(Integer rate) {
         this.rate = rate;
     }
 
     public BigDecimal getTaxBase() {
         return taxBase;
-    }
-
-    public TaxDetailInvoice taxBase(BigDecimal taxBase) {
-        this.taxBase = taxBase;
-        return this;
     }
 
     public void setTaxBase(BigDecimal taxBase) {
@@ -111,54 +89,15 @@ public class TaxDetailInvoice implements Serializable {
         return amount;
     }
 
-    public TaxDetailInvoice amount(BigDecimal amount) {
-        this.amount = amount;
-        return this;
-    }
-
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
-    public DetailInvoice getDetailInvoice() {
-        return detailInvoice;
+    public DetailInvoice getDetailsInvoice() {
+        return detailsInvoice;
     }
 
-    public TaxDetailInvoice detailInvoice(DetailInvoice detailInvoice) {
-        this.detailInvoice = detailInvoice;
-        return this;
-    }
-
-    public void setDetailInvoice(DetailInvoice detailInvoice) {
-        this.detailInvoice = detailInvoice;
-    }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof TaxDetailInvoice)) {
-            return false;
-        }
-        return id != null && id.equals(((TaxDetailInvoice) o).id);
-    }
-
-    @Override
-    public int hashCode() {
-        return 31;
-    }
-
-    @Override
-    public String toString() {
-        return "TaxDetailInvoice{" +
-            "id=" + getId() +
-            ", code=" + getCode() +
-            ", percentageCode=" + getPercentageCode() +
-            ", rate=" + getRate() +
-            ", taxBase=" + getTaxBase() +
-            ", amount=" + getAmount() +
-            "}";
+    public void setDetailsInvoice(DetailInvoice detailsInvoice) {
+        this.detailsInvoice = detailsInvoice;
     }
 }

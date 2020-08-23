@@ -60,15 +60,6 @@ public class SignatureXAdES_BESImpl implements SignatureXAdES_BES {
         return dataToSign;
     }
 
-    /**
-     * <p>
-     * Ejecución del ejemplo. La ejecución consistir� en la firma de los datos creados por el método abstracto <code>createDataToSign</code> mediante
-     * el certificado declarado en la constante <code>PKCS12_FILE</code>. El resultado del proceso de firma ser� almacenado en un fichero XML en el
-     * directorio correspondiente a la constante <code>OUTPUT_DIRECTORY</code> del usuario bajo el nombre devuelto por el método abstracto
-     * <code>getSignFileName</code>
-     * </p>
-     */
-
     @Override
     public void execute() {
 
@@ -124,16 +115,6 @@ public class SignatureXAdES_BESImpl implements SignatureXAdES_BES {
         saveDocumentToFile(docSigned, pathArchivoFirmado);
     }
 
-    /**
-     * <p>
-     * Escribe el documento a un fichero.
-     * </p>
-     *
-     * @param document
-     *            El documento a imprmir
-     * @param pathfile
-     *            El path del fichero donde se quiere escribir.
-     */
     private void saveDocumentToFile(Document document, String pathfile) {
         try {
             FileOutputStream fos = new FileOutputStream(pathfile);
@@ -145,17 +126,6 @@ public class SignatureXAdES_BESImpl implements SignatureXAdES_BES {
         }
     }
 
-    /**
-     * <p>
-     * Escribe el documento a un fichero. Esta implementacion es insegura ya que dependiendo del gestor de transformadas el contenido podr�a ser
-     * alterado, con lo que el XML escrito no ser�a correcto desde el punto de vista de validez de la firma.
-     * </p>
-     *
-     * @param document
-     *            El documento a imprmir
-     * @param pathfile
-     *            El path del fichero donde se quiere escribir.
-     */
     @SuppressWarnings("unused")
     private void saveDocumentToFileUnsafeMode(Document document, String pathfile) {
         TransformerFactory tfactory = TransformerFactory.newInstance();
@@ -171,15 +141,6 @@ public class SignatureXAdES_BESImpl implements SignatureXAdES_BES {
         }
     }
 
-    /**
-     * <p>
-     * Devuelve el <code>Document</code> correspondiente al <code>resource</code> pasado como parámetro
-     * </p>
-     *
-     * @param resource
-     *            El recurso que se desea obtener
-     * @return El <code>Document</code> asociado al <code>resource</code>
-     */
     protected Document getDocument(String resource) {
         Document doc = null;
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -206,16 +167,6 @@ public class SignatureXAdES_BESImpl implements SignatureXAdES_BES {
         return doc;
     }
 
-    /**
-     * <p>
-     * Devuelve el contenido del documento XML correspondiente al <code>resource</code> pasado como parámetro
-     * </p>
-     * como un <code>String</code>
-     *
-     * @param resource
-     *            El recurso que se desea obtener
-     * @return El contenido del documento XML como un <code>String</code>
-     */
     protected String getDocumentAsString(String resource) {
         Document doc = getDocument(resource);
         TransformerFactory tfactory = TransformerFactory.newInstance();
@@ -233,13 +184,6 @@ public class SignatureXAdES_BESImpl implements SignatureXAdES_BES {
         return stringWriter.toString();
     }
 
-    /**
-     * <p>
-     * Devuelve el gestor de claves que se va a utilizar
-     * </p>
-     *
-     * @return El gestor de claves que se va a utilizar</p>
-     */
     private IPKStoreManager getPKStoreManager() {
         IPKStoreManager storeManager = null;
         try {
@@ -266,15 +210,6 @@ public class SignatureXAdES_BESImpl implements SignatureXAdES_BES {
         return storeManager;
     }
 
-    /**
-     * <p>
-     * Recupera el primero de los certificados del almacén.
-     * </p>
-     *
-     * @param storeManager
-     *            Interfaz de acceso al almacén
-     * @return Primer certificado disponible en el almacén
-     */
     private X509Certificate getFirstCertificate(final IPKStoreManager storeManager) {
         List<X509Certificate> certs = null;
         try {
@@ -302,7 +237,6 @@ public class SignatureXAdES_BESImpl implements SignatureXAdES_BES {
 
         return certificate;
     }
-
 
 
 }

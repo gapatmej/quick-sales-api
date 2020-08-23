@@ -10,7 +10,8 @@ public class InvoiceClientJaxb {
     private String version = "1.1.0";
     private TributaryInformationJaxb tributaryInformationJaxb;
     private InvoiceInformationJaxb invoiceInformationJaxb;
-
+    private DetailsJaxb detailsJaxb;
+    private AdditionalsInformationJaxb additionalsInformationJaxb;
 
     @XmlAttribute(name = "id")
     public String getId() {
@@ -46,5 +47,23 @@ public class InvoiceClientJaxb {
 
     public void setInvoiceInformationJaxb(InvoiceInformationJaxb invoiceInformationJaxb) {
         this.invoiceInformationJaxb = invoiceInformationJaxb;
+    }
+
+    @XmlElement(name="detalles")
+    public DetailsJaxb getDetailsJaxb() {
+        return detailsJaxb;
+    }
+
+    public void setDetailsJaxb(DetailsJaxb detailsJaxb) {
+        this.detailsJaxb = detailsJaxb;
+    }
+
+    @XmlElement(name="infoAdicional")
+    public AdditionalsInformationJaxb getAdditionalsInformationJaxb() {
+        return additionalsInformationJaxb;
+    }
+
+    public void setAdditionalsInformationJaxb(AdditionalsInformationJaxb additionalsInformationJaxb) {
+        this.additionalsInformationJaxb = additionalsInformationJaxb;
     }
 }

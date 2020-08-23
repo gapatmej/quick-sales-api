@@ -1,7 +1,5 @@
 package ec.com.newsolutions.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
@@ -31,21 +29,9 @@ public class InvoiceClient extends AbstractAuditingEntity implements Serializabl
     @JoinColumn(name="company_id", nullable = false)
     private Company company;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "sri_enviroment", nullable = false)
-    private SRIEnviromentEnum sriEnviroment;
-
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(name = "emission_type", nullable = false)
-    private EmissionTypeEnum emissionType = EmissionTypeEnum.NORMAL;
-
     @NotNull
     @Column(name = "business_name", nullable = false)
     private String businessName;
-
-    @Column(name = "accessKey", nullable = false, unique = true)
-    private String accessKey;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "receipt_type", nullable = false)
@@ -139,9 +125,16 @@ public class InvoiceClient extends AbstractAuditingEntity implements Serializabl
     @OneToMany(mappedBy = "invoice")
     private Set<TaxInvoice> taxInvoices = new HashSet<>();
 
+    @ManyToMany(mappedBy = "invoicesClient")
+    private Set<AdditionalInformation> additionalsInformation = new HashSet<>();
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="emission_point_id", nullable = false)
     private EmissionPoint emissionPoint;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="electronic_document_id", unique = true)
+    private ElectronicDocument electronicDocument;
 
     public Long getId() {
         return id;
@@ -159,36 +152,12 @@ public class InvoiceClient extends AbstractAuditingEntity implements Serializabl
         this.company = company;
     }
 
-    public SRIEnviromentEnum getSriEnviroment() {
-        return sriEnviroment;
-    }
-
-    public void setSriEnviroment(SRIEnviromentEnum sriEnviroment) {
-        this.sriEnviroment = sriEnviroment;
-    }
-
-    public EmissionTypeEnum getEmissionType() {
-        return emissionType;
-    }
-
-    public void setEmissionType(EmissionTypeEnum emissionType) {
-        this.emissionType = emissionType;
-    }
-
     public String getBusinessName() {
         return businessName;
     }
 
     public void setBusinessName(String businessName) {
         this.businessName = businessName;
-    }
-
-    public String getAccessKey() {
-        return accessKey;
-    }
-
-    public void setAccessKey(String accessKey) {
-        this.accessKey = accessKey;
     }
 
     public ReceiptTypeEnum getReceiptType() {
@@ -367,11 +336,27 @@ public class InvoiceClient extends AbstractAuditingEntity implements Serializabl
         this.taxInvoices = taxInvoices;
     }
 
+    public Set<AdditionalInformation> getAdditionalsInformation() {
+        return additionalsInformation;
+    }
+
+    public void setAdditionalsInformation(Set<AdditionalInformation> additionalsInformation) {
+        this.additionalsInformation = additionalsInformation;
+    }
+
     public EmissionPoint getEmissionPoint() {
         return emissionPoint;
     }
 
     public void setEmissionPoint(EmissionPoint emissionPoint) {
         this.emissionPoint = emissionPoint;
+    }
+
+    public ElectronicDocument getElectronicDocument() {
+        return electronicDocument;
+    }
+
+    public void setElectronicDocument(ElectronicDocument electronicDocument) {
+        this.electronicDocument = electronicDocument;
     }
 }

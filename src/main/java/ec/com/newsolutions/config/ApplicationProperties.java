@@ -10,4 +10,26 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @ConfigurationProperties(prefix = "application", ignoreUnknownFields = false)
 public class ApplicationProperties {
+
+    private ElectronicDocuments electronicDocuments = new ElectronicDocuments();
+
+    public class ElectronicDocuments {
+        private String path;
+
+        public String getPath() {
+            return path;
+        }
+        public void setPath(String path) {
+            this.path = path;
+        }
+
+    }
+
+    public ElectronicDocuments getElectronicDocuments() {
+        return electronicDocuments;
+    }
+
+    public void setElectronicDocuments(ElectronicDocuments electronicDocuments) {
+        this.electronicDocuments = electronicDocuments;
+    }
 }

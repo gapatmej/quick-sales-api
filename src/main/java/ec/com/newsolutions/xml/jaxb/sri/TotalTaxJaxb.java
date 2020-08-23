@@ -6,17 +6,17 @@ import java.math.BigDecimal;
 
 @XmlRootElement(name = "totalImpuesto")
 public class TotalTaxJaxb {
-    private String code;
+    private int code;
     private Integer percentageCode;
     private BigDecimal taxBase;
     private BigDecimal value;
 
     @XmlElement(name = "codigo")
-    public String getCode() {
+    public int getCode() {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(int code) {
         this.code = code;
     }
 

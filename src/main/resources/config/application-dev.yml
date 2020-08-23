@@ -108,6 +108,9 @@ jhipster:
       queue-size: 512
   audit-events:
     retention-period: 30 # Number of days before audit events are deleted.
+application:
+    electronicDocuments:
+      path: D:\electronicDocuments\
 
 # ===================================================================
 # Application specific properties

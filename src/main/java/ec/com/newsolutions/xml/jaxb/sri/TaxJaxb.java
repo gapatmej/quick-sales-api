@@ -7,18 +7,18 @@ import java.math.BigDecimal;
 @XmlRootElement(name = "impuesto")
 public class TaxJaxb {
 
-    private String code;
+    private int code;
     private Integer percentagecode;
     private Integer rate;
     private BigDecimal taxBase;
     private BigDecimal value;
 
     @XmlElement(name = "codigo")
-    public String getCode() {
+    public int getCode() {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(int code) {
         this.code = code;
     }
 
