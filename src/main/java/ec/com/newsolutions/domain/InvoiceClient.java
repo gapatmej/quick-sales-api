@@ -16,7 +16,7 @@ import ec.com.newsolutions.domain.enumeration.*;
  */
 @Entity
 @Table(name = "invoice_client")
-public class InvoiceClient extends AbstractAuditingEntity implements Serializable {
+public class InvoiceClient extends ElectronicDocument implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -32,26 +32,6 @@ public class InvoiceClient extends AbstractAuditingEntity implements Serializabl
     @NotNull
     @Column(name = "business_name", nullable = false)
     private String businessName;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "receipt_type", nullable = false)
-    private ReceiptTypeEnum receiptType;
-
-    @NotNull
-    @Column(name = "establishment_code", nullable = false)
-    private String establishmentCode;
-
-    @NotNull
-    @Column(name = "emission_point_code", nullable = false)
-    private String emissionPointCode;
-
-    @NotNull
-    @Column(name = "sequence", nullable = false)
-    private String sequence;
-
-    @NotNull
-    @Column(name = "date_issue", nullable = false)
-    private Instant dateIssue;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "identification_type")
@@ -132,10 +112,6 @@ public class InvoiceClient extends AbstractAuditingEntity implements Serializabl
     @JoinColumn(name="emission_point_id", nullable = false)
     private EmissionPoint emissionPoint;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="electronic_document_id", unique = true)
-    private ElectronicDocument electronicDocument;
-
     public Long getId() {
         return id;
     }
@@ -158,46 +134,6 @@ public class InvoiceClient extends AbstractAuditingEntity implements Serializabl
 
     public void setBusinessName(String businessName) {
         this.businessName = businessName;
-    }
-
-    public ReceiptTypeEnum getReceiptType() {
-        return receiptType;
-    }
-
-    public void setReceiptType(ReceiptTypeEnum receiptType) {
-        this.receiptType = receiptType;
-    }
-
-    public String getEstablishmentCode() {
-        return establishmentCode;
-    }
-
-    public void setEstablishmentCode(String establishmentCode) {
-        this.establishmentCode = establishmentCode;
-    }
-
-    public String getEmissionPointCode() {
-        return emissionPointCode;
-    }
-
-    public void setEmissionPointCode(String emissionPointCode) {
-        this.emissionPointCode = emissionPointCode;
-    }
-
-    public String getSequence() {
-        return sequence;
-    }
-
-    public void setSequence(String sequence) {
-        this.sequence = sequence;
-    }
-
-    public Instant getDateIssue() {
-        return dateIssue;
-    }
-
-    public void setDateIssue(Instant dateIssue) {
-        this.dateIssue = dateIssue;
     }
 
     public IdentificationTypeEnum getIdentificationType() {
@@ -350,13 +286,5 @@ public class InvoiceClient extends AbstractAuditingEntity implements Serializabl
 
     public void setEmissionPoint(EmissionPoint emissionPoint) {
         this.emissionPoint = emissionPoint;
-    }
-
-    public ElectronicDocument getElectronicDocument() {
-        return electronicDocument;
-    }
-
-    public void setElectronicDocument(ElectronicDocument electronicDocument) {
-        this.electronicDocument = electronicDocument;
     }
 }

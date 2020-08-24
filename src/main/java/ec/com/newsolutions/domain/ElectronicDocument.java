@@ -1,141 +1,95 @@
 package ec.com.newsolutions.domain;
 
-import ec.com.newsolutions.domain.enumeration.EmissionTypeEnum;
-import ec.com.newsolutions.domain.enumeration.SRIEnviromentEnum;
+import ec.com.newsolutions.domain.enumeration.ReceiptTypeEnum;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import java.time.Instant;
 
-@Entity
-@Table(name = "invoice_client")
+@MappedSuperclass
 public class ElectronicDocument extends AbstractAuditingEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
-    private Long id;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "sri_enviroment", nullable = false)
-    private SRIEnviromentEnum sriEnviroment;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "emission_type", nullable = false)
-    private EmissionTypeEnum emissionType = EmissionTypeEnum.NORMAL;
-
-    @Column(name = "business_name", nullable = false)
-    private String businessName;
-
-    @Column(name = "tradename", nullable = false)
-    private String tradename;
-
-    @Column(name = "identification", nullable = false)
-    private String identification;
-
-    @Column(name = "accessKey", nullable = false, unique = true)
-    private String accessKey;
-
-    @Column(name = "address", nullable = false)
-    private String mainAddress;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="organization_id", nullable = false)
+    private Organization organization;
 
     @NotNull
-    @Column(name = "establishment_address")
-    private String establishmentAddress;
-
-    @Column(name = "special_taxpayer_number")
-    private String specialTaxpayerNumber;
+    @Column(name = "establishment_code", nullable = false)
+    private String establishmentCode;
 
     @NotNull
-    @Column(name = "is_keep_accounting", nullable = false)
-    private Boolean isKeepAccounting;
+    @Column(name = "emission_point_code", nullable = false)
+    private String emissionPointCode;
 
-    public Long getId() {
-        return id;
+    @NotNull
+    @Column(name = "sequence", nullable = false)
+    private String sequence;
+
+    @NotNull
+    @Column(name = "date_issue", nullable = false)
+    private Instant dateIssue;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="electronic_document_id", unique = true)
+    private ElectronicDocumentInfo electronicDocumentInfo;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "receipt_type", nullable = false)
+    private ReceiptTypeEnum receiptType;
+
+    public Organization getOrganization() {
+        return organization;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
     }
 
-    public SRIEnviromentEnum getSriEnviroment() {
-        return sriEnviroment;
+    public String getEstablishmentCode() {
+        return establishmentCode;
     }
 
-    public void setSriEnviroment(SRIEnviromentEnum sriEnviroment) {
-        this.sriEnviroment = sriEnviroment;
+    public void setEstablishmentCode(String establishmentCode) {
+        this.establishmentCode = establishmentCode;
     }
 
-    public EmissionTypeEnum getEmissionType() {
-        return emissionType;
+    public String getEmissionPointCode() {
+        return emissionPointCode;
     }
 
-    public void setEmissionType(EmissionTypeEnum emissionType) {
-        this.emissionType = emissionType;
+    public void setEmissionPointCode(String emissionPointCode) {
+        this.emissionPointCode = emissionPointCode;
     }
 
-    public String getBusinessName() {
-        return businessName;
+    public String getSequence() {
+        return sequence;
     }
 
-    public void setBusinessName(String businessName) {
-        this.businessName = businessName;
+    public void setSequence(String sequence) {
+        this.sequence = sequence;
     }
 
-    public String getTradename() {
-        return tradename;
+    public Instant getDateIssue() {
+        return dateIssue;
     }
 
-    public void setTradename(String tradename) {
-        this.tradename = tradename;
+    public void setDateIssue(Instant dateIssue) {
+        this.dateIssue = dateIssue;
     }
 
-    public String getIdentification() {
-        return identification;
+    public ElectronicDocumentInfo getElectronicDocumentInfo() {
+        return electronicDocumentInfo;
     }
 
-    public void setIdentification(String identification) {
-        this.identification = identification;
+    public void setElectronicDocumentInfo(ElectronicDocumentInfo electronicDocumentInfo) {
+        this.electronicDocumentInfo = electronicDocumentInfo;
     }
 
-    public String getAccessKey() {
-        return accessKey;
+    public ReceiptTypeEnum getReceiptType() {
+        return receiptType;
     }
 
-    public void setAccessKey(String accessKey) {
-        this.accessKey = accessKey;
-    }
-
-    public String getMainAddress() {
-        return mainAddress;
-    }
-
-    public void setMainAddress(String mainAddress) {
-        this.mainAddress = mainAddress;
-    }
-
-    public String getEstablishmentAddress() {
-        return establishmentAddress;
-    }
-
-    public void setEstablishmentAddress(String establishmentAddress) {
-        this.establishmentAddress = establishmentAddress;
-    }
-
-    public String getSpecialTaxpayerNumber() {
-        return specialTaxpayerNumber;
-    }
-
-    public void setSpecialTaxpayerNumber(String specialTaxpayerNumber) {
-        this.specialTaxpayerNumber = specialTaxpayerNumber;
-    }
-
-    public Boolean isKeepAccounting() {
-        return isKeepAccounting;
-    }
-
-    public void setKeepAccounting(Boolean keepAccounting) {
-        isKeepAccounting = keepAccounting;
+    public void setReceiptType(ReceiptTypeEnum receiptType) {
+        this.receiptType = receiptType;
     }
 }

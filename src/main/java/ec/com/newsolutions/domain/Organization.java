@@ -6,6 +6,8 @@ import javax.validation.constraints.*;
 
 import java.io.Serializable;
 
+import ec.com.newsolutions.domain.enumeration.EmissionTypeEnum;
+import ec.com.newsolutions.domain.enumeration.SRIEnvironmentEnum;
 import ec.com.newsolutions.domain.enumeration.TokenEnum;
 
 /**
@@ -13,9 +15,7 @@ import ec.com.newsolutions.domain.enumeration.TokenEnum;
  */
 @Entity
 @Table(name = "organization")
-public class Organization implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class Organization extends AbstractAuditingEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
@@ -64,7 +64,14 @@ public class Organization implements Serializable {
     @Column(name = "mail", nullable = false)
     private String mail;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+    @Enumerated(EnumType.STRING)
+    @Column(name = "sri_environment", nullable = false)
+    private SRIEnvironmentEnum sriEnvironment;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "emission_type", nullable = false)
+    private EmissionTypeEnum emissionType = EmissionTypeEnum.NORMAL;
+
     public Long getId() {
         return id;
     }
@@ -77,22 +84,12 @@ public class Organization implements Serializable {
         return identification;
     }
 
-    public Organization identification(String identification) {
-        this.identification = identification;
-        return this;
-    }
-
     public void setIdentification(String identification) {
         this.identification = identification;
     }
 
     public String getBusinessName() {
         return businessName;
-    }
-
-    public Organization businessName(String businessName) {
-        this.businessName = businessName;
-        return this;
     }
 
     public void setBusinessName(String businessName) {
@@ -103,22 +100,12 @@ public class Organization implements Serializable {
         return tradename;
     }
 
-    public Organization tradename(String tradename) {
-        this.tradename = tradename;
-        return this;
-    }
-
     public void setTradename(String tradename) {
         this.tradename = tradename;
     }
 
     public String getAddress() {
         return address;
-    }
-
-    public Organization address(String address) {
-        this.address = address;
-        return this;
     }
 
     public void setAddress(String address) {
@@ -129,22 +116,12 @@ public class Organization implements Serializable {
         return phone;
     }
 
-    public Organization phone(String phone) {
-        this.phone = phone;
-        return this;
-    }
-
     public void setPhone(String phone) {
         this.phone = phone;
     }
 
     public String getMovilPhone() {
         return movilPhone;
-    }
-
-    public Organization movilPhone(String movilPhone) {
-        this.movilPhone = movilPhone;
-        return this;
     }
 
     public void setMovilPhone(String movilPhone) {
@@ -155,35 +132,20 @@ public class Organization implements Serializable {
         return specialTaxpayerNumber;
     }
 
-    public Organization specialTaxpayerNumber(Integer specialTaxpayerNumber) {
-        this.specialTaxpayerNumber = specialTaxpayerNumber;
-        return this;
-    }
-
     public void setSpecialTaxpayerNumber(Integer specialTaxpayerNumber) {
         this.specialTaxpayerNumber = specialTaxpayerNumber;
     }
 
-    public Boolean isIsKeepAccounting() {
+    public Boolean getKeepAccounting() {
         return isKeepAccounting;
     }
 
-    public Organization isKeepAccounting(Boolean isKeepAccounting) {
-        this.isKeepAccounting = isKeepAccounting;
-        return this;
-    }
-
-    public void setIsKeepAccounting(Boolean isKeepAccounting) {
-        this.isKeepAccounting = isKeepAccounting;
+    public void setKeepAccounting(Boolean keepAccounting) {
+        isKeepAccounting = keepAccounting;
     }
 
     public String getLogo() {
         return logo;
-    }
-
-    public Organization logo(String logo) {
-        this.logo = logo;
-        return this;
     }
 
     public void setLogo(String logo) {
@@ -194,11 +156,6 @@ public class Organization implements Serializable {
         return token;
     }
 
-    public Organization token(TokenEnum token) {
-        this.token = token;
-        return this;
-    }
-
     public void setToken(TokenEnum token) {
         this.token = token;
     }
@@ -207,47 +164,23 @@ public class Organization implements Serializable {
         return mail;
     }
 
-    public Organization mail(String mail) {
-        this.mail = mail;
-        return this;
-    }
-
     public void setMail(String mail) {
         this.mail = mail;
     }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Organization)) {
-            return false;
-        }
-        return id != null && id.equals(((Organization) o).id);
+    public SRIEnvironmentEnum getSriEnvironment() {
+        return sriEnvironment;
     }
 
-    @Override
-    public int hashCode() {
-        return 31;
+    public void setSriEnvironment(SRIEnvironmentEnum sriEnvironment) {
+        this.sriEnvironment = sriEnvironment;
     }
 
-    @Override
-    public String toString() {
-        return "Organization{" +
-            "id=" + getId() +
-            ", identification='" + getIdentification() + "'" +
-            ", businessName='" + getBusinessName() + "'" +
-            ", tradename='" + getTradename() + "'" +
-            ", address='" + getAddress() + "'" +
-            ", phone='" + getPhone() + "'" +
-            ", movilPhone='" + getMovilPhone() + "'" +
-            ", specialTaxpayerNumber=" + getSpecialTaxpayerNumber() +
-            ", isKeepAccounting='" + isIsKeepAccounting() + "'" +
-            ", logo='" + getLogo() + "'" +
-            ", token='" + getToken() + "'" +
-            ", mail='" + getMail() + "'" +
-            "}";
+    public EmissionTypeEnum getEmissionType() {
+        return emissionType;
+    }
+
+    public void setEmissionType(EmissionTypeEnum emissionType) {
+        this.emissionType = emissionType;
     }
 }

@@ -1,9 +1,15 @@
 package ec.com.newsolutions.service.impl;
 
-import ec.com.newsolutions.service.ElectronicDocumentService;
+import ec.com.newsolutions.domain.ElectronicDocumentInfo;
+import ec.com.newsolutions.domain.Organization;
+import ec.com.newsolutions.repository.OrganizationRepository;
+import ec.com.newsolutions.repository.UserRepository;
+import ec.com.newsolutions.security.SecurityUtils;
+import ec.com.newsolutions.service.SRIElectronicDocumentService;
 import ec.com.newsolutions.service.InvoiceClientService;
 import ec.com.newsolutions.domain.InvoiceClient;
 import ec.com.newsolutions.repository.InvoiceClientRepository;
+import ec.com.newsolutions.utils.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,11 +30,15 @@ public class InvoiceClientServiceImpl implements InvoiceClientService {
     private final Logger log = LoggerFactory.getLogger(InvoiceClientServiceImpl.class);
 
     private final InvoiceClientRepository invoiceClientRepository;
-    private final ElectronicDocumentService documentElectronicService;
+    private final UserRepository userRepository;
+    private final OrganizationRepository organizationRepository;
+    private final SRIElectronicDocumentService documentElectronicService;
 
     public InvoiceClientServiceImpl(InvoiceClientRepository invoiceClientRepository,
-                                    ElectronicDocumentService documentElectronicService) {
+                                    UserRepository userRepository, OrganizationRepository organizationRepository, SRIElectronicDocumentService documentElectronicService) {
         this.invoiceClientRepository = invoiceClientRepository;
+        this.userRepository = userRepository;
+        this.organizationRepository = organizationRepository;
         this.documentElectronicService = documentElectronicService;
     }
 
@@ -41,23 +51,18 @@ public class InvoiceClientServiceImpl implements InvoiceClientService {
     @Override
     public InvoiceClient save(InvoiceClient invoiceClient) {
         log.debug("Request to save InvoiceClient : {}", invoiceClient);
-
-        /*Pruebas
-
-
-        invoiceClient.setSriEnviroment(SRIEnviromentEnum.PRODUCTION);
-        invoiceClient.setAccessKey("101606046406046490697979797461986456");
-        invoiceClient.setReceiptType(ReceiptTypeEnum.INVOICE);
-
+        Optional<Organization> organizationOptional = organizationRepository.findOneByUserLogin(SecurityUtils.getCurrentUserJWT().get());
+        ElectronicDocumentInfo electronicDocumentInfo = new ElectronicDocumentInfo(organizationOptional.get());
+        invoiceClient.setElectronicDocumentInfo(electronicDocumentInfo);
 
         invoiceClient.getDetailInvoices().stream().forEach(d->d.setInvoice(invoiceClient));
 
+        Utils.generateAccessKey(invoiceClient);
+
+        this.documentElectronicService.generateXML(invoiceClient);
 
         return invoiceClientRepository.save(invoiceClient);
-        invoiceClient.setId(new Long(1));*/
-      this.documentElectronicService.generateXML(invoiceClient);
 
-      return invoiceClient;
 
     }
 

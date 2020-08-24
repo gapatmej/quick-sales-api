@@ -1,7 +1,7 @@
 package ec.com.newsolutions.service.impl;
 
 import ec.com.newsolutions.domain.*;
-import ec.com.newsolutions.service.ElectronicDocumentService;
+import ec.com.newsolutions.service.SRIElectronicDocumentService;
 import ec.com.newsolutions.service.SignatureXAdES_BES;
 import ec.com.newsolutions.xml.jaxb.sri.*;
 import org.slf4j.Logger;
@@ -15,13 +15,13 @@ import java.io.File;
 
 @Service
 @Transactional
-public class ElectronicDocumentServiceImpl implements ElectronicDocumentService {
+public class SRIElectronicDocumentServiceImpl implements SRIElectronicDocumentService {
 
     private final Logger log = LoggerFactory.getLogger(InvoiceClientServiceImpl.class);
 
     private final SignatureXAdES_BES signatureXAdES_BES;
 
-    public ElectronicDocumentServiceImpl(SignatureXAdES_BES signatureXAdES_BES) {
+    public SRIElectronicDocumentServiceImpl(SignatureXAdES_BES signatureXAdES_BES) {
         this.signatureXAdES_BES = signatureXAdES_BES;
     }
 
@@ -31,24 +31,24 @@ public class ElectronicDocumentServiceImpl implements ElectronicDocumentService 
             InvoiceClientJaxb invoiceClientJaxb = new InvoiceClientJaxb();
 
             TributaryInformationJaxb tributaryInformationJaxb = new TributaryInformationJaxb();
-            tributaryInformationJaxb.setEnvironment(invoiceClient.getElectronicDocument().getSriEnviroment().code());
-            tributaryInformationJaxb.setEmissionType(invoiceClient.getElectronicDocument().getEmissionType().code());
-            tributaryInformationJaxb.setBusinessName(invoiceClient.getElectronicDocument().getBusinessName());
-            tributaryInformationJaxb.setTradename(invoiceClient.getElectronicDocument().getTradename());
-            tributaryInformationJaxb.setIdentification(invoiceClient.getElectronicDocument().getIdentification());
-            tributaryInformationJaxb.setAccessKey(invoiceClient.getElectronicDocument().getAccessKey());
+            tributaryInformationJaxb.setEnvironment(invoiceClient.getElectronicDocumentInfo().getSriEnvironment().code());
+            tributaryInformationJaxb.setEmissionType(invoiceClient.getElectronicDocumentInfo().getEmissionType().code());
+            tributaryInformationJaxb.setBusinessName(invoiceClient.getElectronicDocumentInfo().getBusinessName());
+            tributaryInformationJaxb.setTradename(invoiceClient.getElectronicDocumentInfo().getTradename());
+            tributaryInformationJaxb.setIdentification(invoiceClient.getElectronicDocumentInfo().getIdentification());
+            tributaryInformationJaxb.setAccessKey(invoiceClient.getElectronicDocumentInfo().getAccessKey());
             tributaryInformationJaxb.setCodeDocument(invoiceClient.getReceiptType().code());
             tributaryInformationJaxb.setEstablishmentCode(invoiceClient.getEstablishmentCode());
             tributaryInformationJaxb.setEmissionPointCode(invoiceClient.getEmissionPointCode());
             tributaryInformationJaxb.setSequence(invoiceClient.getSequence());
-            tributaryInformationJaxb.setMatrizAddress(invoiceClient.getElectronicDocument().getMainAddress());
+            tributaryInformationJaxb.setMatrizAddress(invoiceClient.getElectronicDocumentInfo().getMainAddress());
             invoiceClientJaxb.setTributaryInformationJaxb(tributaryInformationJaxb);
 
             InvoiceInformationJaxb invoiceInformationJaxb = new InvoiceInformationJaxb();
             invoiceInformationJaxb.setDateIssue(invoiceClient.getDateIssue().toString());
-            invoiceInformationJaxb.setEstablishmentAddress(invoiceClient.getElectronicDocument().getEstablishmentAddress());
-            invoiceInformationJaxb.setSpecialTaxpayer(invoiceClient.getElectronicDocument().getSpecialTaxpayerNumber());
-            invoiceInformationJaxb.setObligedAccounting(invoiceClient.getElectronicDocument().isKeepAccounting()?"SI":"NO");
+            invoiceInformationJaxb.setEstablishmentAddress(invoiceClient.getElectronicDocumentInfo().getEstablishmentAddress());
+            invoiceInformationJaxb.setSpecialTaxpayer(invoiceClient.getElectronicDocumentInfo().getSpecialTaxpayerNumber());
+            invoiceInformationJaxb.setObligedAccounting(invoiceClient.getElectronicDocumentInfo().isKeepAccounting()?"SI":"NO");
             invoiceInformationJaxb.setBuyerIdentificationType(invoiceClient.getIdentificationType().code());
             invoiceInformationJaxb.setBuyerBusinessName(invoiceClient.getBusinessName());
             invoiceInformationJaxb.setBuyerIdentification(invoiceClient.getIdentification());
@@ -132,4 +132,5 @@ public class ElectronicDocumentServiceImpl implements ElectronicDocumentService 
      /*   SignatureXAdES_BESImpl xades = new SignatureXAdES_BESImpl(this);
         xades.execute();*/
     }
+
 }

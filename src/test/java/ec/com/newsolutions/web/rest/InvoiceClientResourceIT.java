@@ -31,7 +31,7 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import ec.com.newsolutions.domain.enumeration.SRIEnviromentEnum;
+import ec.com.newsolutions.domain.enumeration.SRIEnvironmentEnum;
 import ec.com.newsolutions.domain.enumeration.EmissionTypeEnum;
 import ec.com.newsolutions.domain.enumeration.IdentificationTypeEnum;
 import ec.com.newsolutions.domain.enumeration.CurrencyEnum;
@@ -41,8 +41,8 @@ import ec.com.newsolutions.domain.enumeration.CurrencyEnum;
 @SpringBootTest(classes = QuickSalesApiApp.class)
 public class InvoiceClientResourceIT {
 
-    private static final SRIEnviromentEnum DEFAULT_S_RI_ENVIROMENT = SRIEnviromentEnum.TEST;
-    private static final SRIEnviromentEnum UPDATED_S_RI_ENVIROMENT = SRIEnviromentEnum.PRODUCTION;
+    private static final SRIEnvironmentEnum DEFAULT_S_RI_ENVIROMENT = SRIEnvironmentEnum.TEST;
+    private static final SRIEnvironmentEnum UPDATED_S_RI_ENVIROMENT = SRIEnvironmentEnum.PRODUCTION;
 
     private static final EmissionTypeEnum DEFAULT_EMISSION_TYPE = EmissionTypeEnum.NORMAL;
     private static final EmissionTypeEnum UPDATED_EMISSION_TYPE = EmissionTypeEnum.NORMAL;
