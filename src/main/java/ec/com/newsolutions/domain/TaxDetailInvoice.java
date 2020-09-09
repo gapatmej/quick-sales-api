@@ -28,7 +28,7 @@ public class TaxDetailInvoice implements Serializable {
 
     @NotNull
     @Column(name = "percentage_code", nullable = false)
-    private Integer percentageCode;
+    private String percentageCode;
 
     @NotNull
     @Column(name = "rate", nullable = false)
@@ -61,11 +61,11 @@ public class TaxDetailInvoice implements Serializable {
         this.code = code;
     }
 
-    public Integer getPercentageCode() {
+    public String getPercentageCode() {
         return percentageCode;
     }
 
-    public void setPercentageCode(Integer percentageCode) {
+    public void setPercentageCode(String percentageCode) {
         this.percentageCode = percentageCode;
     }
 

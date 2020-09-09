@@ -1,69 +1,40 @@
-package ec.com.newsolutions.domain;
-
-
-import javax.persistence.*;
+package ec.com.newsolutions.service.dto;
 
 import ec.com.newsolutions.domain.enumeration.EmissionTypeEnum;
 import ec.com.newsolutions.domain.enumeration.IdentificationTypeEnum;
 import ec.com.newsolutions.domain.enumeration.SRIEnvironmentEnum;
 import ec.com.newsolutions.domain.enumeration.TokenEnum;
 
-/**
- * A Organization.
- */
-@Entity
-@Table(name = "organization")
-public class Organization extends AbstractAuditingEntity {
+public class OrganizationDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "identification_type", nullable = false)
     private IdentificationTypeEnum identificationType;
 
-    @Column(name = "identification", unique = true, nullable = false)
     private String identification;
 
-    @Column(name = "business_name", nullable = false)
     private String businessName;
 
-    @Column(name = "tradename", nullable = false)
     private String tradename;
 
-    @Column(name = "address", nullable = false)
     private String address;
 
-    @Column(name = "phone")
     private String phone;
 
-    @Column(name = "movil_phone")
     private String movilPhone;
 
-    @Column(name = "special_taxpayer_number")
     private Integer specialTaxpayerNumber;
 
-    @Column(name = "keep_accounting", nullable = false)
     private Boolean keepAccounting;
 
-    @Column(name = "logo")
     private String logo;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "token", nullable = false)
     private TokenEnum token;
 
-    @Column(name = "mail", nullable = false)
     private String mail;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "sri_environment", nullable = false)
     private SRIEnvironmentEnum sriEnvironment;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "emission_type", nullable = false)
     private EmissionTypeEnum emissionType = EmissionTypeEnum.NORMAL;
 
     public Long getId() {
