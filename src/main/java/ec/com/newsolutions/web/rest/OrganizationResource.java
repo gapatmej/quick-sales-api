@@ -4,7 +4,7 @@ import ec.com.newsolutions.service.OrganizationService;
 import ec.com.newsolutions.service.dto.OrganizationDTO;
 import ec.com.newsolutions.web.rest.errors.BadRequestAlertException;
 
-import io.github.jhipster.web.util.HeaderUtil;
+import ec.com.newsolutions.web.rest.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
@@ -49,7 +49,7 @@ public class OrganizationResource {
         }
         OrganizationDTO result = organizationService.save(organizationDTO);
         return ResponseEntity.created(new URI("/api/organizations/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert(true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
 
@@ -61,7 +61,7 @@ public class OrganizationResource {
         }
         OrganizationDTO result = organizationService.save(organizationDTO);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
 
@@ -84,6 +84,6 @@ public class OrganizationResource {
     public ResponseEntity<Void> deleteOrganization(@PathVariable Long id) {
         log.debug("REST request to delete Organization : {}", id);
         organizationService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(true, ENTITY_NAME, id.toString())).build();
     }
 }
