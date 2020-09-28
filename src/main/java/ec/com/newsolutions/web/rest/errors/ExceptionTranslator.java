@@ -1,7 +1,6 @@
 package ec.com.newsolutions.web.rest.errors;
 
-import io.github.jhipster.web.util.HeaderUtil;
-
+import ec.com.newsolutions.web.rest.util.HeaderUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.ConcurrencyFailureException;
 import org.springframework.http.ResponseEntity;
@@ -94,13 +93,13 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
     @ExceptionHandler
     public ResponseEntity<Problem> handleEmailAlreadyUsedException(ec.com.newsolutions.service.EmailAlreadyUsedException ex, NativeWebRequest request) {
         EmailAlreadyUsedException problem = new EmailAlreadyUsedException();
-        return create(problem, request, HeaderUtil.createFailureAlert(applicationName,  true, problem.getEntityName(), problem.getErrorKey(), problem.getMessage()));
+        return create(problem, request, HeaderUtil.createFailureAlert(true, problem.getEntityName(), problem.getErrorKey(), problem.getMessage()));
     }
 
     @ExceptionHandler
     public ResponseEntity<Problem> handleUsernameAlreadyUsedException(ec.com.newsolutions.service.UsernameAlreadyUsedException ex, NativeWebRequest request) {
         LoginAlreadyUsedException problem = new LoginAlreadyUsedException();
-        return create(problem, request, HeaderUtil.createFailureAlert(applicationName,  true, problem.getEntityName(), problem.getErrorKey(), problem.getMessage()));
+        return create(problem, request, HeaderUtil.createFailureAlert(true, problem.getEntityName(), problem.getErrorKey(), problem.getMessage()));
     }
 
     @ExceptionHandler
@@ -110,7 +109,7 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
 
     @ExceptionHandler
     public ResponseEntity<Problem> handleBadRequestAlertException(BadRequestAlertException ex, NativeWebRequest request) {
-        return create(ex, request, HeaderUtil.createFailureAlert(applicationName, true, ex.getEntityName(), ex.getErrorKey(), ex.getMessage()));
+        return create(ex, request, HeaderUtil.createFailureAlert(true, ex.getEntityName(), ex.getErrorKey(), ex.getMessage()));
     }
 
     @ExceptionHandler
@@ -118,6 +117,17 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
         Problem problem = Problem.builder()
             .withStatus(Status.CONFLICT)
             .with(MESSAGE_KEY, ErrorConstants.ERR_CONCURRENCY_FAILURE)
+            .build();
+        return create(ex, problem, request);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<Problem> handleCustom(org.springframework.dao.DataIntegrityViolationException ex, NativeWebRequest request) {
+        Problem problem = Problem.builder()
+            .withType(ErrorConstants.CONSTRAINT_VIOLATION_TYPE)
+            .withTitle("Constraint Violation")
+            .withStatus(defaultConstraintViolationStatus())
+            .with(MESSAGE_KEY, ErrorConstants.ERR_CONSTRAINT_VIOLATION)
             .build();
         return create(ex, problem, request);
     }
