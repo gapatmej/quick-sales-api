@@ -71,11 +71,6 @@ public class Product extends AbstractAuditingEntity  implements Serializable {
     @JoinColumn(name="category_id" , nullable = false)
     private Category category;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @NotNull
-    @JoinColumn(name="sub_category_id", nullable = false)
-    private SubCategory subCategory;
-
     @JsonIgnoreProperties("products")
     @JoinColumn(name="cellar_id")
     private Cellar cellar;
@@ -243,19 +238,6 @@ public class Product extends AbstractAuditingEntity  implements Serializable {
 
     public void setCategory(Category category) {
         this.category = category;
-    }
-
-    public SubCategory getSubCategory() {
-        return subCategory;
-    }
-
-    public Product subCategory(SubCategory subCategory) {
-        this.subCategory = subCategory;
-        return this;
-    }
-
-    public void setSubCategory(SubCategory subCategory) {
-        this.subCategory = subCategory;
     }
 
     public Cellar getCellar() {

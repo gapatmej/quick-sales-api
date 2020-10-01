@@ -5,9 +5,7 @@ import ec.com.newsolutions.domain.enumeration.IdentificationTypeEnum;
 import ec.com.newsolutions.domain.enumeration.SRIEnvironmentEnum;
 import ec.com.newsolutions.domain.enumeration.TokenEnum;
 
-public class OrganizationDTO {
-
-    private Long id;
+public class OrganizationDTO extends  AbstractMainDTO{
 
     private IdentificationTypeEnum identificationType;
 
@@ -36,14 +34,6 @@ public class OrganizationDTO {
     private SRIEnvironmentEnum sriEnvironment;
 
     private EmissionTypeEnum emissionType = EmissionTypeEnum.NORMAL;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public IdentificationTypeEnum getIdentificationType() {
         return identificationType;

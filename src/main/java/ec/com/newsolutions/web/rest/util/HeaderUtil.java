@@ -48,7 +48,7 @@ public class HeaderUtil {
      * @return a {@link org.springframework.http.HttpHeaders} object.
      */
     public static HttpHeaders createEntityCreationAlert(boolean enableTranslation, String entityName, String param) {
-        String message = enableTranslation ? entityName + ".created"
+        String message = enableTranslation ? entityName + ".crudMessages.created"
             : "A new " + entityName + " is created with identifier " + param;
         return createAlert(message, param);
     }
@@ -62,7 +62,7 @@ public class HeaderUtil {
      * @return a {@link org.springframework.http.HttpHeaders} object.
      */
     public static HttpHeaders createEntityUpdateAlert(boolean enableTranslation, String entityName, String param) {
-        String message = enableTranslation ? entityName + ".updated"
+        String message = enableTranslation ? entityName + ".crudMessages.updated"
             : "A " + entityName + " is updated with identifier " + param;
         return createAlert(message, param);
     }
@@ -76,7 +76,7 @@ public class HeaderUtil {
      * @return a {@link org.springframework.http.HttpHeaders} object.
      */
     public static HttpHeaders createEntityDeletionAlert(boolean enableTranslation, String entityName, String param) {
-        String message = enableTranslation ? entityName + ".deleted"
+        String message = enableTranslation ? entityName + ".crudMessages.deleted"
             : "A " + entityName + " is deleted with identifier " + param;
         return createAlert(message, param);
     }

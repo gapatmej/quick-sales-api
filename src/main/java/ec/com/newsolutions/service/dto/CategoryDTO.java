@@ -1,30 +1,10 @@
-package ec.com.newsolutions.domain;
+package ec.com.newsolutions.service.dto;
 
+public class CategoryDTO extends AbstractMainDTO {
 
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
-
-/**
- * A Category.
- */
-@Entity
-@Table(name = "category")
-public class Category extends AbstractMainEntity{
-
-    @Column(name = "code", length = 20, unique = true, nullable = false)
     private String code;
-
-    @Column(name = "name", length = 50, nullable = false)
     private String name;
-
-    @Column(name = "description", length = 200)
     private String description;
-
-    @Column(name = "predetermined", nullable = false)
     private Boolean predetermined;
 
     public String getCode() {

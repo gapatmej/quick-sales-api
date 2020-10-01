@@ -4,6 +4,8 @@ import ec.com.newsolutions.service.OrganizationService;
 import ec.com.newsolutions.service.dto.OrganizationDTO;
 import ec.com.newsolutions.web.rest.errors.BadRequestAlertException;
 
+import ec.com.newsolutions.web.rest.errors.IdExistException;
+import ec.com.newsolutions.web.rest.errors.InvalidIdException;
 import ec.com.newsolutions.web.rest.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -44,9 +46,8 @@ public class OrganizationResource {
     @PostMapping("/organizations")
     public ResponseEntity<OrganizationDTO> createOrganization(@Valid @RequestBody OrganizationDTO organizationDTO) throws URISyntaxException {
         log.debug("REST request to save Organization : {}", organizationDTO);
-        if (organizationDTO.getId() != null) {
-            throw new BadRequestAlertException("A new organization cannot already have an ID", ENTITY_NAME, "idexists");
-        }
+        if (organizationDTO.getId() != null) throw new IdExistException(ENTITY_NAME);
+
         OrganizationDTO result = organizationService.save(organizationDTO);
         return ResponseEntity.created(new URI("/api/organizations/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(true, ENTITY_NAME, result.getId().toString()))
@@ -56,9 +57,8 @@ public class OrganizationResource {
     @PutMapping("/organizations")
     public ResponseEntity<OrganizationDTO> updateOrganization(@Valid @RequestBody OrganizationDTO organizationDTO) throws URISyntaxException {
         log.debug("REST request to update Organization : {}", organizationDTO);
-        if (organizationDTO.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
+        if (organizationDTO.getId() == null) throw new InvalidIdException(ENTITY_NAME);
+
         OrganizationDTO result = organizationService.save(organizationDTO);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(true, ENTITY_NAME, result.getId().toString()))

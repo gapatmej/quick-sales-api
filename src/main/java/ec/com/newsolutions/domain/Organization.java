@@ -13,33 +13,28 @@ import ec.com.newsolutions.domain.enumeration.TokenEnum;
  */
 @Entity
 @Table(name = "organization")
-public class Organization extends AbstractAuditingEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
-    private Long id;
+public class Organization extends AbstractMainEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "identification_type", nullable = false)
     private IdentificationTypeEnum identificationType;
 
-    @Column(name = "identification", unique = true, nullable = false)
+    @Column(name = "identification", length = 13, unique = true, nullable = false)
     private String identification;
 
-    @Column(name = "business_name", nullable = false)
+    @Column(name = "business_name", length = 200, nullable = false)
     private String businessName;
 
-    @Column(name = "tradename", nullable = false)
+    @Column(name = "tradename", length = 200, nullable = false)
     private String tradename;
 
-    @Column(name = "address", nullable = false)
+    @Column(name = "address", length = 200, nullable = false)
     private String address;
 
-    @Column(name = "phone")
+    @Column(name = "phone", length = 13)
     private String phone;
 
-    @Column(name = "movil_phone")
+    @Column(name = "movil_phone", length = 13)
     private String movilPhone;
 
     @Column(name = "special_taxpayer_number")
@@ -52,27 +47,19 @@ public class Organization extends AbstractAuditingEntity {
     private String logo;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "token", nullable = false)
+    @Column(name = "token", length = 20, nullable = false)
     private TokenEnum token;
 
-    @Column(name = "mail", nullable = false)
+    @Column(name = "mail", length = 100, nullable = false)
     private String mail;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "sri_environment", nullable = false)
+    @Column(name = "sri_environment", length = 20, nullable = false)
     private SRIEnvironmentEnum sriEnvironment;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "emission_type", nullable = false)
+    @Column(name = "emission_type", length = 10, nullable = false)
     private EmissionTypeEnum emissionType = EmissionTypeEnum.NORMAL;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public IdentificationTypeEnum getIdentificationType() {
         return identificationType;
