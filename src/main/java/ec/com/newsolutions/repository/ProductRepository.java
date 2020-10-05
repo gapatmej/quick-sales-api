@@ -22,8 +22,4 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
         countQuery = "select count(distinct p) from Product p where (lower(p.mainCode) like :query) or (lower(p.auxiliaryCode) like :query) or (lower(p.name) like :query)")
     Page<Product> search(Pageable page, @Param("query") String query);
 
-    @Query("select p from Product p left join fetch p.iva left join fetch p.ice "+
-        " where p.id = :id ")
-    Optional<Product> findById2(@Param("id") Long id);
-
 }

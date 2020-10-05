@@ -1,4 +1,4 @@
 package ec.com.newsolutions.service.dto;
 
-public class TaxDTO {
+public class TaxDTO extends AbstractMainDTO {
 }

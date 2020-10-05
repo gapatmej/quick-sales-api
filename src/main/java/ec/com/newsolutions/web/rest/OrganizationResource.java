@@ -33,10 +33,6 @@ public class OrganizationResource {
     private final Logger log = LoggerFactory.getLogger(OrganizationResource.class);
 
     private static final String ENTITY_NAME = "organization";
-
-    @Value("${jhipster.clientApp.name}")
-    private String applicationName;
-
     private final OrganizationService organizationService;
 
     public OrganizationResource(OrganizationService organizationService) {

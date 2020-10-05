@@ -4,7 +4,8 @@ import com.google.common.base.Strings;
 import ec.com.newsolutions.service.ProductService;
 import ec.com.newsolutions.domain.Product;
 import ec.com.newsolutions.repository.ProductRepository;
-import org.checkerframework.checker.nullness.Opt;
+import ec.com.newsolutions.service.dto.ProductDTO;
+import ec.com.newsolutions.service.mapper.ProductMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,64 +23,43 @@ import java.util.Optional;
 @Transactional
 public class ProductServiceImpl implements ProductService {
 
+    private final ProductMapper productMapper;
     private final Logger log = LoggerFactory.getLogger(ProductServiceImpl.class);
 
     private final ProductRepository productRepository;
 
-    public ProductServiceImpl(ProductRepository productRepository) {
+    public ProductServiceImpl(ProductMapper productMapper, ProductRepository productRepository) {
+        this.productMapper = productMapper;
         this.productRepository = productRepository;
     }
 
-    /**
-     * Save a product.
-     *
-     * @param product the entity to save.
-     * @return the persisted entity.
-     */
     @Override
-    public Product save(Product product) {
-        log.debug("Request to save Product : {}", product);
-        return productRepository.save(product);
+    public ProductDTO save(ProductDTO productDTO) {
+        log.debug("Request to save Product : {}", productDTO);
+        Product product = productRepository.save(productMapper.toEntity(productDTO));
+        return productMapper.toDto(product);
     }
 
-    /**
-     * Get all the products.
-     *
-     * @param pageable the pagination information.
-     * @return the list of entities.
-     */
     @Override
     @Transactional(readOnly = true)
-    public Page<Product> findAll(Pageable pageable, String query) {
+    public Page<ProductDTO> findAll(Pageable pageable, String query) {
         log.debug("Request to get all Products");
 
         if(Strings.isNullOrEmpty(query)){
-            return productRepository.findAll(pageable);
+            return productRepository.findAll(pageable).map(productMapper::toDto);
         } else{
-            return productRepository.search(pageable, query);
+            return productRepository.search(pageable, query).map(productMapper::toDto);
         }
-
     }
 
-    /**
-     * Get one product by id.
-     *
-     * @param id the id of the entity.
-     * @return the entity.
-     */
     @Override
     @Transactional(readOnly = true)
-    public Optional<Product> findOne(Long id) {
+    public Optional<ProductDTO> findOne(Long id) {
         log.debug("Request to get Product : {}", id);
-        Optional<Product> productOpt =  productRepository.findById2(id);
-        return productOpt;
+        Optional<Product> productOpt =  productRepository.findById(id);
+        return productOpt.map(productMapper::toDto);
     }
 
-    /**
-     * Delete the product by id.
-     *
-     * @param id the id of the entity.
-     */
     @Override
     public void delete(Long id) {
         log.debug("Request to delete Product : {}", id);
