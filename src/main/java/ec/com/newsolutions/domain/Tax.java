@@ -8,66 +8,55 @@ import java.io.Serializable;
 
 import ec.com.newsolutions.domain.enumeration.TaxTypeEnum;
 
-/**
- * A Tax.
- */
 @Entity
 @Table(name = "tax")
-public class Tax implements Serializable {
+public class Tax extends AbstractMainEntity {
 
-    private static final long serialVersionUID = 1L;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tax_type", length = 10, nullable = false)
+    private TaxTypeEnum taxType;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
-    private Long id;
-
-    @NotNull
-    @Column(name = "code", nullable = false, unique = true)
+    @Column(name = "code", length = 20, nullable = false, unique = true)
     private String code;
 
-    @NotNull
-    @Column(name = "description", nullable = false)
+    @Column(name = "name", length = 200, nullable = false)
+    private String name;
+
+    @Column(name = "description", length = 200 )
     private String description;
 
-    @NotNull
     @Column(name = "percentage", nullable = false)
     private Float percentage;
 
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(name = "tax_type", nullable = false)
-    private TaxTypeEnum taxType;
+    @Column(name = "active", nullable = false)
+    private Boolean active;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
-    public Long getId() {
-        return id;
+    public TaxTypeEnum getTaxType() {
+        return taxType;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setTaxType(TaxTypeEnum taxType) {
+        this.taxType = taxType;
     }
 
     public String getCode() {
         return code;
     }
 
-    public Tax code(String code) {
-        this.code = code;
-        return this;
-    }
-
     public void setCode(String code) {
         this.code = code;
     }
 
-    public String getDescription() {
-        return description;
+    public String getName() {
+        return name;
     }
 
-    public Tax description(String description) {
-        this.description = description;
-        return this;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public void setDescription(String description) {
@@ -78,53 +67,15 @@ public class Tax implements Serializable {
         return percentage;
     }
 
-    public Tax percentage(Float percentage) {
-        this.percentage = percentage;
-        return this;
-    }
-
     public void setPercentage(Float percentage) {
         this.percentage = percentage;
     }
 
-    public TaxTypeEnum getTaxType() {
-        return taxType;
+    public Boolean getActive() {
+        return active;
     }
 
-    public Tax taxType(TaxTypeEnum taxType) {
-        this.taxType = taxType;
-        return this;
-    }
-
-    public void setTaxType(TaxTypeEnum taxType) {
-        this.taxType = taxType;
-    }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Tax)) {
-            return false;
-        }
-        return id != null && id.equals(((Tax) o).id);
-    }
-
-    @Override
-    public int hashCode() {
-        return 31;
-    }
-
-    @Override
-    public String toString() {
-        return "Tax{" +
-            "id=" + getId() +
-            ", code='" + getCode() + "'" +
-            ", description='" + getDescription() + "'" +
-            ", percentage=" + getPercentage() +
-            ", taxType='" + getTaxType() + "'" +
-            "}";
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 }

@@ -3,6 +3,8 @@ package ec.com.newsolutions.service.impl;
 import ec.com.newsolutions.service.TaxService;
 import ec.com.newsolutions.domain.Tax;
 import ec.com.newsolutions.repository.TaxRepository;
+import ec.com.newsolutions.service.dto.TaxDTO;
+import ec.com.newsolutions.service.mapper.TaxMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,60 +22,40 @@ import java.util.Optional;
 @Transactional
 public class TaxServiceImpl implements TaxService {
 
-    private final Logger log = LoggerFactory.getLogger(TaxServiceImpl.class);
+    private final Logger log = LoggerFactory.getLogger(UnitServiceImpl.class);
 
     private final TaxRepository taxRepository;
+    private final TaxMapper taxMapper;
 
-    public TaxServiceImpl(TaxRepository taxRepository) {
+    public TaxServiceImpl(TaxRepository taxRepository, TaxMapper taxMapper) {
         this.taxRepository = taxRepository;
+        this.taxMapper = taxMapper;
     }
 
-    /**
-     * Save a tax.
-     *
-     * @param tax the entity to save.
-     * @return the persisted entity.
-     */
     @Override
-    public Tax save(Tax tax) {
-        log.debug("Request to save Tax : {}", tax);
-        return taxRepository.save(tax);
+    public TaxDTO save(TaxDTO taxDTO) {
+        log.debug("Request to save Unit : {}", taxDTO);
+        Tax tax =  taxRepository.save(taxMapper.toEntity(taxDTO));
+        return taxMapper.toDto(tax);
     }
 
-    /**
-     * Get all the taxes.
-     *
-     * @param pageable the pagination information.
-     * @return the list of entities.
-     */
     @Override
     @Transactional(readOnly = true)
-    public Page<Tax> findAll(Pageable pageable) {
-        log.debug("Request to get all Taxes");
-        return taxRepository.findAll(pageable);
+    public Page<TaxDTO> findAll(Pageable pageable) {
+        log.debug("Request to get all Units");
+        return taxRepository.findAll(pageable).map(taxMapper::toDto);
     }
 
-    /**
-     * Get one tax by id.
-     *
-     * @param id the id of the entity.
-     * @return the entity.
-     */
     @Override
     @Transactional(readOnly = true)
-    public Optional<Tax> findOne(Long id) {
-        log.debug("Request to get Tax : {}", id);
-        return taxRepository.findById(id);
+    public Optional<TaxDTO> findOne(Long id) {
+        log.debug("Request to get Unit : {}", id);
+        return taxRepository.findById(id).map(taxMapper::toDto);
     }
 
-    /**
-     * Delete the tax by id.
-     *
-     * @param id the id of the entity.
-     */
     @Override
     public void delete(Long id) {
-        log.debug("Request to delete Tax : {}", id);
+        log.debug("Request to delete Unit : {}", id);
         taxRepository.deleteById(id);
     }
 }
