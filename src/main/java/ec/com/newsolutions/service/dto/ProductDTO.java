@@ -34,6 +34,8 @@ public class ProductDTO extends AbstractMainDTO {
 
     private Long unitId;
 
+    private boolean active;
+
     public String getMainCode() {
         return mainCode;
     }
@@ -144,5 +146,13 @@ public class ProductDTO extends AbstractMainDTO {
 
     public void setUnitId(Long unitId) {
         this.unitId = unitId;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

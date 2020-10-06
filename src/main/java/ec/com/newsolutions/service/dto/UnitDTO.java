@@ -1,30 +1,14 @@
-package ec.com.newsolutions.domain;
+package ec.com.newsolutions.service.dto;
 
 import ec.com.newsolutions.domain.enumeration.UnitTypeEnum;
 
-import javax.persistence.*;
+public class UnitDTO extends AbstractMainDTO {
 
-@Entity
-@Table(name = "unit")
-public class Unit extends AbstractMainEntity {
-
-    @Column(name = "code", length = 20, unique = true, nullable = false)
     private String code;
-
-    @Column(name = "name", length = 50, nullable = false)
     private String name;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "unit_type", nullable = false)
-    private UnitTypeEnum unitType;
-
-    @Column(name = "description", length = 200)
     private String description;
-
-    @Column(name = "predetermined", nullable = false)
+    private UnitTypeEnum unitType;
     private Boolean predetermined;
-
-    @Column(name = "active", nullable = false)
     private Boolean active;
 
     public String getCode() {
@@ -43,20 +27,20 @@ public class Unit extends AbstractMainEntity {
         this.name = name;
     }
 
-    public UnitTypeEnum getUnitType() {
-        return unitType;
-    }
-
-    public void setUnitType(UnitTypeEnum unitType) {
-        this.unitType = unitType;
-    }
-
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public UnitTypeEnum getUnitType() {
+        return unitType;
+    }
+
+    public void setUnitType(UnitTypeEnum unitType) {
+        this.unitType = unitType;
     }
 
     public Boolean getPredetermined() {

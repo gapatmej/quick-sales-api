@@ -2,9 +2,10 @@ package ec.com.newsolutions.web.rest;
 
 import ec.com.newsolutions.service.CategoryService;
 import ec.com.newsolutions.service.dto.CategoryDTO;
-import ec.com.newsolutions.web.rest.errors.BadRequestAlertException;
-
+import ec.com.newsolutions.web.rest.errors.IdExistException;
+import ec.com.newsolutions.web.rest.errors.InvalidIdException;
 import ec.com.newsolutions.web.rest.util.HeaderUtil;
+
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
@@ -38,9 +39,8 @@ public class CategoryResource {
     @PostMapping("/categories")
     public ResponseEntity<CategoryDTO> createCategory(@Valid @RequestBody CategoryDTO categoryDTO) throws URISyntaxException {
         log.debug("REST request to save Category : {}", categoryDTO);
-        if (categoryDTO.getId() != null) {
-            throw new BadRequestAlertException("A new category cannot already have an ID", ENTITY_NAME, "idexists");
-        }
+        if (categoryDTO.getId() != null) throw new IdExistException(ENTITY_NAME);
+
         CategoryDTO result = categoryService.save(categoryDTO);
         return ResponseEntity.created(new URI("/api/categories/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(true, ENTITY_NAME, result.getId().toString()))
@@ -50,9 +50,8 @@ public class CategoryResource {
     @PutMapping("/categories")
     public ResponseEntity<CategoryDTO> updateCategory(@Valid @RequestBody CategoryDTO categoryDTO) throws URISyntaxException {
         log.debug("REST request to update Category : {}", categoryDTO);
-        if (categoryDTO.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
+        if (categoryDTO.getId() == null) throw new InvalidIdException(ENTITY_NAME);
+
         CategoryDTO result = categoryService.save(categoryDTO);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(true, ENTITY_NAME, categoryDTO.getId().toString()))
