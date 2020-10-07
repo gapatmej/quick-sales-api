@@ -15,7 +15,7 @@ public interface OrganizationService {
 
     OrganizationDTO save(OrganizationDTO organizationDTO);
 
-    Page<OrganizationDTO> findAll(Pageable pageable);
+    Page<OrganizationDTO> findAll(String search, Pageable pageable);
 
     Optional<OrganizationDTO> findOne(Long id);
 

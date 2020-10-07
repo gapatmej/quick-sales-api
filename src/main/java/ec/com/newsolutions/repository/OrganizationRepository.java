@@ -13,7 +13,7 @@ import java.util.Optional;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface OrganizationRepository extends JpaRepository<Organization, Long> {
+public interface OrganizationRepository extends JpaRepositoryCustom<Organization, Long> {
 
     @Query("select o from Organization o inner join User u where u.organization = o and u.login =:userLogin  ")
     Optional<Organization> findOneByUserLogin(@Param("userLogin") String userLogin);

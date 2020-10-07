@@ -1,5 +1,6 @@
 package ec.com.newsolutions.service.impl;
 
+import ec.com.newsolutions.repository.specification.UtilsSpecification;
 import ec.com.newsolutions.service.OrganizationService;
 import ec.com.newsolutions.domain.Organization;
 import ec.com.newsolutions.repository.OrganizationRepository;
@@ -38,9 +39,9 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<OrganizationDTO> findAll(Pageable pageable) {
+    public Page<OrganizationDTO> findAll(String search, Pageable pageable) {
         log.debug("Request to get all Organizations");
-        return organizationRepository.findAll(pageable).map(organizationMapper::toDto);
+        return organizationRepository.findAll( UtilsSpecification.<Organization>getSpecification(search), pageable).map(organizationMapper::toDto);
     }
 
     @Override

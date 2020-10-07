@@ -62,9 +62,9 @@ public class OrganizationResource {
     }
 
     @GetMapping("/organizations")
-    public ResponseEntity<List<OrganizationDTO>> getAllOrganizations(Pageable pageable) {
+    public ResponseEntity<List<OrganizationDTO>> getAllOrganizations(String search, Pageable pageable) {
         log.debug("REST request to get a page of Organizations");
-        Page<OrganizationDTO> page = organizationService.findAll(pageable);
+        Page<OrganizationDTO> page = organizationService.findAll(search, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
