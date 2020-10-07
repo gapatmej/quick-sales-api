@@ -2,16 +2,17 @@ package ec.com.newsolutions.service.impl;
 
 import ec.com.newsolutions.domain.Unit;
 import ec.com.newsolutions.repository.UnitRepository;
+import ec.com.newsolutions.repository.specification.UtilsSpecification;
 import ec.com.newsolutions.service.UnitService;
 import ec.com.newsolutions.service.dto.UnitDTO;
 import ec.com.newsolutions.service.mapper.UnitMapper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Optional;
 
 @Service
@@ -37,9 +38,9 @@ public class UnitServiceImpl implements UnitService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<UnitDTO> findAll(Pageable pageable) {
-        log.debug("Request to get all Units");
-        return unitRepository.findAll(pageable).map(unitMapper::toDto);
+    public Page<UnitDTO> findAll(String search, Pageable pageable) {
+        return unitRepository.findAll( UtilsSpecification.<Unit>getSpecification(search), pageable).map(unitMapper::toDto);
+
     }
 
     @Override

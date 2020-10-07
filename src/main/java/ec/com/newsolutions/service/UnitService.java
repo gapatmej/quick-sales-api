@@ -10,7 +10,7 @@ public interface UnitService {
 
     UnitDTO save(UnitDTO unitDTO);
 
-    Page<UnitDTO> findAll(Pageable pageable);
+    Page<UnitDTO> findAll(String search, Pageable pageable);
 
     Optional<UnitDTO> findOne(Long id);
 

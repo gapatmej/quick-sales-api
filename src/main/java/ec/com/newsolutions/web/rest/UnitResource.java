@@ -58,9 +58,9 @@ public class UnitResource {
     }
 
     @GetMapping("/units")
-    public ResponseEntity<List<UnitDTO>> getAllUnits(Pageable pageable) {
+    public ResponseEntity<List<UnitDTO>> getAllUnits(String search, Pageable pageable) {
         log.debug("REST request to get a page of Units");
-        Page<UnitDTO> page = unitService.findAll(pageable);
+        Page<UnitDTO> page = unitService.findAll(search, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
