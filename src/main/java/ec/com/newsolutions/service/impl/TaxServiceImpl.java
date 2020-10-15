@@ -1,5 +1,6 @@
 package ec.com.newsolutions.service.impl;
 
+import ec.com.newsolutions.repository.specification.UtilsSpecification;
 import ec.com.newsolutions.service.TaxService;
 import ec.com.newsolutions.domain.Tax;
 import ec.com.newsolutions.repository.TaxRepository;
@@ -41,9 +42,9 @@ public class TaxServiceImpl implements TaxService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<TaxDTO> findAll(Pageable pageable) {
+    public Page<TaxDTO> findAll(String search, Pageable pageable) {
         log.debug("Request to get all Units");
-        return taxRepository.findAll(pageable).map(taxMapper::toDto);
+        return taxRepository.findAll(UtilsSpecification.<Tax>getSpecification(search), pageable).map(taxMapper::toDto);
     }
 
     @Override

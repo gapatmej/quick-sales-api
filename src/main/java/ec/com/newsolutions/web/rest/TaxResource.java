@@ -59,9 +59,9 @@ public class TaxResource {
     }
 
     @GetMapping("/taxes")
-    public ResponseEntity<List<TaxDTO>> getAllTaxes(Pageable pageable) {
+    public ResponseEntity<List<TaxDTO>> getAllTaxes(String search, Pageable pageable) {
         log.debug("REST request to get a page of Taxes");
-        Page<TaxDTO> page = taxService.findAll(pageable);
+        Page<TaxDTO> page = taxService.findAll(search, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

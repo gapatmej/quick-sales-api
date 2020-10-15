@@ -1,5 +1,6 @@
 package ec.com.newsolutions.repository.specification;
 
+import ec.com.newsolutions.domain.enumeration.TaxTypeEnum;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -38,7 +39,10 @@ public class AbsctractSpecification<T> implements Specification<T> {
                 return criteriaBuilder.equal(root.get(criteria.getKey()), criteria.getValue());
             }
             else if (criteria.getOperation().equalsIgnoreCase(":")) {
-                if (root.get(criteria.getKey()).getJavaType() == String.class) {
+                if (root.get(criteria.getKey()).getJavaType() == TaxTypeEnum.class) {
+                    return criteriaBuilder.equal(root.get(criteria.getKey()), TaxTypeEnum.valueOf(criteria.getValue().toString()));
+                }
+                else if (root.get(criteria.getKey()).getJavaType() == String.class) {
                     return criteriaBuilder.like(criteriaBuilder.lower(
                         root.<String>get(criteria.getKey())), "%" + criteria.getValue().toString().toLowerCase() + "%");
                 } else {

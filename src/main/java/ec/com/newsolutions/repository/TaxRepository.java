@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @SuppressWarnings("unused")
 @Repository
-public interface TaxRepository extends JpaRepository<Tax, Long> {
+public interface TaxRepository extends JpaRepositoryCustom<Tax, Long> {
 
 }
