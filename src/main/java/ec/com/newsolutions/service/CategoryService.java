@@ -12,7 +12,7 @@ public interface CategoryService {
 
     CategoryDTO save(CategoryDTO categoryDTO);
 
-    Page<CategoryDTO> findAll(Pageable pageable);
+    Page<CategoryDTO> findAll(String search, Pageable pageable);
 
     Optional<CategoryDTO> findOne(Long id);
 

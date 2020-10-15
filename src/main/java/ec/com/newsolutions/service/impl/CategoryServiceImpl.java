@@ -1,5 +1,6 @@
 package ec.com.newsolutions.service.impl;
 
+import ec.com.newsolutions.repository.specification.UtilsSpecification;
 import ec.com.newsolutions.service.CategoryService;
 import ec.com.newsolutions.domain.Category;
 import ec.com.newsolutions.repository.CategoryRepository;
@@ -38,9 +39,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<CategoryDTO> findAll(Pageable pageable) {
+    public Page<CategoryDTO> findAll(String search, Pageable pageable) {
         log.debug("Request to get all Categories");
-        return categoryRepository.findAll(pageable).map(categoryMapper::toDto);
+        return categoryRepository.findAll(UtilsSpecification.<Category>getSpecification(search), pageable).map(categoryMapper::toDto);
     }
 
     @Override

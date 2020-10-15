@@ -11,7 +11,7 @@ public interface TaxService {
 
     TaxDTO save(TaxDTO taxDTO);
 
-    Page<TaxDTO> findAll(Pageable pageable);
+    Page<TaxDTO> findAll(String search, Pageable pageable);
 
     Optional<TaxDTO> findOne(Long id);
 

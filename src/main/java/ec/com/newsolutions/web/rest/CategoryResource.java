@@ -59,9 +59,9 @@ public class CategoryResource {
     }
 
     @GetMapping("/categories")
-    public ResponseEntity<List<CategoryDTO>> getAllCategories(Pageable pageable) {
+    public ResponseEntity<List<CategoryDTO>> getAllCategories(String search, Pageable pageable) {
         log.debug("REST request to get a page of Categories");
-        Page<CategoryDTO> page = categoryService.findAll(pageable);
+        Page<CategoryDTO> page = categoryService.findAll(search, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
