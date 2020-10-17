@@ -1,8 +1,11 @@
 package ec.com.newsolutions.service.impl;
 
+import ec.com.newsolutions.repository.specification.UtilsSpecification;
 import ec.com.newsolutions.service.BranchOfficeService;
 import ec.com.newsolutions.domain.BranchOffice;
 import ec.com.newsolutions.repository.BranchOfficeRepository;
+import ec.com.newsolutions.service.dto.BranchOfficeDTO;
+import ec.com.newsolutions.service.mapper.BranchOfficeMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,64 +16,40 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-/**
- * Service Implementation for managing {@link BranchOffice}.
- */
 @Service
 @Transactional
 public class BranchOfficeServiceImpl implements BranchOfficeService {
 
+    private final BranchOfficeMapper branchOfficeMapper;
     private final Logger log = LoggerFactory.getLogger(BranchOfficeServiceImpl.class);
-
     private final BranchOfficeRepository branchOfficeRepository;
 
-    public BranchOfficeServiceImpl(BranchOfficeRepository branchOfficeRepository) {
+    public BranchOfficeServiceImpl(BranchOfficeMapper branchOfficeMapper, BranchOfficeRepository branchOfficeRepository) {
+        this.branchOfficeMapper = branchOfficeMapper;
         this.branchOfficeRepository = branchOfficeRepository;
     }
 
-    /**
-     * Save a branchOffice.
-     *
-     * @param branchOffice the entity to save.
-     * @return the persisted entity.
-     */
     @Override
-    public BranchOffice save(BranchOffice branchOffice) {
-        log.debug("Request to save BranchOffice : {}", branchOffice);
-        return branchOfficeRepository.save(branchOffice);
+    public BranchOfficeDTO save(BranchOfficeDTO branchOfficeDTO) {
+        log.debug("Request to save BranchOffice : {}", branchOfficeDTO);
+        BranchOffice branchOffice =  branchOfficeRepository.save(branchOfficeMapper.toEntity(branchOfficeDTO));
+        return branchOfficeMapper.toDto(branchOffice);
     }
 
-    /**
-     * Get all the branchOffices.
-     *
-     * @param pageable the pagination information.
-     * @return the list of entities.
-     */
     @Override
     @Transactional(readOnly = true)
-    public Page<BranchOffice> findAll(Pageable pageable) {
+    public Page<BranchOfficeDTO> findAll(String search, Pageable pageable) {
         log.debug("Request to get all BranchOffices");
-        return branchOfficeRepository.findAll(pageable);
+        return branchOfficeRepository.findAll( UtilsSpecification.<BranchOffice>getSpecification(search), pageable).map(branchOfficeMapper::toDto);
     }
 
-    /**
-     * Get one branchOffice by id.
-     *
-     * @param id the id of the entity.
-     * @return the entity.
-     */
     @Override
     @Transactional(readOnly = true)
-    public Optional<BranchOffice> findOne(Long id) {
+    public Optional<BranchOfficeDTO> findOne(Long id) {
         log.debug("Request to get BranchOffice : {}", id);
-        return branchOfficeRepository.findById(id);
+        return branchOfficeRepository.findById(id).map(branchOfficeMapper::toDto);
     }
 
-    /**
-     * Delete the branchOffice by id.
-     *
-     * @param id the id of the entity.
-     */
     @Override
     public void delete(Long id) {
         log.debug("Request to delete BranchOffice : {}", id);

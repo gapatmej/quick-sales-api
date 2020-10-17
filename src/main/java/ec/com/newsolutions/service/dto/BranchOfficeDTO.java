@@ -1,33 +1,23 @@
-package ec.com.newsolutions.domain;
+package ec.com.newsolutions.service.dto;
 
-import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
-@Table(name = "branch_office")
-public class BranchOffice extends AbstractMainEntity {
+public class BranchOfficeDTO extends AbstractMainDTO {
 
-    @Column(name = "business_name", length = 200, nullable = false)
     private String businessName;
 
-    @Column(name = "address", length = 200, nullable = false)
     private String address;
 
-    @Column(name = "phone", length = 13)
     private String phone;
 
-    @Column(name = "movil_phone", length = 13 )
     private String movilPhone;
 
-    @Column(name = "establishment_code", unique = true, length = 3, nullable = false)
     private String establishmentCode;
 
-    @Column(name = "active", nullable = false)
     private Boolean active;
 
-    @OneToMany(mappedBy = "branchOffice")
-    private Set<EmissionPoint> emissionPoints = new HashSet<>();
+    private Set<EmissionPointDTO> emissionPoints = new HashSet<>();
 
     public String getBusinessName() {
         return businessName;
@@ -77,11 +67,11 @@ public class BranchOffice extends AbstractMainEntity {
         this.active = active;
     }
 
-    public Set<EmissionPoint> getEmissionPoints() {
+    public Set<EmissionPointDTO> getEmissionPoints() {
         return emissionPoints;
     }
 
-    public void setEmissionPoints(Set<EmissionPoint> emissionPoints) {
+    public void setEmissionPoints(Set<EmissionPointDTO> emissionPoints) {
         this.emissionPoints = emissionPoints;
     }
 }

@@ -1,22 +1,15 @@
-package ec.com.newsolutions.domain;
+package ec.com.newsolutions.service.dto;
 
-import javax.persistence.*;
+import ec.com.newsolutions.domain.BranchOffice;
 
-@Entity
-@Table(name = "emission_point")
-public class EmissionPoint extends AbstractMainEntity {
+public class EmissionPointDTO extends AbstractMainDTO{
 
-    @Column(name = "name", length = 200, nullable = false)
     private String name ;
 
-    @Column(name = "emission_point_code", length = 3, nullable = false)
     private String emissionPointCode;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="branch_office_id", nullable = false)
     private BranchOffice branchOffice;
 
-    @Column(name = "active", nullable = false)
     private Boolean active;
 
     public String getName() {
