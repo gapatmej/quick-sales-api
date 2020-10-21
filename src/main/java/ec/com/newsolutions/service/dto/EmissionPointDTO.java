@@ -1,14 +1,17 @@
 package ec.com.newsolutions.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import ec.com.newsolutions.domain.BranchOffice;
 
 public class EmissionPointDTO extends AbstractMainDTO{
 
     private String name ;
 
+    private String sequence;
+
     private String emissionPointCode;
 
-    private BranchOffice branchOffice;
+    private Long branchOfficeId;
 
     private Boolean active;
 
@@ -20,6 +23,14 @@ public class EmissionPointDTO extends AbstractMainDTO{
         this.name = name;
     }
 
+    public String getSequence() {
+        return sequence;
+    }
+
+    public void setSequence(String sequence) {
+        this.sequence = sequence;
+    }
+
     public String getEmissionPointCode() {
         return emissionPointCode;
     }
@@ -28,12 +39,12 @@ public class EmissionPointDTO extends AbstractMainDTO{
         this.emissionPointCode = emissionPointCode;
     }
 
-    public BranchOffice getBranchOffice() {
-        return branchOffice;
+    public Long getBranchOfficeId() {
+        return branchOfficeId;
     }
 
-    public void setBranchOffice(BranchOffice branchOffice) {
-        this.branchOffice = branchOffice;
+    public void setBranchOfficeId(Long branchOfficeId) {
+        this.branchOfficeId = branchOfficeId;
     }
 
     public Boolean getActive() {

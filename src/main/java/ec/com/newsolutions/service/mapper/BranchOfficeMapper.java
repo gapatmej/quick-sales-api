@@ -2,8 +2,22 @@ package ec.com.newsolutions.service.mapper;
 
 import ec.com.newsolutions.domain.BranchOffice;
 import ec.com.newsolutions.service.dto.BranchOfficeDTO;
-import org.mapstruct.Mapper;
+import org.mapstruct.*;
 
-@Mapper(componentModel = "spring")
+import java.util.List;
+
+@Mapper(componentModel = "spring", uses = {EmissionPointMapper.class},unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface BranchOfficeMapper extends EntityMapper<BranchOfficeDTO, BranchOffice> {
+
+    @Mapping(target = "organizationId", ignore = true)
+    BranchOfficeDTO toDto(BranchOffice branchOffice);
+
+    @Mapping(target = "organizationId", ignore = true)
+    @Mapping(target = "emissionPoints",  ignore = true)
+    @Named(value = "light")
+    BranchOfficeDTO toDtoLight(BranchOffice branchOffice);
+
+    @IterableMapping(qualifiedByName = "light")
+    List<BranchOfficeDTO> toDtoLight(List<BranchOffice> BranchOffices);
+
 }

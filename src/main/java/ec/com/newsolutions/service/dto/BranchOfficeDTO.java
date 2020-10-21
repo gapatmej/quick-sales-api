@@ -5,6 +5,8 @@ import java.util.Set;
 
 public class BranchOfficeDTO extends AbstractMainDTO {
 
+    private Long organizationId;
+
     private String businessName;
 
     private String address;
@@ -18,6 +20,14 @@ public class BranchOfficeDTO extends AbstractMainDTO {
     private Boolean active;
 
     private Set<EmissionPointDTO> emissionPoints = new HashSet<>();
+
+    public Long getOrganizationId() {
+        return organizationId;
+    }
+
+    public void setOrganizationId(Long organizationId) {
+        this.organizationId = organizationId;
+    }
 
     public String getBusinessName() {
         return businessName;
