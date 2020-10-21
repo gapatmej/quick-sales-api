@@ -1,13 +1,20 @@
 package ec.com.newsolutions.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 
 @Entity
-@Table(name = "emission_point")
+@Table(name = "emission_point", uniqueConstraints =  @UniqueConstraint(columnNames = {"branch_office_id", "emission_point_code"}))
 public class EmissionPoint extends AbstractMainEntity {
 
-    @Column(name = "name", length = 200, nullable = false)
+    @Column(name = "name", length = 100, nullable = false)
     private String name ;
+
+    @Column(name = "sequence", length = 9, nullable = false)
+    private String sequence ;
 
     @Column(name = "emission_point_code", length = 3, nullable = false)
     private String emissionPointCode;
@@ -25,6 +32,14 @@ public class EmissionPoint extends AbstractMainEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getSequence() {
+        return sequence;
+    }
+
+    public void setSequence(String sequence) {
+        this.sequence = sequence;
     }
 
     public String getEmissionPointCode() {

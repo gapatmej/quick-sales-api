@@ -1,9 +1,11 @@
 package ec.com.newsolutions.service.impl;
 
+import ec.com.newsolutions.domain.Organization;
 import ec.com.newsolutions.repository.specification.UtilsSpecification;
 import ec.com.newsolutions.service.BranchOfficeService;
 import ec.com.newsolutions.domain.BranchOffice;
 import ec.com.newsolutions.repository.BranchOfficeRepository;
+import ec.com.newsolutions.service.EmissionPointService;
 import ec.com.newsolutions.service.dto.BranchOfficeDTO;
 import ec.com.newsolutions.service.mapper.BranchOfficeMapper;
 import org.slf4j.Logger;
@@ -24,15 +26,29 @@ public class BranchOfficeServiceImpl implements BranchOfficeService {
     private final Logger log = LoggerFactory.getLogger(BranchOfficeServiceImpl.class);
     private final BranchOfficeRepository branchOfficeRepository;
 
-    public BranchOfficeServiceImpl(BranchOfficeMapper branchOfficeMapper, BranchOfficeRepository branchOfficeRepository) {
+    private final EmissionPointService emissionPointService;
+
+    public BranchOfficeServiceImpl(BranchOfficeMapper branchOfficeMapper, BranchOfficeRepository branchOfficeRepository, EmissionPointService emissionPointService) {
         this.branchOfficeMapper = branchOfficeMapper;
         this.branchOfficeRepository = branchOfficeRepository;
+        this.emissionPointService = emissionPointService;
     }
 
     @Override
     public BranchOfficeDTO save(BranchOfficeDTO branchOfficeDTO) {
         log.debug("Request to save BranchOffice : {}", branchOfficeDTO);
-        BranchOffice branchOffice =  branchOfficeRepository.save(branchOfficeMapper.toEntity(branchOfficeDTO));
+
+        BranchOffice branchOfficefirst = branchOfficeMapper.toEntity(branchOfficeDTO);
+        Organization organization = new Organization();
+        organization.setId(new Long(2501));
+        branchOfficefirst.setOrganization(organization);
+        final BranchOffice branchOffice = branchOfficeRepository.save(branchOfficefirst);
+
+        branchOfficeDTO.getEmissionPoints().forEach(eP->{
+            eP.setBranchOfficeId(branchOffice.getId());
+            emissionPointService.save(eP);
+        });
+
         return branchOfficeMapper.toDto(branchOffice);
     }
 
@@ -40,7 +56,7 @@ public class BranchOfficeServiceImpl implements BranchOfficeService {
     @Transactional(readOnly = true)
     public Page<BranchOfficeDTO> findAll(String search, Pageable pageable) {
         log.debug("Request to get all BranchOffices");
-        return branchOfficeRepository.findAll( UtilsSpecification.<BranchOffice>getSpecification(search), pageable).map(branchOfficeMapper::toDto);
+        return branchOfficeRepository.findAll( UtilsSpecification.<BranchOffice>getSpecification(search), pageable).map(branchOfficeMapper::toDtoLight);
     }
 
     @Override

@@ -1,5 +1,7 @@
 package ec.com.newsolutions.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -7,6 +9,10 @@ import java.util.Set;
 @Entity
 @Table(name = "branch_office")
 public class BranchOffice extends AbstractMainEntity {
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="organization_id", nullable = false)
+    private Organization organization;
 
     @Column(name = "business_name", length = 200, nullable = false)
     private String businessName;
@@ -26,8 +32,16 @@ public class BranchOffice extends AbstractMainEntity {
     @Column(name = "active", nullable = false)
     private Boolean active;
 
-    @OneToMany(mappedBy = "branchOffice")
+    @OneToMany(mappedBy = "branchOffice", fetch = FetchType.LAZY)
     private Set<EmissionPoint> emissionPoints = new HashSet<>();
+
+    public Organization getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
+    }
 
     public String getBusinessName() {
         return businessName;
