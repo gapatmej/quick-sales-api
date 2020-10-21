@@ -2,9 +2,11 @@ package ec.com.newsolutions.web.rest;
 
 import ec.com.newsolutions.domain.Cellar;
 import ec.com.newsolutions.service.CellarService;
+import ec.com.newsolutions.service.dto.CellarDTO;
 import ec.com.newsolutions.web.rest.errors.BadRequestAlertException;
 
-import io.github.jhipster.web.util.HeaderUtil;
+//import io.github.jhipster.web.util.HeaderUtil;
+import ec.com.newsolutions.web.rest.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
@@ -17,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ec.com.newsolutions.web.rest.util.HeaderUtil.*;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -52,14 +55,14 @@ public class CellarResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/cellars")
-    public ResponseEntity<Cellar> createCellar(@Valid @RequestBody Cellar cellar) throws URISyntaxException {
-        log.debug("REST request to save Cellar : {}", cellar);
-        if (cellar.getId() != null) {
+    public ResponseEntity<CellarDTO> createCellar(@Valid @RequestBody CellarDTO cellarDTO) throws URISyntaxException {
+        log.debug("REST request to save Cellar : {}", cellarDTO);
+        if (cellarDTO.getId() != null) {
             throw new BadRequestAlertException("A new cellar cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Cellar result = cellarService.save(cellar);
+        CellarDTO result = cellarService.save(cellarDTO);
         return ResponseEntity.created(new URI("/api/cellars/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert(true, ENTITY_NAME, result.getId().toString()))
             .body(result);
     }
 
@@ -73,14 +76,14 @@ public class CellarResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/cellars")
-    public ResponseEntity<Cellar> updateCellar(@Valid @RequestBody Cellar cellar) throws URISyntaxException {
-        log.debug("REST request to update Cellar : {}", cellar);
-        if (cellar.getId() == null) {
+    public ResponseEntity<CellarDTO> updateCellar(@Valid @RequestBody CellarDTO cellarDTO) throws URISyntaxException {
+        log.debug("REST request to update Cellar : {}", cellarDTO);
+        if (cellarDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Cellar result = cellarService.save(cellar);
+        CellarDTO result = cellarService.save(cellarDTO);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, cellar.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(true, ENTITY_NAME, cellarDTO.getId().toString()))
             .body(result);
     }
 
@@ -91,9 +94,9 @@ public class CellarResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of cellars in body.
      */
     @GetMapping("/cellars")
-    public ResponseEntity<List<Cellar>> getAllCellars(Pageable pageable) {
+    public ResponseEntity<List<CellarDTO>> getAllCellars(String search, Pageable pageable) {
         log.debug("REST request to get a page of Cellars");
-        Page<Cellar> page = cellarService.findAll(pageable);
+        Page<CellarDTO> page = cellarService.findAll(search, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -105,10 +108,10 @@ public class CellarResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the cellar, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/cellars/{id}")
-    public ResponseEntity<Cellar> getCellar(@PathVariable Long id) {
+    public ResponseEntity<CellarDTO> getCellar(@PathVariable Long id) {
         log.debug("REST request to get Cellar : {}", id);
-        Optional<Cellar> cellar = cellarService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(cellar);
+        Optional<CellarDTO> cellarDTO = cellarService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(cellarDTO);
     }
 
     /**
@@ -121,6 +124,6 @@ public class CellarResource {
     public ResponseEntity<Void> deleteCellar(@PathVariable Long id) {
         log.debug("REST request to delete Cellar : {}", id);
         cellarService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(true, ENTITY_NAME, id.toString())).build();
     }
 }

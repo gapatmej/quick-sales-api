@@ -1,8 +1,12 @@
 package ec.com.newsolutions.service.impl;
 
+import ec.com.newsolutions.domain.Organization;
+import ec.com.newsolutions.repository.specification.UtilsSpecification;
 import ec.com.newsolutions.service.CellarService;
 import ec.com.newsolutions.domain.Cellar;
 import ec.com.newsolutions.repository.CellarRepository;
+import ec.com.newsolutions.service.dto.CellarDTO;
+import ec.com.newsolutions.service.mapper.CellarMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,11 +24,13 @@ import java.util.Optional;
 @Transactional
 public class CellarServiceImpl implements CellarService {
 
+    private final CellarMapper cellarMapper;
     private final Logger log = LoggerFactory.getLogger(CellarServiceImpl.class);
 
     private final CellarRepository cellarRepository;
 
-    public CellarServiceImpl(CellarRepository cellarRepository) {
+    public CellarServiceImpl(CellarMapper cellarMapper, CellarRepository cellarRepository) {
+        this.cellarMapper = cellarMapper;
         this.cellarRepository = cellarRepository;
     }
 
@@ -35,9 +41,10 @@ public class CellarServiceImpl implements CellarService {
      * @return the persisted entity.
      */
     @Override
-    public Cellar save(Cellar cellar) {
-        log.debug("Request to save Cellar : {}", cellar);
-        return cellarRepository.save(cellar);
+    public CellarDTO save(CellarDTO cellarDTO) {
+        log.debug("Request to save Cellar : {}", cellarDTO);
+        Cellar cellar =  cellarRepository.save(cellarMapper.toEntity(cellarDTO));
+        return cellarMapper.toDto(cellar);
     }
 
     /**
@@ -48,9 +55,9 @@ public class CellarServiceImpl implements CellarService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<Cellar> findAll(Pageable pageable) {
+    public Page<CellarDTO> findAll(String search, Pageable pageable) {
         log.debug("Request to get all Cellars");
-        return cellarRepository.findAll(pageable);
+        return cellarRepository.findAll( UtilsSpecification.<Cellar>getSpecification(search), pageable).map(cellarMapper::toDto);
     }
 
     /**
@@ -61,9 +68,9 @@ public class CellarServiceImpl implements CellarService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Optional<Cellar> findOne(Long id) {
+    public Optional<CellarDTO> findOne(Long id) {
         log.debug("Request to get Cellar : {}", id);
-        return cellarRepository.findById(id);
+        return cellarRepository.findById(id).map(cellarMapper::toDto);
     }
 
     /**

@@ -2,6 +2,7 @@ package ec.com.newsolutions.service;
 
 import ec.com.newsolutions.domain.Cellar;
 
+import ec.com.newsolutions.service.dto.CellarDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -18,7 +19,7 @@ public interface CellarService {
      * @param cellar the entity to save.
      * @return the persisted entity.
      */
-    Cellar save(Cellar cellar);
+    CellarDTO save(CellarDTO cellar);
 
     /**
      * Get all the cellars.
@@ -26,7 +27,7 @@ public interface CellarService {
      * @param pageable the pagination information.
      * @return the list of entities.
      */
-    Page<Cellar> findAll(Pageable pageable);
+    Page<CellarDTO> findAll(String search, Pageable pageable);
 
     /**
      * Get the "id" cellar.
@@ -34,7 +35,7 @@ public interface CellarService {
      * @param id the id of the entity.
      * @return the entity.
      */
-    Optional<Cellar> findOne(Long id);
+    Optional<CellarDTO> findOne(Long id);
 
     /**
      * Delete the "id" cellar.

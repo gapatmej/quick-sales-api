@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface CellarRepository extends JpaRepository<Cellar, Long> {
+public interface CellarRepository extends JpaRepositoryCustom<Cellar, Long> {
 
 }
