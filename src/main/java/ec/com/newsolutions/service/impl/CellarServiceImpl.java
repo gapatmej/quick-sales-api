@@ -1,6 +1,5 @@
 package ec.com.newsolutions.service.impl;
 
-import ec.com.newsolutions.domain.Organization;
 import ec.com.newsolutions.repository.specification.UtilsSpecification;
 import ec.com.newsolutions.service.CellarService;
 import ec.com.newsolutions.domain.Cellar;
@@ -17,9 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-/**
- * Service Implementation for managing {@link Cellar}.
- */
+
 @Service
 @Transactional
 public class CellarServiceImpl implements CellarService {
@@ -34,12 +31,6 @@ public class CellarServiceImpl implements CellarService {
         this.cellarRepository = cellarRepository;
     }
 
-    /**
-     * Save a cellar.
-     *
-     * @param cellar the entity to save.
-     * @return the persisted entity.
-     */
     @Override
     public CellarDTO save(CellarDTO cellarDTO) {
         log.debug("Request to save Cellar : {}", cellarDTO);
@@ -47,12 +38,6 @@ public class CellarServiceImpl implements CellarService {
         return cellarMapper.toDto(cellar);
     }
 
-    /**
-     * Get all the cellars.
-     *
-     * @param pageable the pagination information.
-     * @return the list of entities.
-     */
     @Override
     @Transactional(readOnly = true)
     public Page<CellarDTO> findAll(String search, Pageable pageable) {
@@ -60,12 +45,6 @@ public class CellarServiceImpl implements CellarService {
         return cellarRepository.findAll( UtilsSpecification.<Cellar>getSpecification(search), pageable).map(cellarMapper::toDto);
     }
 
-    /**
-     * Get one cellar by id.
-     *
-     * @param id the id of the entity.
-     * @return the entity.
-     */
     @Override
     @Transactional(readOnly = true)
     public Optional<CellarDTO> findOne(Long id) {
@@ -73,11 +52,6 @@ public class CellarServiceImpl implements CellarService {
         return cellarRepository.findById(id).map(cellarMapper::toDto);
     }
 
-    /**
-     * Delete the cellar by id.
-     *
-     * @param id the id of the entity.
-     */
     @Override
     public void delete(Long id) {
         log.debug("Request to delete Cellar : {}", id);

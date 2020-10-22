@@ -10,6 +10,7 @@ import org.mapstruct.ReportingPolicy;
 public interface EmissionPointMapper extends EntityMapper<EmissionPointDTO, EmissionPoint> {
 
     @Mapping(source = "branchOffice.id", target = "branchOfficeId")
+    @Mapping(expression = "java(false)", target = "deleted")
     EmissionPointDTO toDto(EmissionPoint emissionPoint);
 
     @Mapping(source = "branchOfficeId", target = "branchOffice.id")

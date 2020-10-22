@@ -1,6 +1,8 @@
 package ec.com.newsolutions.service.dto;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class BranchOfficeDTO extends AbstractMainDTO {
@@ -19,7 +21,7 @@ public class BranchOfficeDTO extends AbstractMainDTO {
 
     private Boolean active;
 
-    private Set<EmissionPointDTO> emissionPoints = new HashSet<>();
+    private List<EmissionPointDTO> emissionPoints = new ArrayList<>();
 
     public Long getOrganizationId() {
         return organizationId;
@@ -77,11 +79,11 @@ public class BranchOfficeDTO extends AbstractMainDTO {
         this.active = active;
     }
 
-    public Set<EmissionPointDTO> getEmissionPoints() {
+    public List<EmissionPointDTO> getEmissionPoints() {
         return emissionPoints;
     }
 
-    public void setEmissionPoints(Set<EmissionPointDTO> emissionPoints) {
+    public void setEmissionPoints(List<EmissionPointDTO> emissionPoints) {
         this.emissionPoints = emissionPoints;
     }
 }

@@ -7,6 +7,7 @@ import ec.com.newsolutions.domain.BranchOffice;
 import ec.com.newsolutions.repository.BranchOfficeRepository;
 import ec.com.newsolutions.service.EmissionPointService;
 import ec.com.newsolutions.service.dto.BranchOfficeDTO;
+import ec.com.newsolutions.service.dto.EmissionPointDTO;
 import ec.com.newsolutions.service.mapper.BranchOfficeMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -36,6 +38,7 @@ public class BranchOfficeServiceImpl implements BranchOfficeService {
 
     @Override
     public BranchOfficeDTO save(BranchOfficeDTO branchOfficeDTO) {
+        BranchOfficeDTO result = new BranchOfficeDTO();
         log.debug("Request to save BranchOffice : {}", branchOfficeDTO);
 
         BranchOffice branchOfficefirst = branchOfficeMapper.toEntity(branchOfficeDTO);
@@ -44,12 +47,11 @@ public class BranchOfficeServiceImpl implements BranchOfficeService {
         branchOfficefirst.setOrganization(organization);
         final BranchOffice branchOffice = branchOfficeRepository.save(branchOfficefirst);
 
-        branchOfficeDTO.getEmissionPoints().forEach(eP->{
-            eP.setBranchOfficeId(branchOffice.getId());
-            emissionPointService.save(eP);
-        });
+        branchOfficeDTO.getEmissionPoints().forEach(eP -> eP.setBranchOfficeId(branchOffice.getId()));
 
-        return branchOfficeMapper.toDto(branchOffice);
+        result = branchOfficeMapper.toDto(branchOffice);
+        result.setEmissionPoints(emissionPointService.saveAll(branchOfficeDTO.getEmissionPoints()));
+        return result;
     }
 
     @Override

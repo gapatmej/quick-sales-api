@@ -1,8 +1,5 @@
 package ec.com.newsolutions.service.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import ec.com.newsolutions.domain.BranchOffice;
-
 public class EmissionPointDTO extends AbstractMainDTO{
 
     private String name ;
@@ -14,6 +11,8 @@ public class EmissionPointDTO extends AbstractMainDTO{
     private Long branchOfficeId;
 
     private Boolean active;
+
+    private Boolean deleted;
 
     public String getName() {
         return name;
@@ -53,5 +52,13 @@ public class EmissionPointDTO extends AbstractMainDTO{
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
     }
 }

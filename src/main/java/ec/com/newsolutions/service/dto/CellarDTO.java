@@ -1,7 +1,5 @@
 package ec.com.newsolutions.service.dto;
 
-import javax.persistence.Column;
-
 public class CellarDTO extends AbstractMainDTO {
 
     private String code;

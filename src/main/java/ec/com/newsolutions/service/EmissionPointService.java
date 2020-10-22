@@ -4,11 +4,14 @@ import ec.com.newsolutions.service.dto.EmissionPointDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface EmissionPointService {
 
     EmissionPointDTO save(EmissionPointDTO emissionPointDTO);
+
+    List<EmissionPointDTO> saveAll(List<EmissionPointDTO> emissionPointDTOS);
 
     Page<EmissionPointDTO> findAll(String search, Pageable pageable);
 
