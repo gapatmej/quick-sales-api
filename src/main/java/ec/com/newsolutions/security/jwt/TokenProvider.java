@@ -1,11 +1,14 @@
 package ec.com.newsolutions.security.jwt;
 
+import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.*;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
+import ec.com.newsolutions.service.dto.WorkspaceDTO;
+import ec.com.newsolutions.utils.GsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,6 +30,7 @@ public class TokenProvider {
     private final Logger log = LoggerFactory.getLogger(TokenProvider.class);
 
     private static final String AUTHORITIES_KEY = "auth";
+    private static final String WORKSPACE = "workspace";
 
     private Key key;
 
@@ -60,23 +64,30 @@ public class TokenProvider {
                 .getTokenValidityInSecondsForRememberMe();
     }
 
-    public String createToken(Authentication authentication, boolean rememberMe) {
+    public String createToken(Authentication authentication) {
         String authorities = authentication.getAuthorities().stream()
             .map(GrantedAuthority::getAuthority)
             .collect(Collectors.joining(","));
 
         long now = (new Date()).getTime();
-        Date validity;
-        if (rememberMe) {
-            validity = new Date(now + this.tokenValidityInMillisecondsForRememberMe);
-        } else {
-            validity = new Date(now + this.tokenValidityInMilliseconds);
-        }
+        Date validity = new Date(now + this.tokenValidityInMilliseconds);
 
         return Jwts.builder()
             .setSubject(authentication.getName())
             .claim(AUTHORITIES_KEY, authorities)
-            .claim("organizationId",2501)
+            .signWith(key, SignatureAlgorithm.HS512)
+            .setExpiration(validity)
+            .compact();
+    }
+
+    public String createTokenWorkspace(WorkspaceDTO workspaceDTO) {
+        String authorities = "ROLE_ADMIN,ROLE_USER";
+        Date validity = new Date((new Date()).getTime() + this.tokenValidityInMillisecondsForRememberMe);
+
+        return Jwts.builder()
+            .setSubject("admin")
+            .claim(AUTHORITIES_KEY, authorities)
+            .claim(WORKSPACE,workspaceDTO)
             .signWith(key, SignatureAlgorithm.HS512)
             .setExpiration(validity)
             .compact();
@@ -96,6 +107,37 @@ public class TokenProvider {
         User principal = new User(claims.getSubject(), "", authorities);
 
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
+    }
+
+    public Claims getClaimns(String token) {
+        Claims claims = Jwts.parser()
+            .setSigningKey(key)
+            .parseClaimsJws(token)
+            .getBody();
+
+        return claims;
+    }
+
+    public String getClaimnById(String token, String id) {
+        try{
+            return this.getClaimns(token).get(id).toString();
+        }catch(Exception ex){
+            log.info("Invalid ID searched in the claim.");
+            return null;
+        }
+    }
+
+    public Object getClaimnWorkspaceById(String token, String id) {
+        try{
+            WorkspaceDTO workspaceDTO = GsonUtils.jsonToEntity(getClaimnById(token, WORKSPACE),WorkspaceDTO.class);
+
+            Field field = workspaceDTO.getClass().getDeclaredField(id);
+            field.setAccessible(true);
+            return field.get(workspaceDTO);
+        }catch(Exception ex){
+            log.info("Invalid ID searched in the claim.");
+            return null;
+        }
     }
 
     public boolean validateToken(String authToken) {

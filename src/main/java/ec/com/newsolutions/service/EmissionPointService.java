@@ -18,4 +18,6 @@ public interface EmissionPointService {
     Optional<EmissionPointDTO> findOne(Long id);
 
     void delete(Long id);
+
+    void deleteByBranchOffice(Long branchOfficeId);
 }

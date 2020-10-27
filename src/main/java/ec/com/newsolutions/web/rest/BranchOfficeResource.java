@@ -1,9 +1,8 @@
 package ec.com.newsolutions.web.rest;
 
-import ec.com.newsolutions.domain.BranchOffice;
 import ec.com.newsolutions.service.BranchOfficeService;
+import ec.com.newsolutions.service.EmissionPointService;
 import ec.com.newsolutions.service.dto.BranchOfficeDTO;
-import ec.com.newsolutions.web.rest.errors.BadRequestAlertException;
 
 import ec.com.newsolutions.web.rest.errors.IdExistException;
 import ec.com.newsolutions.web.rest.errors.InvalidIdException;
@@ -12,7 +11,6 @@ import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;

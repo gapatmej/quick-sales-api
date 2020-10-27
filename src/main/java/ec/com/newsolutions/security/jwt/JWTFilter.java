@@ -1,5 +1,6 @@
 package ec.com.newsolutions.security.jwt;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
@@ -19,7 +20,8 @@ import java.io.IOException;
 public class JWTFilter extends GenericFilterBean {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
-
+    public static final String PATTERN_ORGANIZATION_REPLACE = "\"organizationId\":.*[,]";
+    public static final String PATTERN_ORGANIZATION_REPLACE_FINAL_POSITION = "\"organizationId\":.*[\r]";
     public static final String AUTHORIZATION_TOKEN = "access_token";
 
     private final TokenProvider tokenProvider;
@@ -36,8 +38,24 @@ public class JWTFilter extends GenericFilterBean {
         if (StringUtils.hasText(jwt) && this.tokenProvider.validateToken(jwt)) {
             Authentication authentication = this.tokenProvider.getAuthentication(jwt);
             SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            if("POST".equals(httpServletRequest.getMethod()) || "PUT".equals(httpServletRequest.getMethod())){
+                Long organizationId = Long.parseLong(this.tokenProvider.getClaimnWorkspaceById(jwt,"organizationId").toString());
+                if(!StringUtils.isEmpty(organizationId)){
+                    XSSRequestWrapper wrappedRequest = new XSSRequestWrapper(
+                        (HttpServletRequest) servletRequest);
+
+                    String body = IOUtils.toString(wrappedRequest.getReader());
+                    body = body.replaceAll(PATTERN_ORGANIZATION_REPLACE,"\"organizationId\": "+organizationId.toString()+",");
+                    body = body.replaceAll(PATTERN_ORGANIZATION_REPLACE_FINAL_POSITION,"\"organizationId\": "+organizationId+"\r");
+                    wrappedRequest.resetInputStream(body.getBytes());
+                    servletRequest = wrappedRequest;
+                }
+            }
         }
+
         filterChain.doFilter(servletRequest, servletResponse);
+
     }
 
     private String resolveToken(HttpServletRequest request) {

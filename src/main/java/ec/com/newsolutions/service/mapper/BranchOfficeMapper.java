@@ -12,6 +12,9 @@ public interface BranchOfficeMapper extends EntityMapper<BranchOfficeDTO, Branch
     @Mapping(target = "organizationId", ignore = true)
     BranchOfficeDTO toDto(BranchOffice branchOffice);
 
+    @Mapping(target = "organization.id", source = "organizationId")
+    BranchOffice toEntity(BranchOfficeDTO branchOfficeDTO);
+
     @Mapping(target = "organizationId", ignore = true)
     @Mapping(target = "emissionPoints",  ignore = true)
     @Named(value = "light")

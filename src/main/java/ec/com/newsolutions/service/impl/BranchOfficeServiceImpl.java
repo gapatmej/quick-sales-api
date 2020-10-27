@@ -38,19 +38,14 @@ public class BranchOfficeServiceImpl implements BranchOfficeService {
 
     @Override
     public BranchOfficeDTO save(BranchOfficeDTO branchOfficeDTO) {
-        BranchOfficeDTO result = new BranchOfficeDTO();
+        BranchOfficeDTO result ;
         log.debug("Request to save BranchOffice : {}", branchOfficeDTO);
-
-        BranchOffice branchOfficefirst = branchOfficeMapper.toEntity(branchOfficeDTO);
-        Organization organization = new Organization();
-        organization.setId(new Long(2501));
-        branchOfficefirst.setOrganization(organization);
-        final BranchOffice branchOffice = branchOfficeRepository.save(branchOfficefirst);
+        final BranchOffice branchOffice = branchOfficeRepository.save(branchOfficeMapper.toEntity(branchOfficeDTO));
+        result = branchOfficeMapper.toDto(branchOffice);
 
         branchOfficeDTO.getEmissionPoints().forEach(eP -> eP.setBranchOfficeId(branchOffice.getId()));
-
-        result = branchOfficeMapper.toDto(branchOffice);
         result.setEmissionPoints(emissionPointService.saveAll(branchOfficeDTO.getEmissionPoints()));
+
         return result;
     }
 
@@ -71,6 +66,7 @@ public class BranchOfficeServiceImpl implements BranchOfficeService {
     @Override
     public void delete(Long id) {
         log.debug("Request to delete BranchOffice : {}", id);
+        emissionPointService.deleteByBranchOffice(id);
         branchOfficeRepository.deleteById(id);
     }
 }

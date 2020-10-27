@@ -67,4 +67,9 @@ public class EmissionPointServiceImpl implements EmissionPointService {
         log.debug("Request to delete Emission Point : {}", id);
         emissionPointRepository.deleteById(id);
     }
+
+    @Override
+    public void deleteByBranchOffice(Long idBranchOffice) {
+        emissionPointRepository.deleteByBranchOfficeId(idBranchOffice);
+    }
 }
