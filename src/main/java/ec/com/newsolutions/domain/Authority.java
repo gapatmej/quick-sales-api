@@ -1,28 +1,39 @@
 package ec.com.newsolutions.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Column;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import java.io.Serializable;
-import java.util.Objects;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * An authority (a security role) used by Spring Security.
  */
 @Entity
 @Table(name = "jhi_authority")
-public class Authority implements Serializable {
+public class Authority extends AbstractMainEntity {
 
-    private static final long serialVersionUID = 1L;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="organization_id", nullable = false)
+    private Organization organization;
 
-    @NotNull
-    @Size(max = 50)
-    @Id
-    @Column(length = 50)
+    @Column(length = 50, nullable = false)
     private String name;
+
+    @Column(name = "description", length = 200)
+    private String description;
+
+    @Column(name = "active", nullable = false)
+    private Boolean active;
+
+    @OneToMany(mappedBy = "authority", fetch = FetchType.LAZY)
+    private Set<Permit> permits = new HashSet<>();
+
+    public Organization getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
+    }
 
     public String getName() {
         return name;
@@ -32,26 +43,27 @@ public class Authority implements Serializable {
         this.name = name;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Authority)) {
-            return false;
-        }
-        return Objects.equals(name, ((Authority) o).name);
+    public String getDescription() {
+        return description;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(name);
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    @Override
-    public String toString() {
-        return "Authority{" +
-            "name='" + name + '\'' +
-            "}";
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public Set<Permit> getPermits() {
+        return permits;
+    }
+
+    public void setPermits(Set<Permit> permits) {
+        this.permits = permits;
     }
 }

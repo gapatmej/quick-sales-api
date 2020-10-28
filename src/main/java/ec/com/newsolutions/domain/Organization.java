@@ -16,7 +16,7 @@ import ec.com.newsolutions.domain.enumeration.TokenEnum;
 public class Organization extends AbstractMainEntity {
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "identification_type", nullable = false)
+    @Column(name = "identification_type", length = 20, nullable = false)
     private IdentificationTypeEnum identificationType;
 
     @Column(name = "identification", length = 13, unique = true, nullable = false)
@@ -43,7 +43,7 @@ public class Organization extends AbstractMainEntity {
     @Column(name = "keep_accounting", nullable = false)
     private Boolean keepAccounting;
 
-    @Column(name = "logo")
+    @Column(name = "logo", length = 200)
     private String logo;
 
     @Enumerated(EnumType.STRING)
