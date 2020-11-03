@@ -25,15 +25,11 @@ import java.util.Set;
 @Table(name = "jhi_user")
 public class User extends AbstractMainEntity implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    @Column(name = "identification", length = 13, unique = true, nullable = false)
+    private String identification;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="organization_id", nullable = false)
-    private Organization organization;
-
-    @Pattern(regexp = Constants.LOGIN_REGEX)
-    @Column(length = 50, unique = true, nullable = false)
-    private String login;
+    @Column(length = 100, unique = true, nullable = false)
+    private String email;
 
     @JsonIgnore
     @Column(name = "password_hash", length = 60, nullable = false)
@@ -45,8 +41,8 @@ public class User extends AbstractMainEntity implements Serializable {
     @Column(name = "last_name", length = 50)
     private String lastName;
 
-    @Column(length = 100, unique = true)
-    private String email;
+    @Column(name = "phone", length = 13)
+    private String phone;
 
     @Column(nullable = false)
     private boolean activated = false;
@@ -76,21 +72,36 @@ public class User extends AbstractMainEntity implements Serializable {
         inverseJoinColumns = {@JoinColumn(name = "authority_id", referencedColumnName = "id")})
     private Set<Authority> authorities = new HashSet<>();
 
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+        name = "jhi_user_organization",
+        joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+        inverseJoinColumns = {@JoinColumn(name = "organization_id", referencedColumnName = "id")})
+    private Set<Organization> organizations = new HashSet<>();
 
-    public Organization getOrganization() {
-        return organization;
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+        name = "jhi_user_branch_office",
+        joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
+        inverseJoinColumns = {@JoinColumn(name = "branch_office_id", referencedColumnName = "id")})
+    private Set<BranchOffice> branchOffices = new HashSet<>();
+
+    public String getIdentification() {
+        return identification;
     }
 
-    public void setOrganization(Organization organization) {
-        this.organization = organization;
+    public void setIdentification(String identification) {
+        this.identification = identification;
     }
 
-    public String getLogin() {
-        return login;
+    public String getEmail() {
+        return email;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
@@ -117,12 +128,12 @@ public class User extends AbstractMainEntity implements Serializable {
         this.lastName = lastName;
     }
 
-    public String getEmail() {
-        return email;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public boolean isActivated() {
@@ -179,5 +190,21 @@ public class User extends AbstractMainEntity implements Serializable {
 
     public void setAuthorities(Set<Authority> authorities) {
         this.authorities = authorities;
+    }
+
+    public Set<Organization> getOrganizations() {
+        return organizations;
+    }
+
+    public void setOrganizations(Set<Organization> organizations) {
+        this.organizations = organizations;
+    }
+
+    public Set<BranchOffice> getBranchOffices() {
+        return branchOffices;
+    }
+
+    public void setBranchOffices(Set<BranchOffice> branchOffices) {
+        this.branchOffices = branchOffices;
     }
 }

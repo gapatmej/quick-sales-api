@@ -7,5 +7,4 @@ import java.util.List;
 
 public interface EmissionPointUserService {
 
-    List<EmissionPointUser> findAllByUser(String login);
 }

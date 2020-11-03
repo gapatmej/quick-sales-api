@@ -32,19 +32,18 @@ public class DomainUserDetailsService implements UserDetailsService {
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(final String login) {
-        log.debug("Authenticating {}", login);
+    public UserDetails loadUserByUsername(final String email) {
+        log.debug("Authenticating {}", email);
 
-        if (new EmailValidator().isValid(login, null)) {
-            return userRepository.findOneWithAuthoritiesByEmailIgnoreCase(login)
-                .map(user -> createSpringSecurityUser(login, user))
-                .orElseThrow(() -> new UsernameNotFoundException("User with email " + login + " was not found in the database"));
+        if (new EmailValidator().isValid(email, null)) {
+            return userRepository.findOneWithAuthoritiesByEmailIgnoreCase(email)
+                .map(user -> createSpringSecurityUser(email, user))
+                .orElseThrow(() -> new UsernameNotFoundException("User with email " + email + " was not found in the database"));
         }
 
-        String lowercaseLogin = login.toLowerCase(Locale.ENGLISH);
-        return userRepository.findOneWithAuthoritiesByLogin(lowercaseLogin)
-            .map(user -> createSpringSecurityUser(lowercaseLogin, user))
-            .orElseThrow(() -> new UsernameNotFoundException("User " + lowercaseLogin + " was not found in the database"));
+        return userRepository.findOneWithAuthoritiesByEmailIgnoreCase(email)
+            .map(user -> createSpringSecurityUser(email, user))
+            .orElseThrow(() -> new UsernameNotFoundException("User " + email + " was not found in the database"));
 
     }
 
@@ -55,7 +54,7 @@ public class DomainUserDetailsService implements UserDetailsService {
         List<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream()
             .map(authority -> new SimpleGrantedAuthority(authority.getName()))
             .collect(Collectors.toList());
-        return new org.springframework.security.core.userdetails.User(user.getLogin(),
+        return new org.springframework.security.core.userdetails.User(user.getEmail(),
             user.getPassword(),
             grantedAuthorities);
     }

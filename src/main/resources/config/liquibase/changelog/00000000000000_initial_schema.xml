@@ -61,15 +61,47 @@
             <column name="last_modified_date" type="timestamp"/>
         </createTable>
 
-        <createTable tableName="jhi_user">
+        <createTable tableName="branch_office">
             <column name="id" type="bigint" >
                 <constraints primaryKey="true" nullable="false" unique="true"/>
             </column>
             <column name="organization_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="login" type="varchar(50)">
-                <constraints unique="true" nullable="false" uniqueConstraintName="ux_user_login"/>
+            <column name="business_name" type="varchar(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="address" type="varchar(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="phone" type="varchar(13)"/>
+            <column name="movil_phone" type="varchar(13)"/>
+            <column name="establishment_code" type="varchar(3)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="active" type="boolean">
+                <constraints nullable="false" />
+            </column>
+            <column name="created_by" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp"/>
+            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="last_modified_date" type="timestamp"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="organization_id"
+                                 baseTableName="branch_office"
+                                 constraintName="fk_organization_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="organization"/>
+
+        <createTable tableName="jhi_user">
+            <column name="id" type="bigint" >
+                <constraints primaryKey="true" nullable="false" unique="true"/>
+            </column>
+            <column name="identification" type="varchar(13)">
+                <constraints nullable="false" />
             </column>
             <column name="password_hash" type="varchar(60)"/>
             <column name="first_name" type="varchar(50)"/>
@@ -77,6 +109,7 @@
             <column name="email" type="varchar(100)">
                 <constraints unique="true" uniqueConstraintName="ux_user_email"/>
             </column>
+            <column name="phone" type="varchar(13)"/>
             <column name="activated" type="boolean" valueBoolean="false">
                 <constraints nullable="false" />
             </column>
@@ -94,12 +127,6 @@
             <column name="last_modified_by" type="varchar(50)"/>
             <column name="last_modified_date" type="timestamp"/>
         </createTable>
-
-        <addForeignKeyConstraint baseColumnNames="organization_id"
-                                 baseTableName="jhi_user"
-                                 constraintName="fk_organization_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="organization"/>
 
         <addNotNullConstraint   columnName="password_hash"
                                 columnDataType="varchar(60)"
@@ -152,6 +179,52 @@
 
         <addForeignKeyConstraint baseColumnNames="user_id"
                                  baseTableName="jhi_user_authority"
+                                 constraintName="fk_user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+
+        <createTable tableName="jhi_user_organization">
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="organization_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="user_id, organization_id" tableName="jhi_user_organization"/>
+
+        <addForeignKeyConstraint baseColumnNames="organization_id"
+                                 baseTableName="jhi_user_organization"
+                                 constraintName="fk_organization_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="organization"/>
+
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="jhi_user_organization"
+                                 constraintName="fk_user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+
+        <createTable tableName="jhi_user_branch_office">
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="branch_office_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="user_id, branch_office_id" tableName="jhi_user_branch_office"/>
+
+        <addForeignKeyConstraint baseColumnNames="branch_office_id"
+                                 baseTableName="jhi_user_branch_office"
+                                 constraintName="fk_branch_office_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="branch_office"/>
+
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="jhi_user_branch_office"
                                  constraintName="fk_user_id"
                                  referencedColumnNames="id"
                                  referencedTableName="jhi_user"/>
@@ -218,6 +291,16 @@
         </loadData>
 
         <loadData
+            file="config/liquibase/data/branch_office.csv"
+            separator=";"
+            tableName="branch_office">
+            <column name="id" type="numeric"/>
+            <column name="organization_id" type="numeric"/>
+            <column name="active" type="boolean"/>
+            <column name="created_date" type="timestamp"/>
+        </loadData>
+
+        <loadData
             file="config/liquibase/data/user.csv"
             separator=";"
             tableName="jhi_user">
@@ -242,6 +325,22 @@
             tableName="jhi_user_authority">
             <column name="user_id" type="numeric"/>
             <column name="authority_id" type="numeric"/>
+        </loadData>
+
+        <loadData
+            file="config/liquibase/data/user_organization.csv"
+            separator=";"
+            tableName="jhi_user_organization">
+            <column name="user_id" type="numeric"/>
+            <column name="organization_id" type="numeric"/>
+        </loadData>
+
+        <loadData
+            file="config/liquibase/data/user_branch_office.csv"
+            separator=";"
+            tableName="jhi_user_branch_office">
+            <column name="user_id" type="numeric"/>
+            <column name="branch_office_id" type="numeric"/>
         </loadData>
 
         <loadData

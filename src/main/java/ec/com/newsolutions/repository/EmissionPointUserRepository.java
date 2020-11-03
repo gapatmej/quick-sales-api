@@ -9,5 +9,4 @@ import java.util.List;
 @Repository
 public interface EmissionPointUserRepository extends JpaRepository<EmissionPointUser, Long> {
 
-    List<EmissionPointUser> findEmissionPointUserByUser_Login(String login);
 }

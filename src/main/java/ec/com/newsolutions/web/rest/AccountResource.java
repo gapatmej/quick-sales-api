@@ -7,6 +7,7 @@ import ec.com.newsolutions.service.MailService;
 import ec.com.newsolutions.service.UserService;
 import ec.com.newsolutions.service.dto.PasswordChangeDTO;
 import ec.com.newsolutions.service.dto.UserDTO;
+import ec.com.newsolutions.service.mapper.UserMapper;
 import ec.com.newsolutions.web.rest.errors.*;
 import ec.com.newsolutions.web.rest.vm.KeyAndPasswordVM;
 import ec.com.newsolutions.web.rest.vm.ManagedUserVM;
@@ -42,11 +43,14 @@ public class AccountResource {
 
     private final MailService mailService;
 
-    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService) {
+    private final UserMapper userMapper;
+
+    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService, UserMapper userMapper) {
 
         this.userRepository = userRepository;
         this.userService = userService;
         this.mailService = mailService;
+        this.userMapper = userMapper;
     }
 
     /**
@@ -102,7 +106,7 @@ public class AccountResource {
     @GetMapping("/account")
     public UserDTO getAccount() {
         return userService.getUserWithAuthorities()
-            .map(UserDTO::new)
+            .map(userMapper::userToUserDTO)
             .orElseThrow(() -> new AccountResourceException("User could not be found"));
     }
 
@@ -115,12 +119,12 @@ public class AccountResource {
      */
     @PostMapping("/account")
     public void saveAccount(@Valid @RequestBody UserDTO userDTO) {
-        String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Current user login not found"));
+        String userEmail = SecurityUtils.getCurrentUserEmail().orElseThrow(() -> new AccountResourceException("Current user login not found"));
         Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
-        if (existingUser.isPresent() && (!existingUser.get().getLogin().equalsIgnoreCase(userLogin))) {
+        if (existingUser.isPresent()) {
             throw new EmailAlreadyUsedException();
         }
-        Optional<User> user = userRepository.findOneByLogin(userLogin);
+        Optional<User> user = userRepository.findOneByEmailIgnoreCase(userEmail);
         if (!user.isPresent()) {
             throw new AccountResourceException("User could not be found");
         }

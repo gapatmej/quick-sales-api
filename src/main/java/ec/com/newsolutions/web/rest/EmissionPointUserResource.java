@@ -31,15 +31,4 @@ public class EmissionPointUserResource {
         this.emissionPointUserService = emissionPointUserService;
     }
 
-    /**
-     * {@code GET  /invoice-clients} : get all the invoiceClients.
-     *
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of invoiceClients in body.
-     */
-    @GetMapping("/emission-point-user/{login}")
-    public ResponseEntity<List<EmissionPointUser>> getAllEmissionPointByUser(@PathVariable String login) {
-    log.debug("REST request to get a page of InvoiceClients");
-    List<EmissionPointUser> emissionPointUsers = emissionPointUserService.findAllByUser(login);
-    return ResponseEntity.ok().body(emissionPointUsers);
-    }
 }

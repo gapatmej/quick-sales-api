@@ -2,6 +2,8 @@ package ec.com.newsolutions.service;
 
 import ec.com.newsolutions.domain.User;
 
+import ec.com.newsolutions.service.dto.UserDTO;
+import ec.com.newsolutions.service.mapper.UserMapper;
 import io.github.jhipster.config.JHipsterProperties;
 
 import java.nio.charset.StandardCharsets;
@@ -42,13 +44,16 @@ public class MailService {
 
     private final SpringTemplateEngine templateEngine;
 
+    private final UserMapper userMapper;
+
     public MailService(JHipsterProperties jHipsterProperties, JavaMailSender javaMailSender,
-            MessageSource messageSource, SpringTemplateEngine templateEngine) {
+                       MessageSource messageSource, SpringTemplateEngine templateEngine, UserMapper userMapper) {
 
         this.jHipsterProperties = jHipsterProperties;
         this.javaMailSender = javaMailSender;
         this.messageSource = messageSource;
         this.templateEngine = templateEngine;
+        this.userMapper = userMapper;
     }
 
     @Async
@@ -74,7 +79,7 @@ public class MailService {
     @Async
     public void sendEmailFromTemplate(User user, String templateName, String titleKey) {
         if (user.getEmail() == null) {
-            log.debug("Email doesn't exist for user '{}'", user.getLogin());
+            log.debug("Email doesn't exist for user '{}'", user.getEmail());
             return;
         }
         Locale locale = Locale.forLanguageTag(user.getLangKey());
@@ -93,9 +98,9 @@ public class MailService {
     }
 
     @Async
-    public void sendCreationEmail(User user) {
-        log.debug("Sending creation email to '{}'", user.getEmail());
-        sendEmailFromTemplate(user, "mail/creationEmail", "email.activation.title");
+    public void sendCreationEmail(UserDTO userDTO) {
+        log.debug("Sending creation email to '{}'", userDTO.getEmail());
+        sendEmailFromTemplate(userMapper.userDTOToUser(userDTO), "mail/creationEmail", "email.activation.title");
     }
 
     @Async

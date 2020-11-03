@@ -1,91 +1,53 @@
 package ec.com.newsolutions.service.dto;
 
-import ec.com.newsolutions.config.Constants;
-
 import ec.com.newsolutions.domain.Authority;
 import ec.com.newsolutions.domain.User;
 
-import javax.validation.constraints.*;
-import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-/**
- * A DTO representing a user, with his authorities.
- */
-public class UserDTO {
+public class UserDTO extends AbstractMainDTO {
 
-    private Long id;
+    private String identification;
 
-    @NotBlank
-    @Pattern(regexp = Constants.LOGIN_REGEX)
-    @Size(min = 1, max = 50)
-    private String login;
-
-    @Size(max = 50)
-    private String firstName;
-
-    @Size(max = 50)
-    private String lastName;
-
-    @Email
-    @Size(min = 5, max = 254)
     private String email;
 
-    @Size(max = 256)
-    private String imageUrl;
+    private String firstName;
+
+    private String lastName;
+
+    private String phone;
 
     private boolean activated = false;
 
-    @Size(min = 2, max = 10)
     private String langKey;
 
-    private String createdBy;
+    private String imageUrl;
 
-    private Instant createdDate;
+    private List<AuthorityDTO> authorities = new ArrayList<>();
 
-    private String lastModifiedBy;
+    private List<OrganizationDTO> organizations = new ArrayList<>();
 
-    private Instant lastModifiedDate;
-
-    private Set<String> authorities;
+    private List<BranchOfficeDTO> branchOffices = new ArrayList<>();
 
     public UserDTO() {
-        // Empty constructor needed for Jackson.
     }
 
-    public UserDTO(User user) {
-        this.id = user.getId();
-        this.login = user.getLogin();
-        this.firstName = user.getFirstName();
-        this.lastName = user.getLastName();
-        this.email = user.getEmail();
-        this.activated = user.isActivated();
-        this.imageUrl = user.getImageUrl();
-        this.langKey = user.getLangKey();
-        this.createdBy = user.getCreatedBy();
-        this.createdDate = user.getCreatedDate();
-        this.lastModifiedBy = user.getLastModifiedBy();
-        this.lastModifiedDate = user.getLastModifiedDate();
-        this.authorities = user.getAuthorities().stream()
-            .map(Authority::getName)
-            .collect(Collectors.toSet());
+    public String getIdentification() {
+        return identification;
     }
 
-    public Long getId() {
-        return id;
+    public void setIdentification(String identification) {
+        this.identification = identification;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public String getEmail() {
+        return email;
     }
 
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getFirstName() {
@@ -104,20 +66,12 @@ public class UserDTO {
         this.lastName = lastName;
     }
 
-    public String getEmail() {
-        return email;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public boolean isActivated() {
@@ -136,61 +90,35 @@ public class UserDTO {
         this.langKey = langKey;
     }
 
-    public String getCreatedBy() {
-        return createdBy;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
-    public Instant getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Instant createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public String getLastModifiedBy() {
-        return lastModifiedBy;
-    }
-
-    public void setLastModifiedBy(String lastModifiedBy) {
-        this.lastModifiedBy = lastModifiedBy;
-    }
-
-    public Instant getLastModifiedDate() {
-        return lastModifiedDate;
-    }
-
-    public void setLastModifiedDate(Instant lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
-    }
-
-    public Set<String> getAuthorities() {
+    public List<AuthorityDTO> getAuthorities() {
         return authorities;
     }
 
-    public void setAuthorities(Set<String> authorities) {
+    public void setAuthorities(List<AuthorityDTO> authorities) {
         this.authorities = authorities;
     }
 
-    @Override
-    public String toString() {
-        return "UserDTO{" +
-            "login='" + login + '\'' +
-            ", firstName='" + firstName + '\'' +
-            ", lastName='" + lastName + '\'' +
-            ", email='" + email + '\'' +
-            ", imageUrl='" + imageUrl + '\'' +
-            ", activated=" + activated +
-            ", langKey='" + langKey + '\'' +
-            ", createdBy=" + createdBy +
-            ", createdDate=" + createdDate +
-            ", lastModifiedBy='" + lastModifiedBy + '\'' +
-            ", lastModifiedDate=" + lastModifiedDate +
-            ", authorities=" + authorities +
-            "}";
+    public List<OrganizationDTO> getOrganizations() {
+        return organizations;
+    }
+
+    public void setOrganizations(List<OrganizationDTO> organizations) {
+        this.organizations = organizations;
+    }
+
+    public List<BranchOfficeDTO> getBranchOffices() {
+        return branchOffices;
+    }
+
+    public void setBranchOffices(List<BranchOfficeDTO> branchOffices) {
+        this.branchOffices = branchOffices;
     }
 }

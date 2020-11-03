@@ -51,8 +51,8 @@ public class InvoiceClientServiceImpl implements InvoiceClientService {
     @Override
     public InvoiceClient save(InvoiceClient invoiceClient) {
         log.debug("Request to save InvoiceClient : {}", invoiceClient);
-        Optional<Organization> organizationOptional = organizationRepository.findOneByUserLogin(SecurityUtils.getCurrentUserJWT().get());
-        ElectronicDocumentInfo electronicDocumentInfo = new ElectronicDocumentInfo(organizationOptional.get());
+        //Optional<Organization> organizationOptional = organizationRepository.findOneByUserLogin(SecurityUtils.getCurrentUserJWT().get());
+        ElectronicDocumentInfo electronicDocumentInfo = new ElectronicDocumentInfo(new Organization());
         invoiceClient.setElectronicDocumentInfo(electronicDocumentInfo);
 
         invoiceClient.getDetailInvoices().stream().forEach(d->d.setInvoice(invoiceClient));

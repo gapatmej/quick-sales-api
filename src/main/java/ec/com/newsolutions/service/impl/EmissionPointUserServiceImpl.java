@@ -22,8 +22,4 @@ public class EmissionPointUserServiceImpl implements EmissionPointUserService {
         this.emissionPointUserRepository = emissionPointUserRepository;
     }
 
-    @Override
-    public List<EmissionPointUser> findAllByUser(String login) {
-        return emissionPointUserRepository.findEmissionPointUserByUser_Login(login) ;
-    }
 }
