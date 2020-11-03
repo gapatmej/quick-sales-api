@@ -6,6 +6,7 @@ import ec.com.newsolutions.domain.Cellar;
 import ec.com.newsolutions.repository.CellarRepository;
 import ec.com.newsolutions.service.dto.CellarDTO;
 import ec.com.newsolutions.service.mapper.CellarMapper;
+import ec.com.newsolutions.utils.GsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +34,7 @@ public class CellarServiceImpl implements CellarService {
 
     @Override
     public CellarDTO save(CellarDTO cellarDTO) {
-        log.debug("Request to save Cellar : {}", cellarDTO);
+        log.debug("Request to save Cellar : {}", GsonUtils.entityToJson(cellarDTO));
         Cellar cellar =  cellarRepository.save(cellarMapper.toEntity(cellarDTO));
         return cellarMapper.toDto(cellar);
     }

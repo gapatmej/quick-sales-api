@@ -8,6 +8,7 @@ import ec.com.newsolutions.service.EmissionPointService;
 import ec.com.newsolutions.service.dto.BranchOfficeDTO;
 
 import ec.com.newsolutions.service.mapper.BranchOfficeMapper;
+import ec.com.newsolutions.utils.GsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +38,7 @@ public class BranchOfficeServiceImpl implements BranchOfficeService {
     @Override
     public BranchOfficeDTO save(BranchOfficeDTO branchOfficeDTO) {
         BranchOfficeDTO result ;
-        log.debug("Request to save BranchOffice : {}", branchOfficeDTO);
+        log.debug("Request to save BranchOffice : {}", GsonUtils.entityToJson(branchOfficeDTO));
         final BranchOffice branchOffice = branchOfficeRepository.save(branchOfficeMapper.toEntity(branchOfficeDTO));
         result = branchOfficeMapper.toDto(branchOffice);
 

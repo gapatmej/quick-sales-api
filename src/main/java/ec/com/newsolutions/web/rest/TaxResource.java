@@ -3,6 +3,7 @@ package ec.com.newsolutions.web.rest;
 import ec.com.newsolutions.service.TaxService;
 import ec.com.newsolutions.service.dto.TaxDTO;
 
+import ec.com.newsolutions.utils.GsonUtils;
 import ec.com.newsolutions.web.rest.errors.IdExistException;
 import ec.com.newsolutions.web.rest.errors.InvalidIdException;
 import ec.com.newsolutions.web.rest.util.HeaderUtil;
@@ -36,7 +37,7 @@ public class TaxResource extends AbstractResource{
 
     @PostMapping("/taxes")
     public ResponseEntity<TaxDTO> createTax(@Valid @RequestBody TaxDTO taxDTO) throws URISyntaxException {
-        log.debug("REST request to save Tax : {}", taxDTO);
+        log.debug("REST request to save Tax : {}", GsonUtils.entityToJson(taxDTO));
         if (taxDTO.getId() != null) throw new IdExistException(entityName);
 
         TaxDTO result = taxService.save(taxDTO);
@@ -47,7 +48,7 @@ public class TaxResource extends AbstractResource{
 
     @PutMapping("/taxes")
     public ResponseEntity<TaxDTO> updateTax(@Valid @RequestBody TaxDTO taxDTO) throws URISyntaxException {
-        log.debug("REST request to update Tax : {}", taxDTO);
+        log.debug("REST request to update Tax : {}", GsonUtils.entityToJson(taxDTO));
         if (taxDTO.getId() == null) throw new InvalidIdException(entityName);
 
         TaxDTO result = taxService.save(taxDTO);

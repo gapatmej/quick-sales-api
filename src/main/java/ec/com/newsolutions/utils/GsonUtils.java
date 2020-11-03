@@ -14,4 +14,8 @@ public class GsonUtils {
         return a;
     }
 
+    public static String entityToJson (Object entity){
+        return gson.toJson(entity);
+    }
+
 }

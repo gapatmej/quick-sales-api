@@ -2,6 +2,7 @@ package ec.com.newsolutions.web.rest;
 
 import ec.com.newsolutions.service.UnitService;
 import ec.com.newsolutions.service.dto.UnitDTO;
+import ec.com.newsolutions.utils.GsonUtils;
 import ec.com.newsolutions.web.rest.errors.IdExistException;
 import ec.com.newsolutions.web.rest.errors.InvalidIdException;
 import ec.com.newsolutions.web.rest.util.HeaderUtil;
@@ -34,7 +35,7 @@ public class UnitResource extends AbstractResource{
 
     @PostMapping("/units")
     public ResponseEntity<UnitDTO> createUnit(@Valid @RequestBody UnitDTO unitDTO) throws URISyntaxException {
-        log.debug("REST request to save Unit : {}", unitDTO);
+        log.debug("REST request to save Unit : {}", GsonUtils.entityToJson(unitDTO));
         if (unitDTO.getId() != null) throw new IdExistException(entityName);
 
         UnitDTO result = unitService.save(unitDTO);
@@ -45,7 +46,7 @@ public class UnitResource extends AbstractResource{
 
     @PutMapping("/units")
     public ResponseEntity<UnitDTO> updateUnit(@Valid @RequestBody UnitDTO unitDTO) throws URISyntaxException {
-        log.debug("REST request to update Unit : {}", unitDTO);
+        log.debug("REST request to update Unit : {}", GsonUtils.entityToJson(unitDTO));
         if (unitDTO.getId() == null) throw new InvalidIdException(entityName);
 
         UnitDTO result = unitService.save(unitDTO);

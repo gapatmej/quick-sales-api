@@ -6,6 +6,7 @@ import ec.com.newsolutions.domain.Product;
 import ec.com.newsolutions.repository.ProductRepository;
 import ec.com.newsolutions.service.dto.ProductDTO;
 import ec.com.newsolutions.service.mapper.ProductMapper;
+import ec.com.newsolutions.utils.GsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +36,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO save(ProductDTO productDTO) {
-        log.debug("Request to save Product : {}", productDTO);
+        log.debug("Request to save Product : {}", GsonUtils.entityToJson(productDTO));
         Product product = productRepository.save(productMapper.toEntity(productDTO));
         return productMapper.toDto(product);
     }

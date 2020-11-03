@@ -6,6 +6,7 @@ import ec.com.newsolutions.domain.Tax;
 import ec.com.newsolutions.repository.TaxRepository;
 import ec.com.newsolutions.service.dto.TaxDTO;
 import ec.com.newsolutions.service.mapper.TaxMapper;
+import ec.com.newsolutions.utils.GsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +36,7 @@ public class TaxServiceImpl implements TaxService {
 
     @Override
     public TaxDTO save(TaxDTO taxDTO) {
-        log.debug("Request to save Unit : {}", taxDTO);
+        log.debug("Request to save Unit : {}", GsonUtils.entityToJson(taxDTO));
         Tax tax =  taxRepository.save(taxMapper.toEntity(taxDTO));
         return taxMapper.toDto(tax);
     }

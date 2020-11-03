@@ -3,6 +3,7 @@ package ec.com.newsolutions.web.rest;
 import ec.com.newsolutions.domain.Product;
 import ec.com.newsolutions.service.ProductService;
 import ec.com.newsolutions.service.dto.ProductDTO;
+import ec.com.newsolutions.utils.GsonUtils;
 import ec.com.newsolutions.web.rest.errors.BadRequestAlertException;
 
 import ec.com.newsolutions.web.rest.errors.IdExistException;
@@ -27,36 +28,35 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
-public class ProductResource {
+public class ProductResource extends AbstractResource {
 
-    private final Logger log = LoggerFactory.getLogger(ProductResource.class);
-
-    private static final String ENTITY_NAME = "product";
     private final ProductService productService;
 
     public ProductResource(ProductService productService) {
+
+        super(ProductResource.class, "product");
         this.productService = productService;
     }
 
     @PostMapping("/products")
     public ResponseEntity<ProductDTO> createProduct(@Valid @RequestBody ProductDTO productDTO) throws URISyntaxException {
-        log.debug("REST request to save Product : {}", productDTO);
-        if (productDTO.getId() != null) throw new IdExistException(ENTITY_NAME);
+        log.debug("REST request to save Product : {}", GsonUtils.entityToJson(productDTO));
+        if (productDTO.getId() != null) throw new IdExistException(entityName);
 
         ProductDTO result = productService.save(productDTO);
         return ResponseEntity.created(new URI("/api/products/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(true, ENTITY_NAME, result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert(true, entityName, result.getId().toString()))
             .body(result);
     }
 
     @PutMapping("/products")
     public ResponseEntity<ProductDTO> updateProduct(@Valid @RequestBody ProductDTO productDTO) throws URISyntaxException {
-        log.debug("REST request to update Product : {}", productDTO);
-        if (productDTO.getId() == null) throw new InvalidIdException(ENTITY_NAME);
+        log.debug("REST request to update Product : {}", GsonUtils.entityToJson(productDTO));
+        if (productDTO.getId() == null) throw new InvalidIdException(entityName);
 
         ProductDTO result = productService.save(productDTO);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(true, ENTITY_NAME, productDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(true, entityName, productDTO.getId().toString()))
             .body(result);
     }
 
@@ -79,6 +79,6 @@ public class ProductResource {
     public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
         log.debug("REST request to delete Product : {}", id);
         productService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(true, ENTITY_NAME, id.toString())).build();
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(true, entityName, id.toString())).build();
     }
 }

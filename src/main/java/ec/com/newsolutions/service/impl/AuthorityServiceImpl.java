@@ -6,6 +6,8 @@ import ec.com.newsolutions.repository.specification.UtilsSpecification;
 import ec.com.newsolutions.service.AuthorityService;
 import ec.com.newsolutions.service.dto.AuthorityDTO;
 import ec.com.newsolutions.service.mapper.AuthorityMapper;
+import ec.com.newsolutions.utils.GsonUtils;
+import io.micrometer.core.instrument.util.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -30,7 +32,7 @@ public class AuthorityServiceImpl implements AuthorityService {
     @Override
     public AuthorityDTO save(AuthorityDTO authorityDTO) {
         AuthorityDTO result ;
-        log.debug("Request to save Authority : {}", authorityDTO);
+        log.debug("Request to save Authority : {}", GsonUtils.entityToJson(authorityDTO));
         final Authority authority = authorityRepository.save(authorityMapper.toEntity(authorityDTO));
         result = authorityMapper.toDto(authority);
 

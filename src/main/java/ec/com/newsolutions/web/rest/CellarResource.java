@@ -2,6 +2,7 @@ package ec.com.newsolutions.web.rest;
 
 import ec.com.newsolutions.service.CellarService;
 import ec.com.newsolutions.service.dto.CellarDTO;
+import ec.com.newsolutions.utils.GsonUtils;
 import ec.com.newsolutions.web.rest.errors.BadRequestAlertException;
 
 import ec.com.newsolutions.web.rest.errors.IdExistException;
@@ -38,7 +39,7 @@ public class CellarResource extends AbstractResource {
 
     @PostMapping("/cellars")
     public ResponseEntity<CellarDTO> createCellar(@Valid @RequestBody CellarDTO cellarDTO) throws URISyntaxException {
-        log.debug("REST request to save Cellar : {}", cellarDTO);
+        log.debug("REST request to save Cellar : {}", GsonUtils.entityToJson(cellarDTO));
         if (cellarDTO.getId() != null) throw new IdExistException(entityName);
 
         CellarDTO result = cellarService.save(cellarDTO);
@@ -49,7 +50,7 @@ public class CellarResource extends AbstractResource {
 
     @PutMapping("/cellars")
     public ResponseEntity<CellarDTO> updateCellar(@Valid @RequestBody CellarDTO cellarDTO) throws URISyntaxException {
-        log.debug("REST request to update Cellar : {}", cellarDTO);
+        log.debug("REST request to update Cellar : {}", GsonUtils.entityToJson(cellarDTO));
         if (cellarDTO.getId() == null) throw new InvalidIdException(entityName);
 
         CellarDTO result = cellarService.save(cellarDTO);

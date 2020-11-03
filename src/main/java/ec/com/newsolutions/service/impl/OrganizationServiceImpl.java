@@ -6,6 +6,7 @@ import ec.com.newsolutions.domain.Organization;
 import ec.com.newsolutions.repository.OrganizationRepository;
 import ec.com.newsolutions.service.dto.OrganizationDTO;
 import ec.com.newsolutions.service.mapper.OrganizationMapper;
+import ec.com.newsolutions.utils.GsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +33,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     @Override
     public OrganizationDTO save(OrganizationDTO organizationDTO) {
-        log.debug("Request to save Organization : {}", organizationDTO);
+        log.debug("Request to save Organization : {}", GsonUtils.entityToJson(organizationDTO));
         Organization organization =  organizationRepository.save(organizationMapper.toEntity(organizationDTO));
         return organizationMapper.toDto(organization);
     }

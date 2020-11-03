@@ -3,6 +3,7 @@ package ec.com.newsolutions.web.rest;
 
 import ec.com.newsolutions.service.AuthorityService;
 import ec.com.newsolutions.service.dto.AuthorityDTO;
+import ec.com.newsolutions.utils.GsonUtils;
 import ec.com.newsolutions.web.rest.errors.IdExistException;
 import ec.com.newsolutions.web.rest.errors.InvalidIdException;
 import ec.com.newsolutions.web.rest.util.HeaderUtil;
@@ -35,7 +36,7 @@ public class AuthorityResource extends AbstractResource {
 
     @PostMapping("/authorities")
     public ResponseEntity<AuthorityDTO> createAuthority(@Valid @RequestBody AuthorityDTO authorityDTO) throws URISyntaxException {
-        log.debug("REST request to save Authority : {}", authorityDTO);
+        log.debug("REST request to save Authority : {}", GsonUtils.entityToJson(authorityDTO));
         if (authorityDTO.getId() != null) throw new IdExistException(entityName);
 
         AuthorityDTO result = authorityService.save(authorityDTO);
@@ -46,7 +47,7 @@ public class AuthorityResource extends AbstractResource {
 
     @PutMapping("/authorities")
     public ResponseEntity<AuthorityDTO> updateAuthority(@Valid @RequestBody AuthorityDTO authorityDTO) throws URISyntaxException {
-        log.debug("REST request to update Authority : {}", authorityDTO);
+        log.debug("REST request to update Authority : {}", GsonUtils.entityToJson(authorityDTO) );
         if (authorityDTO.getId() == null) throw new InvalidIdException(entityName);
 
         AuthorityDTO result = authorityService.save(authorityDTO);

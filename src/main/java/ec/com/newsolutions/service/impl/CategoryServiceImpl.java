@@ -6,6 +6,7 @@ import ec.com.newsolutions.domain.Category;
 import ec.com.newsolutions.repository.CategoryRepository;
 import ec.com.newsolutions.service.dto.CategoryDTO;
 import ec.com.newsolutions.service.mapper.CategoryMapper;
+import ec.com.newsolutions.utils.GsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +33,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDTO save(CategoryDTO categoryDTO) {
-        log.debug("Request to save Category : {}", categoryDTO);
+        log.debug("Request to save Category : {}", GsonUtils.entityToJson(categoryDTO));
         Category category =  categoryRepository.save(categoryMapper.toEntity(categoryDTO));
         return categoryMapper.toDto(category);
     }

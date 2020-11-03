@@ -2,6 +2,7 @@ package ec.com.newsolutions.web.rest;
 
 import ec.com.newsolutions.service.OrganizationService;
 import ec.com.newsolutions.service.dto.OrganizationDTO;
+import ec.com.newsolutions.utils.GsonUtils;
 import ec.com.newsolutions.web.rest.errors.BadRequestAlertException;
 
 import ec.com.newsolutions.web.rest.errors.IdExistException;
@@ -39,7 +40,7 @@ public class OrganizationResource extends  AbstractResource {
 
     @PostMapping("/organizations")
     public ResponseEntity<OrganizationDTO> createOrganization(@Valid @RequestBody OrganizationDTO organizationDTO) throws URISyntaxException {
-        log.debug("REST request to save Organization : {}", organizationDTO);
+        log.debug("REST request to save Organization : {}", GsonUtils.entityToJson(organizationDTO));
         if (organizationDTO.getId() != null) throw new IdExistException(entityName);
 
         OrganizationDTO result = organizationService.save(organizationDTO);
@@ -50,7 +51,7 @@ public class OrganizationResource extends  AbstractResource {
 
     @PutMapping("/organizations")
     public ResponseEntity<OrganizationDTO> updateOrganization(@Valid @RequestBody OrganizationDTO organizationDTO) throws URISyntaxException {
-        log.debug("REST request to update Organization : {}", organizationDTO);
+        log.debug("REST request to update Organization : {}", GsonUtils.entityToJson(organizationDTO));
         if (organizationDTO.getId() == null) throw new InvalidIdException(entityName);
 
         OrganizationDTO result = organizationService.save(organizationDTO);

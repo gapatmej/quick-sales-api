@@ -2,6 +2,7 @@ package ec.com.newsolutions.web.rest;
 
 import ec.com.newsolutions.service.CategoryService;
 import ec.com.newsolutions.service.dto.CategoryDTO;
+import ec.com.newsolutions.utils.GsonUtils;
 import ec.com.newsolutions.web.rest.errors.IdExistException;
 import ec.com.newsolutions.web.rest.errors.InvalidIdException;
 import ec.com.newsolutions.web.rest.util.HeaderUtil;
@@ -36,7 +37,7 @@ public class CategoryResource extends AbstractResource{
 
     @PostMapping("/categories")
     public ResponseEntity<CategoryDTO> createCategory(@Valid @RequestBody CategoryDTO categoryDTO) throws URISyntaxException {
-        log.debug("REST request to save Category : {}", categoryDTO);
+        log.debug("REST request to save Category : {}", GsonUtils.entityToJson(categoryDTO));
         if (categoryDTO.getId() != null) throw new IdExistException(entityName);
 
         CategoryDTO result = categoryService.save(categoryDTO);
@@ -47,7 +48,7 @@ public class CategoryResource extends AbstractResource{
 
     @PutMapping("/categories")
     public ResponseEntity<CategoryDTO> updateCategory(@Valid @RequestBody CategoryDTO categoryDTO) throws URISyntaxException {
-        log.debug("REST request to update Category : {}", categoryDTO);
+        log.debug("REST request to update Category : {}", GsonUtils.entityToJson(categoryDTO));
         if (categoryDTO.getId() == null) throw new InvalidIdException(entityName);
 
         CategoryDTO result = categoryService.save(categoryDTO);

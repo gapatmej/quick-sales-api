@@ -7,6 +7,7 @@ import ec.com.newsolutions.service.UnitService;
 import ec.com.newsolutions.service.dto.UnitDTO;
 import ec.com.newsolutions.service.mapper.UnitMapper;
 
+import ec.com.newsolutions.utils.GsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -31,7 +32,7 @@ public class UnitServiceImpl implements UnitService {
 
     @Override
     public UnitDTO save(UnitDTO unitDTO) {
-        log.debug("Request to save Unit : {}", unitDTO);
+        log.debug("Request to save Unit : {}", GsonUtils.entityToJson(unitDTO));
         Unit unit =  unitRepository.save(unitMapper.toEntity(unitDTO));
         return unitMapper.toDto(unit);
     }

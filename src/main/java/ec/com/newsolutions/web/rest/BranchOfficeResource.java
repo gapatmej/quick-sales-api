@@ -4,6 +4,7 @@ import ec.com.newsolutions.service.BranchOfficeService;
 import ec.com.newsolutions.service.EmissionPointService;
 import ec.com.newsolutions.service.dto.BranchOfficeDTO;
 
+import ec.com.newsolutions.utils.GsonUtils;
 import ec.com.newsolutions.web.rest.errors.IdExistException;
 import ec.com.newsolutions.web.rest.errors.InvalidIdException;
 import ec.com.newsolutions.web.rest.util.HeaderUtil;
@@ -38,7 +39,7 @@ public class BranchOfficeResource extends AbstractResource {
 
     @PostMapping("/branch-offices")
     public ResponseEntity<BranchOfficeDTO> createBranchOffice(@Valid @RequestBody BranchOfficeDTO branchOfficeDTO) throws URISyntaxException {
-        log.debug("REST request to save BranchOffice : {}", branchOfficeDTO);
+        log.debug("REST request to save BranchOffice : {}", GsonUtils.entityToJson(branchOfficeDTO));
         if (branchOfficeDTO.getId() != null) throw new IdExistException(entityName);
 
         BranchOfficeDTO result = branchOfficeService.save(branchOfficeDTO);
@@ -49,7 +50,7 @@ public class BranchOfficeResource extends AbstractResource {
 
     @PutMapping("/branch-offices")
     public ResponseEntity<BranchOfficeDTO> updateBranchOffice(@Valid @RequestBody BranchOfficeDTO branchOfficeDTO) throws URISyntaxException {
-        log.debug("REST request to update BranchOffice : {}", branchOfficeDTO);
+        log.debug("REST request to update BranchOffice : {}", GsonUtils.entityToJson(branchOfficeDTO));
         if (branchOfficeDTO.getId() == null) throw new InvalidIdException(entityName);
 
         BranchOfficeDTO result = branchOfficeService.save(branchOfficeDTO);
