@@ -6,15 +6,23 @@ import javax.persistence.*;
 @Table(name = "jhi_permit")
 public class Permit extends AbstractMainEntity {
 
-    @Column(length = 50)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="organization_id", nullable = false)
+    private Organization organization;
+
+    @Column(name = "name", length = 50, nullable = false)
     private String name;
 
     @Column(name = "resource", length = 200)
     private String resource;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="authority_id", nullable = false)
-    private Authority authority;
+    public Organization getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
+    }
 
     public String getName() {
         return name;
@@ -32,11 +40,4 @@ public class Permit extends AbstractMainEntity {
         this.resource = resource;
     }
 
-    public Authority getAuthority() {
-        return authority;
-    }
-
-    public void setAuthority(Authority authority) {
-        this.authority = authority;
-    }
 }

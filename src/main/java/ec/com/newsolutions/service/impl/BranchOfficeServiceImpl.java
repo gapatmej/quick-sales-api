@@ -1,13 +1,12 @@
 package ec.com.newsolutions.service.impl;
 
-import ec.com.newsolutions.domain.Organization;
 import ec.com.newsolutions.repository.specification.UtilsSpecification;
 import ec.com.newsolutions.service.BranchOfficeService;
 import ec.com.newsolutions.domain.BranchOffice;
 import ec.com.newsolutions.repository.BranchOfficeRepository;
 import ec.com.newsolutions.service.EmissionPointService;
 import ec.com.newsolutions.service.dto.BranchOfficeDTO;
-import ec.com.newsolutions.service.dto.EmissionPointDTO;
+
 import ec.com.newsolutions.service.mapper.BranchOfficeMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service

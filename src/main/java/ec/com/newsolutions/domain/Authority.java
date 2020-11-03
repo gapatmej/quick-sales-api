@@ -1,5 +1,7 @@
 package ec.com.newsolutions.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -24,7 +26,12 @@ public class Authority extends AbstractMainEntity {
     @Column(name = "active", nullable = false)
     private Boolean active;
 
-    @OneToMany(mappedBy = "authority", fetch = FetchType.LAZY)
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+        name = "jhi_authority_permit",
+        joinColumns = {@JoinColumn(name = "authority_id", referencedColumnName = "id")},
+        inverseJoinColumns = {@JoinColumn(name = "permit_id", referencedColumnName = "id")})
     private Set<Permit> permits = new HashSet<>();
 
     public Organization getOrganization() {

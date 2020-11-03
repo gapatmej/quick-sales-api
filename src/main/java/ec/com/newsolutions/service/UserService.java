@@ -110,7 +110,7 @@ public class UserService {
         // new user gets registration key
         newUser.setActivationKey(RandomUtil.generateActivationKey());
         Set<Authority> authorities = new HashSet<>();
-        authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
+       // authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
         newUser.setAuthorities(authorities);
         userRepository.save(newUser);
         log.debug("Created Information for User: {}", newUser);
@@ -145,14 +145,14 @@ public class UserService {
         user.setResetKey(RandomUtil.generateResetKey());
         user.setResetDate(Instant.now());
         user.setActivated(true);
-        if (userDTO.getAuthorities() != null) {
+       /* if (userDTO.getAuthorities() != null) {
             Set<Authority> authorities = userDTO.getAuthorities().stream()
                 .map(authorityRepository::findById)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toSet());
             user.setAuthorities(authorities);
-        }
+        }*/
         userRepository.save(user);
         log.debug("Created Information for User: {}", user);
         return user;
@@ -205,11 +205,11 @@ public class UserService {
                 user.setLangKey(userDTO.getLangKey());
                 Set<Authority> managedAuthorities = user.getAuthorities();
                 managedAuthorities.clear();
-                userDTO.getAuthorities().stream()
+              /*  userDTO.getAuthorities().stream()
                     .map(authorityRepository::findById)
                     .filter(Optional::isPresent)
                     .map(Optional::get)
-                    .forEach(managedAuthorities::add);
+                    .forEach(managedAuthorities::add);*/
                 log.debug("Changed Information for User: {}", user);
                 return user;
             })

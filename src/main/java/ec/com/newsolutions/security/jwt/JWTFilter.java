@@ -40,8 +40,9 @@ public class JWTFilter extends GenericFilterBean {
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
             if("POST".equals(httpServletRequest.getMethod()) || "PUT".equals(httpServletRequest.getMethod())){
-                Long organizationId = Long.parseLong(this.tokenProvider.getClaimnWorkspaceById(jwt,"organizationId").toString());
-                if(!StringUtils.isEmpty(organizationId)){
+                Object claimWorkspace = this.tokenProvider.getClaimnWorkspaceById(jwt,"organizationId");
+                if(!StringUtils.isEmpty(claimWorkspace)){
+                    Long organizationId = Long.parseLong(claimWorkspace.toString());
                     XSSRequestWrapper wrappedRequest = new XSSRequestWrapper(
                         (HttpServletRequest) servletRequest);
 
