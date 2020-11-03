@@ -25,36 +25,34 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
-public class CategoryResource {
-
-    private final Logger log = LoggerFactory.getLogger(CategoryResource.class);
-    private static final String ENTITY_NAME = "category";
+public class CategoryResource extends AbstractResource{
 
     private final CategoryService categoryService;
 
     public CategoryResource(CategoryService categoryService) {
+        super(CategoryResource.class, "category");
         this.categoryService = categoryService;
     }
 
     @PostMapping("/categories")
     public ResponseEntity<CategoryDTO> createCategory(@Valid @RequestBody CategoryDTO categoryDTO) throws URISyntaxException {
         log.debug("REST request to save Category : {}", categoryDTO);
-        if (categoryDTO.getId() != null) throw new IdExistException(ENTITY_NAME);
+        if (categoryDTO.getId() != null) throw new IdExistException(entityName);
 
         CategoryDTO result = categoryService.save(categoryDTO);
         return ResponseEntity.created(new URI("/api/categories/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(true, ENTITY_NAME, result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert(true, entityName, result.getId().toString()))
             .body(result);
     }
 
     @PutMapping("/categories")
     public ResponseEntity<CategoryDTO> updateCategory(@Valid @RequestBody CategoryDTO categoryDTO) throws URISyntaxException {
         log.debug("REST request to update Category : {}", categoryDTO);
-        if (categoryDTO.getId() == null) throw new InvalidIdException(ENTITY_NAME);
+        if (categoryDTO.getId() == null) throw new InvalidIdException(entityName);
 
         CategoryDTO result = categoryService.save(categoryDTO);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(true, ENTITY_NAME, categoryDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(true, entityName, categoryDTO.getId().toString()))
             .body(result);
     }
 
@@ -77,6 +75,6 @@ public class CategoryResource {
     public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
         log.debug("REST request to delete Category : {}", id);
         categoryService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(true, ENTITY_NAME, id.toString())).build();
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(true, entityName, id.toString())).build();
     }
 }

@@ -1,0 +1,79 @@
+package ec.com.newsolutions.web.rest;
+
+
+import ec.com.newsolutions.service.AuthorityService;
+import ec.com.newsolutions.service.dto.AuthorityDTO;
+import ec.com.newsolutions.web.rest.errors.IdExistException;
+import ec.com.newsolutions.web.rest.errors.InvalidIdException;
+import ec.com.newsolutions.web.rest.util.HeaderUtil;
+import io.github.jhipster.web.util.PaginationUtil;
+import io.github.jhipster.web.util.ResponseUtil;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import javax.validation.Valid;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
+
+@RestController
+@RequestMapping("/api")
+public class AuthorityResource extends AbstractResource {
+
+    private final AuthorityService authorityService;
+
+    public AuthorityResource(AuthorityService authorityService) {
+        super(AuthorityResource.class, "authority");
+        this.authorityService = authorityService;
+    }
+
+
+    @PostMapping("/authorities")
+    public ResponseEntity<AuthorityDTO> createAuthority(@Valid @RequestBody AuthorityDTO authorityDTO) throws URISyntaxException {
+        log.debug("REST request to save Authority : {}", authorityDTO);
+        if (authorityDTO.getId() != null) throw new IdExistException(entityName);
+
+        AuthorityDTO result = authorityService.save(authorityDTO);
+        return ResponseEntity.created(new URI("/api/authorities/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(true, entityName, result.getId().toString()))
+            .body(result);
+    }
+
+    @PutMapping("/authorities")
+    public ResponseEntity<AuthorityDTO> updateAuthority(@Valid @RequestBody AuthorityDTO authorityDTO) throws URISyntaxException {
+        log.debug("REST request to update Authority : {}", authorityDTO);
+        if (authorityDTO.getId() == null) throw new InvalidIdException(entityName);
+
+        AuthorityDTO result = authorityService.save(authorityDTO);
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(true, entityName, result.getId().toString()))
+            .body(result);
+    }
+
+    @GetMapping("/authorities")
+    public ResponseEntity<List<AuthorityDTO>> getAllAuthorities(String search, Pageable pageable) {
+        log.debug("REST request to get a page of Authorities");
+        Page<AuthorityDTO> page = authorityService.findAll(search, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    @GetMapping("/authorities/{id}")
+    public ResponseEntity<AuthorityDTO> getAuthority(@PathVariable Long id) {
+        log.debug("REST request to get Authority : {}", id);
+        Optional<AuthorityDTO> authorityDTO = authorityService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(authorityDTO);
+    }
+
+    @DeleteMapping("/authorities/{id}")
+    public ResponseEntity<Void> deleteAuthority(@PathVariable Long id) {
+        log.debug("REST request to delete Authority : {}", id);
+        authorityService.delete(id);
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(true, entityName, id.toString())).build();
+    }
+}

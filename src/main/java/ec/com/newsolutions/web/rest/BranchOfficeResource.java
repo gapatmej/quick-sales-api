@@ -27,36 +27,34 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
-public class BranchOfficeResource {
+public class BranchOfficeResource extends AbstractResource {
 
-    private final Logger log = LoggerFactory.getLogger(BranchOfficeResource.class);
-
-    private static final String ENTITY_NAME = "branchOffice";
     private final BranchOfficeService branchOfficeService;
 
     public BranchOfficeResource(BranchOfficeService branchOfficeService) {
+        super(BranchOfficeResource.class,"branchOffice");
         this.branchOfficeService = branchOfficeService;
     }
 
     @PostMapping("/branch-offices")
     public ResponseEntity<BranchOfficeDTO> createBranchOffice(@Valid @RequestBody BranchOfficeDTO branchOfficeDTO) throws URISyntaxException {
         log.debug("REST request to save BranchOffice : {}", branchOfficeDTO);
-        if (branchOfficeDTO.getId() != null) throw new IdExistException(ENTITY_NAME);
+        if (branchOfficeDTO.getId() != null) throw new IdExistException(entityName);
 
         BranchOfficeDTO result = branchOfficeService.save(branchOfficeDTO);
         return ResponseEntity.created(new URI("/api/organizations/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(true, ENTITY_NAME, result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert(true, entityName, result.getId().toString()))
             .body(result);
     }
 
     @PutMapping("/branch-offices")
     public ResponseEntity<BranchOfficeDTO> updateBranchOffice(@Valid @RequestBody BranchOfficeDTO branchOfficeDTO) throws URISyntaxException {
         log.debug("REST request to update BranchOffice : {}", branchOfficeDTO);
-        if (branchOfficeDTO.getId() == null) throw new InvalidIdException(ENTITY_NAME);
+        if (branchOfficeDTO.getId() == null) throw new InvalidIdException(entityName);
 
         BranchOfficeDTO result = branchOfficeService.save(branchOfficeDTO);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(true, ENTITY_NAME, result.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(true, entityName, result.getId().toString()))
             .body(result);
     }
 
@@ -80,6 +78,6 @@ public class BranchOfficeResource {
     public ResponseEntity<Void> deleteBranchOffice(@PathVariable Long id) {
         log.debug("REST request to delete BranchOffice : {}", id);
         branchOfficeService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(true, ENTITY_NAME, id.toString())).build();
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(true, entityName, id.toString())).build();
     }
 }

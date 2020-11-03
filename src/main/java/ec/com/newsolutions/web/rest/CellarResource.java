@@ -26,37 +26,35 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
-public class CellarResource {
-
-    private final Logger log = LoggerFactory.getLogger(CellarResource.class);
-
-    private static final String ENTITY_NAME = "cellar";
+public class CellarResource extends AbstractResource {
 
     private final CellarService cellarService;
 
     public CellarResource(CellarService cellarService) {
+
+        super(CellarResource.class, "cellar");
         this.cellarService = cellarService;
     }
 
     @PostMapping("/cellars")
     public ResponseEntity<CellarDTO> createCellar(@Valid @RequestBody CellarDTO cellarDTO) throws URISyntaxException {
         log.debug("REST request to save Cellar : {}", cellarDTO);
-        if (cellarDTO.getId() != null) throw new IdExistException(ENTITY_NAME);
+        if (cellarDTO.getId() != null) throw new IdExistException(entityName);
 
         CellarDTO result = cellarService.save(cellarDTO);
         return ResponseEntity.created(new URI("/api/cellars/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(true, ENTITY_NAME, result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert(true, entityName, result.getId().toString()))
             .body(result);
     }
 
     @PutMapping("/cellars")
     public ResponseEntity<CellarDTO> updateCellar(@Valid @RequestBody CellarDTO cellarDTO) throws URISyntaxException {
         log.debug("REST request to update Cellar : {}", cellarDTO);
-        if (cellarDTO.getId() == null) throw new InvalidIdException(ENTITY_NAME);
+        if (cellarDTO.getId() == null) throw new InvalidIdException(entityName);
 
         CellarDTO result = cellarService.save(cellarDTO);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(true, ENTITY_NAME, cellarDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(true, entityName, cellarDTO.getId().toString()))
             .body(result);
     }
 
@@ -79,6 +77,6 @@ public class CellarResource {
     public ResponseEntity<Void> deleteCellar(@PathVariable Long id) {
         log.debug("REST request to delete Cellar : {}", id);
         cellarService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(true, ENTITY_NAME, id.toString())).build();
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(true, entityName, id.toString())).build();
     }
 }

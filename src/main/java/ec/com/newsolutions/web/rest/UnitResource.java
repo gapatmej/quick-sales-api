@@ -24,36 +24,33 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
-public class UnitResource {
-
-    private final Logger log = LoggerFactory.getLogger(UnitResource.class);
-    private static final String ENTITY_NAME = "unit";
-
+public class UnitResource extends AbstractResource{
     private final UnitService unitService;
 
     public UnitResource(UnitService unitService) {
+        super(UnitResource.class, "unit");
         this.unitService = unitService;
     }
 
     @PostMapping("/units")
     public ResponseEntity<UnitDTO> createUnit(@Valid @RequestBody UnitDTO unitDTO) throws URISyntaxException {
         log.debug("REST request to save Unit : {}", unitDTO);
-        if (unitDTO.getId() != null) throw new IdExistException(ENTITY_NAME);
+        if (unitDTO.getId() != null) throw new IdExistException(entityName);
 
         UnitDTO result = unitService.save(unitDTO);
         return ResponseEntity.created(new URI("/api/units/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(true, ENTITY_NAME, result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert(true, entityName, result.getId().toString()))
             .body(result);
     }
 
     @PutMapping("/units")
     public ResponseEntity<UnitDTO> updateUnit(@Valid @RequestBody UnitDTO unitDTO) throws URISyntaxException {
         log.debug("REST request to update Unit : {}", unitDTO);
-        if (unitDTO.getId() == null) throw new InvalidIdException(ENTITY_NAME);
+        if (unitDTO.getId() == null) throw new InvalidIdException(entityName);
 
         UnitDTO result = unitService.save(unitDTO);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(true, ENTITY_NAME, unitDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(true, entityName, unitDTO.getId().toString()))
             .body(result);
     }
 
@@ -76,6 +73,6 @@ public class UnitResource {
     public ResponseEntity<Void> deleteUnit(@PathVariable Long id) {
         log.debug("REST request to delete Unit : {}", id);
         unitService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(true, ENTITY_NAME, id.toString())).build();
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(true, entityName, id.toString())).build();
     }
 }

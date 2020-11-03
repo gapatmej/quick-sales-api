@@ -25,36 +25,34 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
-public class TaxResource {
-
-    private final Logger log = LoggerFactory.getLogger(TaxResource.class);
-    private static final String ENTITY_NAME = "tax";
+public class TaxResource extends AbstractResource{
 
     private final TaxService taxService;
 
     public TaxResource(TaxService taxService) {
-        this.taxService = taxService;
+
+        super(TaxResource.class, "tax");this.taxService = taxService;
     }
 
     @PostMapping("/taxes")
     public ResponseEntity<TaxDTO> createTax(@Valid @RequestBody TaxDTO taxDTO) throws URISyntaxException {
         log.debug("REST request to save Tax : {}", taxDTO);
-        if (taxDTO.getId() != null) throw new IdExistException(ENTITY_NAME);
+        if (taxDTO.getId() != null) throw new IdExistException(entityName);
 
         TaxDTO result = taxService.save(taxDTO);
         return ResponseEntity.created(new URI("/api/taxes/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(true, ENTITY_NAME, result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert(true, entityName, result.getId().toString()))
             .body(result);
     }
 
     @PutMapping("/taxes")
     public ResponseEntity<TaxDTO> updateTax(@Valid @RequestBody TaxDTO taxDTO) throws URISyntaxException {
         log.debug("REST request to update Tax : {}", taxDTO);
-        if (taxDTO.getId() == null) throw new InvalidIdException(ENTITY_NAME);
+        if (taxDTO.getId() == null) throw new InvalidIdException(entityName);
 
         TaxDTO result = taxService.save(taxDTO);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(true, ENTITY_NAME, taxDTO.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(true, entityName, taxDTO.getId().toString()))
             .body(result);
     }
 
@@ -77,6 +75,6 @@ public class TaxResource {
     public ResponseEntity<Void> deleteTax(@PathVariable Long id) {
         log.debug("REST request to delete Tax : {}", id);
         taxService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(true, ENTITY_NAME, id.toString())).build();
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(true, entityName, id.toString())).build();
     }
 }

@@ -28,36 +28,34 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
-public class OrganizationResource {
+public class OrganizationResource extends  AbstractResource {
 
-    private final Logger log = LoggerFactory.getLogger(OrganizationResource.class);
-
-    private static final String ENTITY_NAME = "organization";
     private final OrganizationService organizationService;
 
     public OrganizationResource(OrganizationService organizationService) {
+        super(OrganizationResource.class, "organization");
         this.organizationService = organizationService;
     }
 
     @PostMapping("/organizations")
     public ResponseEntity<OrganizationDTO> createOrganization(@Valid @RequestBody OrganizationDTO organizationDTO) throws URISyntaxException {
         log.debug("REST request to save Organization : {}", organizationDTO);
-        if (organizationDTO.getId() != null) throw new IdExistException(ENTITY_NAME);
+        if (organizationDTO.getId() != null) throw new IdExistException(entityName);
 
         OrganizationDTO result = organizationService.save(organizationDTO);
         return ResponseEntity.created(new URI("/api/organizations/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(true, ENTITY_NAME, result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert(true, entityName, result.getId().toString()))
             .body(result);
     }
 
     @PutMapping("/organizations")
     public ResponseEntity<OrganizationDTO> updateOrganization(@Valid @RequestBody OrganizationDTO organizationDTO) throws URISyntaxException {
         log.debug("REST request to update Organization : {}", organizationDTO);
-        if (organizationDTO.getId() == null) throw new InvalidIdException(ENTITY_NAME);
+        if (organizationDTO.getId() == null) throw new InvalidIdException(entityName);
 
         OrganizationDTO result = organizationService.save(organizationDTO);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(true, ENTITY_NAME, result.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(true, entityName, result.getId().toString()))
             .body(result);
     }
 
@@ -80,6 +78,6 @@ public class OrganizationResource {
     public ResponseEntity<Void> deleteOrganization(@PathVariable Long id) {
         log.debug("REST request to delete Organization : {}", id);
         organizationService.delete(id);
-        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(true, ENTITY_NAME, id.toString())).build();
+        return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(true, entityName, id.toString())).build();
     }
 }
