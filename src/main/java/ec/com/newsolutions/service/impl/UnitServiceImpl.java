@@ -18,14 +18,13 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class UnitServiceImpl implements UnitService {
-
-    private final Logger log = LoggerFactory.getLogger(UnitServiceImpl.class);
+public class UnitServiceImpl extends AbstractService implements UnitService {
 
     private final UnitRepository unitRepository;
     private final UnitMapper unitMapper;
 
     public UnitServiceImpl(UnitRepository unitRepository, UnitMapper unitMapper) {
+        super(UnitServiceImpl.class);
         this.unitRepository = unitRepository;
         this.unitMapper = unitMapper;
     }

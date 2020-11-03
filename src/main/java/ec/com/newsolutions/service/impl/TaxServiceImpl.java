@@ -22,14 +22,13 @@ import java.util.Optional;
  */
 @Service
 @Transactional
-public class TaxServiceImpl implements TaxService {
-
-    private final Logger log = LoggerFactory.getLogger(UnitServiceImpl.class);
+public class TaxServiceImpl extends AbstractService implements TaxService {
 
     private final TaxRepository taxRepository;
     private final TaxMapper taxMapper;
 
     public TaxServiceImpl(TaxRepository taxRepository, TaxMapper taxMapper) {
+        super(TaxServiceImpl.class);
         this.taxRepository = taxRepository;
         this.taxMapper = taxMapper;
     }

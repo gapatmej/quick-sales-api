@@ -19,14 +19,13 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class OrganizationServiceImpl implements OrganizationService {
+public class OrganizationServiceImpl extends AbstractService implements OrganizationService {
 
     private final OrganizationMapper organizationMapper;
-    private final Logger log = LoggerFactory.getLogger(OrganizationServiceImpl.class);
-
     private final OrganizationRepository organizationRepository;
 
     public OrganizationServiceImpl(OrganizationMapper organizationMapper, OrganizationRepository organizationRepository) {
+        super(OrganizationServiceImpl.class);
         this.organizationMapper = organizationMapper;
         this.organizationRepository = organizationRepository;
     }

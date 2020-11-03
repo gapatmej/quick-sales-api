@@ -21,15 +21,15 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class BranchOfficeServiceImpl implements BranchOfficeService {
+public class BranchOfficeServiceImpl extends AbstractService implements BranchOfficeService {
 
     private final BranchOfficeMapper branchOfficeMapper;
-    private final Logger log = LoggerFactory.getLogger(BranchOfficeServiceImpl.class);
     private final BranchOfficeRepository branchOfficeRepository;
 
     private final EmissionPointService emissionPointService;
 
     public BranchOfficeServiceImpl(BranchOfficeMapper branchOfficeMapper, BranchOfficeRepository branchOfficeRepository, EmissionPointService emissionPointService) {
+        super(BranchOfficeServiceImpl.class);
         this.branchOfficeMapper = branchOfficeMapper;
         this.branchOfficeRepository = branchOfficeRepository;
         this.emissionPointService = emissionPointService;

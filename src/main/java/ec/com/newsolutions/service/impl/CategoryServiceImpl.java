@@ -19,14 +19,13 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class CategoryServiceImpl implements CategoryService {
-
-    private final Logger log = LoggerFactory.getLogger(CategoryServiceImpl.class);
+public class CategoryServiceImpl extends AbstractService implements CategoryService {
 
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
 
     public CategoryServiceImpl(CategoryRepository categoryRepository, CategoryMapper categoryMapper) {
+        super(CategoryServiceImpl.class);
         this.categoryRepository = categoryRepository;
         this.categoryMapper = categoryMapper;
     }

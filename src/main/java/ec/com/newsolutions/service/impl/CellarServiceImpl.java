@@ -20,14 +20,13 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class CellarServiceImpl implements CellarService {
+public class CellarServiceImpl extends AbstractService implements CellarService {
 
     private final CellarMapper cellarMapper;
-    private final Logger log = LoggerFactory.getLogger(CellarServiceImpl.class);
-
     private final CellarRepository cellarRepository;
 
     public CellarServiceImpl(CellarMapper cellarMapper, CellarRepository cellarRepository) {
+        super(CellarServiceImpl.class);
         this.cellarMapper = cellarMapper;
         this.cellarRepository = cellarRepository;
     }

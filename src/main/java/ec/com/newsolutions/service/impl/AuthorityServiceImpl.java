@@ -19,12 +19,12 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class AuthorityServiceImpl implements AuthorityService {
-    private final Logger log = LoggerFactory.getLogger(AuthorityServiceImpl.class);
+public class AuthorityServiceImpl extends AbstractService implements AuthorityService{
     private final AuthorityMapper authorityMapper;
     private final AuthorityRepository authorityRepository;
 
     public AuthorityServiceImpl(AuthorityMapper authorityMapper, AuthorityRepository authorityRepository) {
+        super(AuthorityServiceImpl.class);
         this.authorityMapper = authorityMapper;
         this.authorityRepository = authorityRepository;
     }

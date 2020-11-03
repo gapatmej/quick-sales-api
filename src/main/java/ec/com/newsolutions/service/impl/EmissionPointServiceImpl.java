@@ -19,13 +19,13 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class EmissionPointServiceImpl implements EmissionPointService {
+public class EmissionPointServiceImpl extends AbstractService implements EmissionPointService {
 
     private final EmissionPointMapper emissionPointMapper;
     private final EmissionPointRepository emissionPointRepository;
-    private final Logger log = LoggerFactory.getLogger(EmissionPointServiceImpl.class);
 
     public EmissionPointServiceImpl(EmissionPointMapper emissionPointMapper, EmissionPointRepository emissionPointRepository) {
+        super(EmissionPointServiceImpl.class);
         this.emissionPointMapper = emissionPointMapper;
         this.emissionPointRepository = emissionPointRepository;
     }

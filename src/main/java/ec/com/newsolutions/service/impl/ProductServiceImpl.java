@@ -22,14 +22,13 @@ import java.util.Optional;
  */
 @Service
 @Transactional
-public class ProductServiceImpl implements ProductService {
+public class ProductServiceImpl extends AbstractService implements ProductService {
 
     private final ProductMapper productMapper;
-    private final Logger log = LoggerFactory.getLogger(ProductServiceImpl.class);
-
     private final ProductRepository productRepository;
 
     public ProductServiceImpl(ProductMapper productMapper, ProductRepository productRepository) {
+        super(ProductServiceImpl.class);
         this.productMapper = productMapper;
         this.productRepository = productRepository;
     }
