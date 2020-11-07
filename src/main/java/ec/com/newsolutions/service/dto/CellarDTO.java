@@ -2,12 +2,21 @@ package ec.com.newsolutions.service.dto;
 
 public class CellarDTO extends AbstractMainDTO {
 
+    private Long organizationId;
     private String code;
     private String name;
     private String address;
     private String description;
     private Boolean predetermined;
     private Boolean active;
+
+    public Long getOrganizationId() {
+        return organizationId;
+    }
+
+    public void setOrganizationId(Long organizationId) {
+        this.organizationId = organizationId;
+    }
 
     public String getCode() {
         return code;

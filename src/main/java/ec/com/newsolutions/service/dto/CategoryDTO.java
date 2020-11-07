@@ -2,10 +2,19 @@ package ec.com.newsolutions.service.dto;
 
 public class CategoryDTO extends AbstractMainDTO {
 
+    private Long organizationId;
     private String code;
     private String name;
     private String description;
     private Boolean predetermined;
+
+    public Long getOrganizationId() {
+        return organizationId;
+    }
+
+    public void setOrganizationId(Long organizationId) {
+        this.organizationId = organizationId;
+    }
 
     public String getCode() {
         return code;

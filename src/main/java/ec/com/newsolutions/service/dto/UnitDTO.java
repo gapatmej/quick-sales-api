@@ -4,12 +4,21 @@ import ec.com.newsolutions.domain.enumeration.UnitTypeEnum;
 
 public class UnitDTO extends AbstractMainDTO {
 
+    private Long organizationId;
     private String code;
     private String name;
     private String description;
     private UnitTypeEnum unitType;
     private Boolean predetermined;
     private Boolean active;
+
+    public Long getOrganizationId() {
+        return organizationId;
+    }
+
+    public void setOrganizationId(Long organizationId) {
+        this.organizationId = organizationId;
+    }
 
     public String getCode() {
         return code;

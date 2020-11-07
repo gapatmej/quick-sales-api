@@ -6,6 +6,8 @@ import java.math.BigDecimal;
 
 public class ProductDTO extends AbstractMainDTO {
 
+    private Long organizationId;
+
     private String mainCode;
 
     private String auxiliaryCode;
@@ -35,6 +37,14 @@ public class ProductDTO extends AbstractMainDTO {
     private Long unitId;
 
     private boolean active;
+
+    public Long getOrganizationId() {
+        return organizationId;
+    }
+
+    public void setOrganizationId(Long organizationId) {
+        this.organizationId = organizationId;
+    }
 
     public String getMainCode() {
         return mainCode;

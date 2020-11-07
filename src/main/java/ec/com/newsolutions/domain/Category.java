@@ -15,6 +15,10 @@ import java.util.Set;
 @Table(name = "category")
 public class Category extends AbstractMainEntity{
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="organization_id", nullable = false)
+    private Organization organization;
+
     @Column(name = "code", length = 20, unique = true, nullable = false)
     private String code;
 
@@ -26,6 +30,14 @@ public class Category extends AbstractMainEntity{
 
     @Column(name = "predetermined", nullable = false)
     private Boolean predetermined;
+
+    public Organization getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
+    }
 
     public String getCode() {
         return code;

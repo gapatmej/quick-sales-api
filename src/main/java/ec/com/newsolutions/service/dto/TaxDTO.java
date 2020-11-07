@@ -4,6 +4,8 @@ import ec.com.newsolutions.domain.enumeration.TaxTypeEnum;
 
 public class TaxDTO extends AbstractMainDTO {
 
+    private Long organizationId;
+
     private TaxTypeEnum taxType;
 
     private String code;
@@ -15,6 +17,14 @@ public class TaxDTO extends AbstractMainDTO {
     private Float percentage;
 
     private Boolean active;
+
+    public Long getOrganizationId() {
+        return organizationId;
+    }
+
+    public void setOrganizationId(Long organizationId) {
+        this.organizationId = organizationId;
+    }
 
     public TaxTypeEnum getTaxType() {
         return taxType;

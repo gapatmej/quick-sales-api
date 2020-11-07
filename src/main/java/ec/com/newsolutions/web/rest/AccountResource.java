@@ -105,7 +105,7 @@ public class AccountResource {
      */
     @GetMapping("/account")
     public UserDTO getAccount() {
-        return userService.getUserWithAuthorities()
+        return userService.getUserWithLazy()
             .map(userMapper::userToUserDTO)
             .orElseThrow(() -> new AccountResourceException("User could not be found"));
     }
@@ -128,8 +128,7 @@ public class AccountResource {
         if (!user.isPresent()) {
             throw new AccountResourceException("User could not be found");
         }
-        userService.updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(),
-            userDTO.getLangKey(), userDTO.getImageUrl());
+        userService.update(userDTO);
     }
 
     /**

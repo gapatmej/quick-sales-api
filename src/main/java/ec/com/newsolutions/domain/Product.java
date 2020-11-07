@@ -11,6 +11,10 @@ import ec.com.newsolutions.domain.enumeration.ProductTypeEnum;
 @Table(name = "product")
 public class Product extends AbstractMainEntity  implements Serializable {
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="organization_id", nullable = false)
+    private Organization organization;
+
     @Column(name = "main_code", length = 50, nullable = false, unique = true)
     private String mainCode;
 
@@ -61,6 +65,14 @@ public class Product extends AbstractMainEntity  implements Serializable {
 
     @Column(name = "active", nullable = false)
     private Boolean active;
+
+    public Organization getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
+    }
 
     public String getMainCode() {
         return mainCode;

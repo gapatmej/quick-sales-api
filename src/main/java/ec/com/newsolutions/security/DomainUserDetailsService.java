@@ -36,12 +36,12 @@ public class DomainUserDetailsService implements UserDetailsService {
         log.debug("Authenticating {}", email);
 
         if (new EmailValidator().isValid(email, null)) {
-            return userRepository.findOneWithAuthoritiesByEmailIgnoreCase(email)
+            return userRepository.findOneWithLazyEntitiesByEmailIgnoreCase(email)
                 .map(user -> createSpringSecurityUser(email, user))
                 .orElseThrow(() -> new UsernameNotFoundException("User with email " + email + " was not found in the database"));
         }
 
-        return userRepository.findOneWithAuthoritiesByEmailIgnoreCase(email)
+        return userRepository.findOneWithLazyEntitiesByEmailIgnoreCase(email)
             .map(user -> createSpringSecurityUser(email, user))
             .orElseThrow(() -> new UsernameNotFoundException("User " + email + " was not found in the database"));
 

@@ -8,6 +8,10 @@ import javax.persistence.*;
 @Table(name = "cellar")
 public class Cellar extends AbstractMainEntity {
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="organization_id", nullable = false)
+    private Organization organization;
+
     @Column(name = "code", length = 20, nullable = false)
     private String code;
 
@@ -25,6 +29,14 @@ public class Cellar extends AbstractMainEntity {
 
     @Column(name = "active", nullable = false)
     private Boolean active;
+
+    public Organization getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
+    }
 
     public String getCode() {
         return code;

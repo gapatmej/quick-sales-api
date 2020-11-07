@@ -20,8 +20,7 @@ import java.io.IOException;
 public class JWTFilter extends GenericFilterBean {
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
-    public static final String PATTERN_ORGANIZATION_REPLACE = "\"organizationId\":.*[,]";
-    public static final String PATTERN_ORGANIZATION_REPLACE_FINAL_POSITION = "\"organizationId\":.*[\r]";
+    public static final String PATTERN_ORGANIZATION_REPLACE = "\"organizationId\":[^,}]*";
     public static final String AUTHORIZATION_TOKEN = "access_token";
 
     private final TokenProvider tokenProvider;
@@ -47,8 +46,7 @@ public class JWTFilter extends GenericFilterBean {
                         (HttpServletRequest) servletRequest);
 
                     String body = IOUtils.toString(wrappedRequest.getReader());
-                    body = body.replaceAll(PATTERN_ORGANIZATION_REPLACE,"\"organizationId\": "+organizationId.toString()+",");
-                    body = body.replaceAll(PATTERN_ORGANIZATION_REPLACE_FINAL_POSITION,"\"organizationId\": "+organizationId+"\r");
+                    body = body.replaceAll(PATTERN_ORGANIZATION_REPLACE,"\"organizationId\": "+organizationId.toString());
                     wrappedRequest.resetInputStream(body.getBytes());
                     servletRequest = wrappedRequest;
                 }

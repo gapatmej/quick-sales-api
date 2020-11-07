@@ -30,7 +30,7 @@ public interface UserRepository extends JpaRepositoryCustom <User, Long> {
     @EntityGraph(attributePaths = "authorities")
     Optional<User> findOneWithAuthoritiesById(Long id);
 
-    @EntityGraph(attributePaths = "authorities")
-    Optional<User> findOneWithAuthoritiesByEmailIgnoreCase(String email);
+    @EntityGraph(attributePaths = {"authorities", "organizations", "branchOffices"})
+    Optional<User> findOneWithLazyEntitiesByEmailIgnoreCase(String email);
 
 }

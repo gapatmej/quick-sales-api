@@ -56,7 +56,7 @@ public class UserResource extends AbstractResource {
         if (userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).isPresent()) {
             throw new EmailAlreadyUsedException();
         } else {
-            UserDTO newUser = userService.save(userDTO);
+            UserDTO newUser = userService.create(userDTO);
             mailService.sendCreationEmail(newUser);
             return ResponseEntity.created(new URI("/api/users/" + newUser.getId()))
                 .headers(HeaderUtil.createEntityCreationAlert(true,entityName, newUser.getId().toString()))
@@ -71,7 +71,7 @@ public class UserResource extends AbstractResource {
         if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
             throw new EmailAlreadyUsedException();
         }
-        UserDTO result = userService.save(userDTO);
+        UserDTO result = userService.update(userDTO);
 
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(true, entityName, result.getId().toString()))

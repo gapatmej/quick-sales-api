@@ -12,6 +12,10 @@ import ec.com.newsolutions.domain.enumeration.TaxTypeEnum;
 @Table(name = "tax")
 public class Tax extends AbstractMainEntity {
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="organization_id", nullable = false)
+    private Organization organization;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "tax_type", length = 10, nullable = false)
     private TaxTypeEnum taxType;
@@ -30,6 +34,14 @@ public class Tax extends AbstractMainEntity {
 
     @Column(name = "active", nullable = false)
     private Boolean active;
+
+    public Organization getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
+    }
 
     public TaxTypeEnum getTaxType() {
         return taxType;
