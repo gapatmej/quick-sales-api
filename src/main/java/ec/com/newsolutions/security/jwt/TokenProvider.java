@@ -7,6 +7,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
+import ec.com.newsolutions.security.SecurityUtils;
 import ec.com.newsolutions.service.dto.WorkspaceDTO;
 import ec.com.newsolutions.utils.GsonUtils;
 import org.slf4j.Logger;
@@ -83,9 +84,8 @@ public class TokenProvider {
     public String createTokenWorkspace(WorkspaceDTO workspaceDTO) {
         String authorities = "ROLE_ADMIN,ROLE_USER";
         Date validity = new Date((new Date()).getTime() + this.tokenValidityInMillisecondsForRememberMe);
-
         return Jwts.builder()
-            .setSubject("admin")
+            .setSubject(SecurityUtils.getCurrentUserEmail().get())
             .claim(AUTHORITIES_KEY, authorities)
             .claim(WORKSPACE,workspaceDTO)
             .signWith(key, SignatureAlgorithm.HS512)
