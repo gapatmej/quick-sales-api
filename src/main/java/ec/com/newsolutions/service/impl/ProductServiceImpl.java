@@ -1,6 +1,7 @@
 package ec.com.newsolutions.service.impl;
 
 import com.google.common.base.Strings;
+import ec.com.newsolutions.repository.specification.UtilsSpecification;
 import ec.com.newsolutions.service.ProductService;
 import ec.com.newsolutions.domain.Product;
 import ec.com.newsolutions.repository.ProductRepository;
@@ -42,14 +43,9 @@ public class ProductServiceImpl extends AbstractService implements ProductServic
 
     @Override
     @Transactional(readOnly = true)
-    public Page<ProductDTO> findAll(Pageable pageable, String query) {
+    public Page<ProductDTO> findAll(String search, Pageable pageable) {
         log.debug("Request to get all Products");
-
-        if(Strings.isNullOrEmpty(query)){
-            return productRepository.findAll(pageable).map(productMapper::toDto);
-        } else{
-            return productRepository.search(pageable, query).map(productMapper::toDto);
-        }
+        return productRepository.findAll( UtilsSpecification.<Product>getSpecification(search), pageable).map(productMapper::toDto);
     }
 
     @Override

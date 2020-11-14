@@ -15,7 +15,7 @@ import java.util.Optional;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Long> {
+public interface ProductRepository extends JpaRepositoryCustom<Product, Long> {
 
     @Query(value = "select distinct p from Product p where lower(p.mainCode) like lower(concat('%', :query,'%')) or " +
         " lower(p.auxiliaryCode) like lower(concat('%', :query,'%')) or lower(p.name) like lower(concat('%', :query,'%'))",

@@ -15,7 +15,7 @@ public interface ProductService {
 
     ProductDTO save(ProductDTO productDTO);
 
-    Page<ProductDTO> findAll(Pageable pageable, String query);
+    Page<ProductDTO> findAll(String search, Pageable pageable);
 
     Optional<ProductDTO> findOne(Long id);
 
