@@ -1,13 +1,7 @@
 package ec.com.newsolutions.service.mapper;
 
-import ec.com.newsolutions.domain.Authority;
-import ec.com.newsolutions.domain.BranchOffice;
-import ec.com.newsolutions.domain.Organization;
-import ec.com.newsolutions.domain.User;
-import ec.com.newsolutions.service.dto.AuthorityDTO;
-import ec.com.newsolutions.service.dto.BranchOfficeDTO;
-import ec.com.newsolutions.service.dto.OrganizationDTO;
-import ec.com.newsolutions.service.dto.UserDTO;
+import ec.com.newsolutions.domain.*;
+import ec.com.newsolutions.service.dto.*;
 
 import org.springframework.stereotype.Service;
 
@@ -21,11 +15,13 @@ public class UserMapper {
     private final AuthorityMapper authorityMapper;
     private final OrganizationMapper organizationMapper;
     private final BranchOfficeMapper branchOfficeMapper;
+    private final PermitMapper permitMapper;
 
-    public UserMapper(AuthorityMapper authorityMapper, OrganizationMapper organizationMapper, BranchOfficeMapper branchOfficeMapper) {
+    public UserMapper(AuthorityMapper authorityMapper, OrganizationMapper organizationMapper, BranchOfficeMapper branchOfficeMapper, PermitMapper permitMapper) {
         this.authorityMapper = authorityMapper;
         this.organizationMapper = organizationMapper;
         this.branchOfficeMapper = branchOfficeMapper;
+        this.permitMapper = permitMapper;
     }
 
     public List<UserDTO> usersToUserDTOs(List<User> users) {
@@ -63,6 +59,8 @@ public class UserMapper {
         userDTO.setAuthorities(entitySetToEntityList(authorityMapper,user.getAuthorities()));
         userDTO.setOrganizations(entitySetToEntityList(organizationMapper,user.getOrganizations()));
         userDTO.setBranchOffices(entitySetToEntityList(branchOfficeMapper,user.getBranchOffices()));
+        userDTO.setPermits(entitySetToEntityList(permitMapper, user.getAuthorities().stream().map(Authority::getPermits).flatMap(x->x.stream()).collect(Collectors.toSet())));
+
         return userDTO;
     }
 
@@ -129,15 +127,17 @@ public class UserMapper {
             for ( Object object : list ) {
                 set.add( authorityMapper.toEntity((AuthorityDTO) object) );
             }
-        }
-        else if(mapper instanceof OrganizationMapper){
+        }else if(mapper instanceof OrganizationMapper){
             for ( Object object : list ) {
                 set.add( organizationMapper.toEntity((OrganizationDTO) object) );
             }
-        }
-        else if(mapper instanceof BranchOfficeMapper){
+        }else if(mapper instanceof BranchOfficeMapper){
             for ( Object object : list ) {
                 set.add( branchOfficeMapper.toEntity((BranchOfficeDTO) object) );
+            }
+        }else if(mapper instanceof PermitMapper){
+            for ( Object object : list ) {
+                set.add( permitMapper.toEntity((PermitDTO) object) );
             }
         }
     }
@@ -148,15 +148,17 @@ public class UserMapper {
             for ( Object entity : set ) {
                 list.add( authorityMapper.toDtoLight((Authority) entity) );
             }
-        }
-        else if(mapper instanceof OrganizationMapper){
+        }else if(mapper instanceof OrganizationMapper){
             for ( Object entity : set ) {
                 list.add( organizationMapper.toDto((Organization) entity) );
             }
-        }
-        else if(mapper instanceof BranchOfficeMapper){
+        }else if(mapper instanceof BranchOfficeMapper){
             for ( Object entity : set ) {
                 list.add( branchOfficeMapper.toDtoLight((BranchOffice) entity) );
+            }
+        }else if(mapper instanceof PermitMapper){
+            for ( Object entity : set ) {
+                list.add( permitMapper.toDto((Permit) entity) );
             }
         }
     }

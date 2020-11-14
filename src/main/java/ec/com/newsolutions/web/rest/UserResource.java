@@ -39,13 +39,10 @@ public class UserResource extends AbstractResource {
 
     private final UserRepository userRepository;
 
-    private final MailService mailService;
-
-    public UserResource(UserService userService, UserRepository userRepository, MailService mailService) {
+    public UserResource(UserService userService, UserRepository userRepository) {
         super(UserResource.class, "user" );
         this.userService = userService;
         this.userRepository = userRepository;
-        this.mailService = mailService;
     }
 
     @PostMapping("/users")
@@ -57,7 +54,6 @@ public class UserResource extends AbstractResource {
             throw new EmailAlreadyUsedException();
         } else {
             UserDTO newUser = userService.create(userDTO);
-            mailService.sendCreationEmail(newUser);
             return ResponseEntity.created(new URI("/api/users/" + newUser.getId()))
                 .headers(HeaderUtil.createEntityCreationAlert(true,entityName, newUser.getId().toString()))
                 .body(newUser);

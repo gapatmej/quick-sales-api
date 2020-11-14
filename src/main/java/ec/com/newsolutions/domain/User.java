@@ -23,6 +23,22 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "jhi_user")
+@NamedEntityGraph(
+    name = "user-account",
+    attributeNodes = {
+        @NamedAttributeNode(value = "authorities", subgraph = "permits-subgraph"),
+        @NamedAttributeNode("organizations"),
+        @NamedAttributeNode("branchOffices"),
+    },
+    subgraphs = {
+        @NamedSubgraph(
+            name = "permits-subgraph",
+            attributeNodes = {
+                @NamedAttributeNode("permits")
+            }
+        )
+    }
+)
 public class User extends AbstractMainEntity implements Serializable {
 
     @Column(name = "identification", length = 13, unique = true, nullable = false)

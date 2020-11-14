@@ -9,7 +9,6 @@ import ec.com.newsolutions.security.SecurityUtils;
 import ec.com.newsolutions.service.dto.UserDTO;
 
 import ec.com.newsolutions.service.impl.AbstractService;
-import ec.com.newsolutions.service.mapper.OrganizationMapper;
 import ec.com.newsolutions.service.mapper.UserMapper;
 import ec.com.newsolutions.web.rest.errors.EntityNotFoundException;
 import io.github.jhipster.security.RandomUtil;
@@ -38,12 +37,15 @@ public class UserService extends AbstractService {
 
     private final UserMapper userMapper;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository, UserMapper userMapper) {
+    private final MailService mailService;
+
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository, UserMapper userMapper, MailService mailService) {
         super(UserService.class);
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
         this.userMapper = userMapper;
+        this.mailService = mailService;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -129,6 +131,7 @@ public class UserService extends AbstractService {
         user.setActivated(true);
         User result = userRepository.save(user);
         log.debug("Created Information for User: {}", result);
+        mailService.sendCreationEmail(result);
         return userMapper.userToUserDTO(result);
     }
 

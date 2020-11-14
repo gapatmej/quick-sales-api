@@ -31,6 +31,8 @@ public class UserDTO extends AbstractMainDTO {
 
     private List<BranchOfficeDTO> branchOffices = new ArrayList<>();
 
+    private List<PermitDTO> permits = new ArrayList<>();
+
     public UserDTO() {
     }
 
@@ -120,5 +122,13 @@ public class UserDTO extends AbstractMainDTO {
 
     public void setBranchOffices(List<BranchOfficeDTO> branchOffices) {
         this.branchOffices = branchOffices;
+    }
+
+    public List<PermitDTO> getPermits() {
+        return permits;
+    }
+
+    public void setPermits(List<PermitDTO> permits) {
+        this.permits = permits;
     }
 }
