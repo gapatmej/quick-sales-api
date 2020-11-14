@@ -98,9 +98,9 @@ public class MailService {
     }
 
     @Async
-    public void sendCreationEmail(UserDTO userDTO) {
-        log.debug("Sending creation email to '{}'", userDTO.getEmail());
-        sendEmailFromTemplate(userMapper.userDTOToUser(userDTO), "mail/creationEmail", "email.activation.title");
+    public void sendCreationEmail(User user) {
+        log.debug("Sending creation email to '{}'", user.getEmail());
+        sendEmailFromTemplate(user, "mail/creationEmail", "email.activation.title");
     }
 
     @Async
