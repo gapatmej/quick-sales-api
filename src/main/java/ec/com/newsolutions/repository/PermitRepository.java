@@ -11,7 +11,7 @@ import java.util.List;
 public interface PermitRepository extends JpaRepositoryCustom<Permit,Long> {
 
     @Query(" select distinct p from Permit p " +
-        " inner join fetch p.authorities a " +
+        " inner join p.authorities a " +
         " where a.id in :authorityIds " )
     List<Permit> findAllByAuthoritiesIn(@Param("authorityIds") List<Long> authorityIds);
 }
