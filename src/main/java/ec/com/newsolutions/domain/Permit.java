@@ -1,6 +1,10 @@
 package ec.com.newsolutions.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "jhi_permit")
@@ -15,6 +19,10 @@ public class Permit extends AbstractMainEntity {
 
     @Column(name = "resource", length = 200)
     private String resource;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "permits")
+    private Set<Authority> authorities = new HashSet<>();
 
     public Organization getOrganization() {
         return organization;
@@ -40,4 +48,11 @@ public class Permit extends AbstractMainEntity {
         this.resource = resource;
     }
 
+    public Set<Authority> getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(Set<Authority> authorities) {
+        this.authorities = authorities;
+    }
 }

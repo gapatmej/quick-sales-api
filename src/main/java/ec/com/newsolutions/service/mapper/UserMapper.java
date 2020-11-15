@@ -15,13 +15,11 @@ public class UserMapper {
     private final AuthorityMapper authorityMapper;
     private final OrganizationMapper organizationMapper;
     private final BranchOfficeMapper branchOfficeMapper;
-    private final PermitMapper permitMapper;
 
-    public UserMapper(AuthorityMapper authorityMapper, OrganizationMapper organizationMapper, BranchOfficeMapper branchOfficeMapper, PermitMapper permitMapper) {
+    public UserMapper(AuthorityMapper authorityMapper, OrganizationMapper organizationMapper, BranchOfficeMapper branchOfficeMapper) {
         this.authorityMapper = authorityMapper;
         this.organizationMapper = organizationMapper;
         this.branchOfficeMapper = branchOfficeMapper;
-        this.permitMapper = permitMapper;
     }
 
     public List<UserDTO> usersToUserDTOs(List<User> users) {
@@ -59,7 +57,6 @@ public class UserMapper {
         userDTO.setAuthorities(entitySetToEntityList(authorityMapper,user.getAuthorities()));
         userDTO.setOrganizations(entitySetToEntityList(organizationMapper,user.getOrganizations()));
         userDTO.setBranchOffices(entitySetToEntityList(branchOfficeMapper,user.getBranchOffices()));
-        userDTO.setPermits(entitySetToEntityList(permitMapper, user.getAuthorities().stream().map(Authority::getPermits).flatMap(x->x.stream()).collect(Collectors.toSet())));
 
         return userDTO;
     }
@@ -135,10 +132,6 @@ public class UserMapper {
             for ( Object object : list ) {
                 set.add( branchOfficeMapper.toEntity((BranchOfficeDTO) object) );
             }
-        }else if(mapper instanceof PermitMapper){
-            for ( Object object : list ) {
-                set.add( permitMapper.toEntity((PermitDTO) object) );
-            }
         }
     }
 
@@ -155,10 +148,6 @@ public class UserMapper {
         }else if(mapper instanceof BranchOfficeMapper){
             for ( Object entity : set ) {
                 list.add( branchOfficeMapper.toDtoLight((BranchOffice) entity) );
-            }
-        }else if(mapper instanceof PermitMapper){
-            for ( Object entity : set ) {
-                list.add( permitMapper.toDto((Permit) entity) );
             }
         }
     }

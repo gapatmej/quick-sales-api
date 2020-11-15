@@ -6,6 +6,7 @@ import ec.com.newsolutions.repository.AuthorityRepository;
 import ec.com.newsolutions.repository.UserRepository;
 import ec.com.newsolutions.repository.specification.UtilsSpecification;
 import ec.com.newsolutions.security.SecurityUtils;
+import ec.com.newsolutions.service.dto.AuthorityDTO;
 import ec.com.newsolutions.service.dto.UserDTO;
 
 import ec.com.newsolutions.service.impl.AbstractService;
@@ -39,13 +40,16 @@ public class UserService extends AbstractService {
 
     private final MailService mailService;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository, UserMapper userMapper, MailService mailService) {
+    private final PermitService permitService;
+
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository, UserMapper userMapper, MailService mailService, PermitService permitService) {
         super(UserService.class);
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
         this.userMapper = userMapper;
         this.mailService = mailService;
+        this.permitService = permitService;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -171,24 +175,13 @@ public class UserService extends AbstractService {
             });
     }
 
-   /* @Transactional(readOnly = true)
-    public Page<UserDTO> getAllManagedUsers(Pageable pageable) {
-       // return userRepository.findAllByLoginNot(pageable, Constants.ANONYMOUS_USER).map(UserDTO::new);
-    }*/
-
-  /*  @Transactional(readOnly = true)
-    public Optional<User> getUserWithAuthoritiesByLogin(String email) {
-        return userRepository.findOneWithLazyEntityByEmailIgnoreCase(email);
-    }*/
-
     @Transactional(readOnly = true)
-    public Optional<User> getUserWithAuthorities(Long id) {
-        return userRepository.findOneWithAuthoritiesById(id);
-    }
-
-    @Transactional(readOnly = true)
-    public Optional<User> getUserWithLazy() {
-        return SecurityUtils.getCurrentUserEmail().flatMap(userRepository::findOneWithLazyEntitiesByEmailIgnoreCase);
+    public Optional<UserDTO> getUserAccount() {
+        Optional<User> user = SecurityUtils.getCurrentUserEmail().flatMap(userRepository::findOneWithAuthoritiesOrganizationsBranchOfficesByEmailIgnoreCase);
+        return user.map(userMapper::userToUserDTO).map(u->{
+            u.setPermits(permitService.findAllByAuthoritiesIn(u.getAuthorities().stream().map(AuthorityDTO::getId).collect(Collectors.toList())));
+            return u;
+        });
     }
 
     @Scheduled(cron = "0 0 1 * * ?")

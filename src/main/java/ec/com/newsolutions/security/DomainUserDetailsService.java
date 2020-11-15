@@ -35,19 +35,14 @@ public class DomainUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(final String email) {
         log.debug("Authenticating {}", email);
 
-        if (new EmailValidator().isValid(email, null)) {
-            return userRepository.findOneWithLazyEntitiesByEmailIgnoreCase(email)
-                .map(user -> createSpringSecurityUser(email, user))
-                .orElseThrow(() -> new UsernameNotFoundException("User with email " + email + " was not found in the database"));
-        }
-
-        return userRepository.findOneWithLazyEntitiesByEmailIgnoreCase(email)
+        return userRepository.findOneWithAuthoritiesByEmailIgnoreCase(email)
             .map(user -> createSpringSecurityUser(email, user))
-            .orElseThrow(() -> new UsernameNotFoundException("User " + email + " was not found in the database"));
+            .orElseThrow(() -> new UsernameNotFoundException("User with email " + email + " was not found in the database"));
 
     }
 
     private org.springframework.security.core.userdetails.User createSpringSecurityUser(String lowercaseLogin, User user) {
+
         if (!user.isActivated()) {
             throw new UserNotActivatedException("User " + lowercaseLogin + " was not activated");
         }

@@ -105,8 +105,7 @@ public class AccountResource {
      */
     @GetMapping("/account")
     public UserDTO getAccount() {
-        return userService.getUserWithLazy()
-            .map(userMapper::userToUserDTO)
+        return userService.getUserAccount()
             .orElseThrow(() -> new AccountResourceException("User could not be found"));
     }
 

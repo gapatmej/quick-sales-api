@@ -4,6 +4,8 @@ import ec.com.newsolutions.domain.User;
 
 import org.springframework.data.jpa.repository.EntityGraph;
 
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -27,7 +29,11 @@ public interface UserRepository extends JpaRepositoryCustom <User, Long> {
     @EntityGraph(attributePaths = "authorities")
     Optional<User> findOneWithAuthoritiesById(Long id);
 
-    @EntityGraph(value="user-account")
-    Optional<User> findOneWithLazyEntitiesByEmailIgnoreCase(String email);
+    @EntityGraph(attributePaths = "authorities")
+    Optional<User> findOneWithAuthoritiesByEmailIgnoreCase(String email);
+
+    @EntityGraph(attributePaths = {"authorities","organizations","branchOffices"})
+    Optional<User> findOneWithAuthoritiesOrganizationsBranchOfficesByEmailIgnoreCase(String email);
+
 
 }
