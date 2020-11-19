@@ -3,7 +3,7 @@
     Permits
  */
 
-insert into jhi_permit (organization_id,name,resource,created_by,last_modified_by)
+insert into jhi_permit (id,organization_id,name,resource,created_by,last_modified_by)
 values
        (3,1,'Sucursal','/configuration/branch-office','system','system'),
        (4,1,'Roles','/admin/authority','system','system'),
