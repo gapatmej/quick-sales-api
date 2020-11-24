@@ -12,6 +12,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Filters incoming requests and installs a Spring Security principal if a header corresponding to a valid user is
@@ -19,6 +21,11 @@ import java.io.IOException;
  */
 public class JWTFilter extends GenericFilterBean {
 
+    private static final List<String> urisNotFilterOrganization = new ArrayList<String>(){
+        {
+            add("api/user");
+        }
+    };
     public static final String AUTHORIZATION_HEADER = "Authorization";
     public static final String PATTERN_ORGANIZATION_REPLACE = "\"organizationId\":[^,}]*";
     public static final String AUTHORIZATION_TOKEN = "access_token";
@@ -37,8 +44,7 @@ public class JWTFilter extends GenericFilterBean {
         if (StringUtils.hasText(jwt) && this.tokenProvider.validateToken(jwt)) {
             Authentication authentication = this.tokenProvider.getAuthentication(jwt);
             SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            if("POST".equals(httpServletRequest.getMethod()) || "PUT".equals(httpServletRequest.getMethod())){
+            if(validateRequestURIForOrganizationFilter(httpServletRequest)){
                 Object claimWorkspace = this.tokenProvider.getClaimnWorkspaceById(jwt,"organizationId");
                 if(!StringUtils.isEmpty(claimWorkspace)){
                     Long organizationId = Long.parseLong(claimWorkspace.toString());
@@ -54,6 +60,16 @@ public class JWTFilter extends GenericFilterBean {
         }
 
         filterChain.doFilter(servletRequest, servletResponse);
+
+    }
+
+    private boolean validateRequestURIForOrganizationFilter(HttpServletRequest httpServletRequest){
+
+        if(urisNotFilterOrganization.contains(httpServletRequest.getRequestURL()) ||
+            !"POST".equals(httpServletRequest.getMethod()) || !"PUT".equals(httpServletRequest.getMethod()))
+            return false;
+
+        return true;
 
     }
 
