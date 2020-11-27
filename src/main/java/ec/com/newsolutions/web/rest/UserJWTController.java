@@ -54,6 +54,7 @@ public class UserJWTController {
     @PatchMapping("/workspace")
     public ResponseEntity<JWTToken> workspace(@Valid @RequestBody WorkspaceDTO workspaceDTO) {
         String jwt = tokenProvider.createTokenWorkspace(workspaceDTO);
+        SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
         return new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK);

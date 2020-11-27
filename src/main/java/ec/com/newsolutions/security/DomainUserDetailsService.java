@@ -2,6 +2,7 @@ package ec.com.newsolutions.security;
 
 import ec.com.newsolutions.domain.User;
 import ec.com.newsolutions.repository.UserRepository;
+import ec.com.newsolutions.service.dto.WorkspaceDTO;
 import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +33,7 @@ public class DomainUserDetailsService implements UserDetailsService {
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(final String email) {
+    public UserDetailsCustom loadUserByUsername(final String email) {
         log.debug("Authenticating {}", email);
 
         return userRepository.findOneWithAuthoritiesByEmailIgnoreCase(email)
@@ -41,7 +42,7 @@ public class DomainUserDetailsService implements UserDetailsService {
 
     }
 
-    private org.springframework.security.core.userdetails.User createSpringSecurityUser(String lowercaseLogin, User user) {
+    private UserDetailsCustom createSpringSecurityUser(String lowercaseLogin, User user) {
 
         if (!user.isActivated()) {
             throw new UserNotActivatedException("User " + lowercaseLogin + " was not activated");
@@ -49,8 +50,8 @@ public class DomainUserDetailsService implements UserDetailsService {
         List<GrantedAuthority> grantedAuthorities = user.getAuthorities().stream()
             .map(authority -> new SimpleGrantedAuthority(authority.getName()))
             .collect(Collectors.toList());
-        return new org.springframework.security.core.userdetails.User(user.getEmail(),
+        return new UserDetailsCustom(user.getEmail(),
             user.getPassword(),
-            grantedAuthorities);
+            grantedAuthorities, new WorkspaceDTO());
     }
 }

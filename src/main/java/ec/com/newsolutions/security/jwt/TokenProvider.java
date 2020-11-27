@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 
 import ec.com.newsolutions.security.SecurityUtils;
+import ec.com.newsolutions.security.UserDetailsCustom;
 import ec.com.newsolutions.service.dto.WorkspaceDTO;
 import ec.com.newsolutions.utils.GsonUtils;
 import org.slf4j.Logger;
@@ -104,7 +105,9 @@ public class TokenProvider {
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
 
-        User principal = new User(claims.getSubject(), "", authorities);
+        WorkspaceDTO workspaceDTO = GsonUtils.jsonToEntity(getClaimnById(token, WORKSPACE),WorkspaceDTO.class);
+
+        UserDetailsCustom principal = new UserDetailsCustom(claims.getSubject(), "", authorities, workspaceDTO);
 
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
