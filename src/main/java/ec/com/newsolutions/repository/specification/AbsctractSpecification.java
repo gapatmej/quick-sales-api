@@ -6,8 +6,6 @@ import ec.com.newsolutions.utils.Utils;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class AbsctractSpecification<T> implements Specification<T> {
 
@@ -19,8 +17,10 @@ public class AbsctractSpecification<T> implements Specification<T> {
 
     @Override
     public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-
-            if (criteria.getOperation().equalsIgnoreCase(QueryOperationEnum.GREATER_THAN.value())) {
+            if(!root.getModel().getAttributes().stream().filter(a->a.getName().equals(criteria.getKey())).findFirst().isPresent()){
+                return null;
+            }
+            else if (criteria.getOperation().equalsIgnoreCase(QueryOperationEnum.GREATER_THAN.value())) {
                 return criteriaBuilder.greaterThan(buildPath(root,criteria.getKey()), criteria.getValue().toString());
             }
             else if (criteria.getOperation().equalsIgnoreCase(QueryOperationEnum.GREATER_OR_EQUAL.value())) {
