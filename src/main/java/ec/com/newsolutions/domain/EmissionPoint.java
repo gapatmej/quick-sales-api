@@ -10,14 +10,11 @@ import javax.persistence.*;
 @Table(name = "emission_point", uniqueConstraints =  @UniqueConstraint(columnNames = {"branch_office_id", "emission_point_code"}))
 public class EmissionPoint extends AbstractMainEntity {
 
-    @Column(name = "name", length = 100, nullable = false)
-    private String name ;
-
-    @Column(name = "sequence", length = 9, nullable = false)
-    private String sequence ;
-
     @Column(name = "emission_point_code", length = 3, nullable = false)
     private String emissionPointCode;
+
+    @Column(name = "name", length = 100, nullable = false)
+    private String name ;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="branch_office_id", nullable = false)
@@ -32,14 +29,6 @@ public class EmissionPoint extends AbstractMainEntity {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getSequence() {
-        return sequence;
-    }
-
-    public void setSequence(String sequence) {
-        this.sequence = sequence;
     }
 
     public String getEmissionPointCode() {

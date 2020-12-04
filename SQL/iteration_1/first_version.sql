@@ -27,5 +27,10 @@ values (1,3),
 
 update jhi_permit set resource='/configuration/organization' where name = 'Organizacion' ;
 
+/*
+    Drop sequence
+ */
+alter table emission_point drop column sequence;
+
 
 

@@ -66,7 +66,7 @@ public class JWTFilter extends GenericFilterBean {
     private boolean validateRequestURIForOrganizationFilter(HttpServletRequest httpServletRequest){
 
         if(urisNotFilterOrganization.contains(httpServletRequest.getRequestURL()) ||
-            !"POST".equals(httpServletRequest.getMethod()) || !"PUT".equals(httpServletRequest.getMethod()))
+            (!"POST".equals(httpServletRequest.getMethod()) && !"PUT".equals(httpServletRequest.getMethod())))
             return false;
 
         return true;
