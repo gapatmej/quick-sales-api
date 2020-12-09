@@ -10,6 +10,7 @@ public enum QueryOperationEnum {
     LIKE(":"),
     IN("[]"),
     NOT_IN("![]"),
+    NOT_DATA("<>"),
     IN_SEPARATOR(";"),
     KEY_SEPARATOR("\\.");
 

@@ -45,7 +45,7 @@ public class ProductServiceImpl extends AbstractService implements ProductServic
     @Transactional(readOnly = true)
     public Page<ProductDTO> findAll(String search, Pageable pageable) {
         log.debug("Request to get all Products");
-        return productRepository.findAll( UtilsSpecification.<Product>getSpecification(search), pageable).map(productMapper::toDto);
+        return productRepository.findAll( UtilsSpecification.<Product>getSpecificationWithWorkspace(search), pageable).map(productMapper::toDto);
     }
 
     @Override

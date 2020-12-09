@@ -39,7 +39,7 @@ public class UnitServiceImpl extends AbstractService implements UnitService {
     @Override
     @Transactional(readOnly = true)
     public Page<UnitDTO> findAll(String search, Pageable pageable) {
-        return unitRepository.findAll( UtilsSpecification.<Unit>getSpecification(search), pageable).map(unitMapper::toDto);
+        return unitRepository.findAll( UtilsSpecification.<Unit>getSpecificationWithWorkspace(search), pageable).map(unitMapper::toDto);
 
     }
 

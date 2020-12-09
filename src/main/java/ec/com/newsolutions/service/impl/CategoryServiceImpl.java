@@ -41,7 +41,7 @@ public class CategoryServiceImpl extends AbstractService implements CategoryServ
     @Transactional(readOnly = true)
     public Page<CategoryDTO> findAll(String search, Pageable pageable) {
         log.debug("Request to get all Categories");
-        return categoryRepository.findAll(UtilsSpecification.<Category>getSpecification(search), pageable).map(categoryMapper::toDto);
+        return categoryRepository.findAll(UtilsSpecification.<Category>getSpecificationWithWorkspace(search), pageable).map(categoryMapper::toDto);
     }
 
     @Override

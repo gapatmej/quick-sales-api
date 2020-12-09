@@ -40,4 +40,8 @@ public class SpecificationsBuilder {
         return result;
     }
 
+    public int size(){
+        return params.size();
+    }
+
 }

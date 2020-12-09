@@ -42,7 +42,7 @@ public class AuthorityServiceImpl extends AbstractService implements AuthoritySe
     @Override
     public Page<AuthorityDTO> findAll(String search, Pageable pageable) {
         log.debug("Request to get all Authorities");
-        return authorityRepository.findAll( UtilsSpecification.<Authority>getSpecification(search), pageable).map(authorityMapper::toDtoLight);
+        return authorityRepository.findAll( UtilsSpecification.<Authority>getSpecificationWithWorkspace(search), pageable).map(authorityMapper::toDtoLight);
     }
 
     @Override

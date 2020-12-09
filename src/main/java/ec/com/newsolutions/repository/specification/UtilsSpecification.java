@@ -20,16 +20,9 @@ public class UtilsSpecification {
         UtilsSpecification.tokenProvider = tokenProvider;
     }
 
-    public static <T> Specification<T> getSpecification(String search){
+    public static <T> Specification<T> getSpecification(String search, Boolean validateSearch){
         SpecificationsBuilder builder = new SpecificationsBuilder();
         StringBuilder regex = new StringBuilder();
-        Optional<Long> organizationId =  SecurityUtils.getCurrentWorkspace().map(WorkspaceDTO::getOrganizationId);
-        if(StringUtils.isEmpty(search) ){
-            search = "search=organization.id="+organizationId.get();
-        }else{
-            search += ",organization.id="+organizationId.get();
-        }
-
         regex.append("([\\w\\.]+?)(");
         regex.append(QueryOperationEnum.LIKE.value()).append("|");
         regex.append(QueryOperationEnum.EQUAL.value()).append("|");
@@ -49,8 +42,25 @@ public class UtilsSpecification {
             builder.with(matcher.group(1), matcher.group(2), matcher.group(3));
         }
 
+        if(validateSearch && builder.size() == 0){
+            builder.with("1",QueryOperationEnum.NOT_DATA.value(), "1");
+        }
 
         return builder.build();
+    }
+
+    public static <T> Specification<T> getSpecificationWithWorkspace(String search){
+        Optional<Long> organizationId =  SecurityUtils.getCurrentWorkspace().map(WorkspaceDTO::getOrganizationId);
+        if(StringUtils.isEmpty(search) ){
+            search = "search=organization.id="+organizationId.get();
+        }else{
+            search += ",organization.id="+organizationId.get();
+        }
+        return UtilsSpecification.getSpecification(search,false);
+    }
+
+    public static <T> Specification<T> getSpecificationWithoutWorkspaceAndValidateSearch(String search){
+        return UtilsSpecification.getSpecification(search,true);
     }
 
 }

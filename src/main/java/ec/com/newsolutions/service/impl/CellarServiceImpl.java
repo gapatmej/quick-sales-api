@@ -42,7 +42,7 @@ public class CellarServiceImpl extends AbstractService implements CellarService 
     @Transactional(readOnly = true)
     public Page<CellarDTO> findAll(String search, Pageable pageable) {
         log.debug("Request to get all Cellars");
-        return cellarRepository.findAll( UtilsSpecification.<Cellar>getSpecification(search), pageable).map(cellarMapper::toDto);
+        return cellarRepository.findAll( UtilsSpecification.<Cellar>getSpecificationWithWorkspace(search), pageable).map(cellarMapper::toDto);
     }
 
     @Override

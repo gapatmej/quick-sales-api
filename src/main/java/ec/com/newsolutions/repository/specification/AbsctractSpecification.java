@@ -17,10 +17,8 @@ public class AbsctractSpecification<T> implements Specification<T> {
 
     @Override
     public Predicate toPredicate(Root<T> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-            if(!root.getModel().getAttributes().stream().filter(a->a.getName().equals(criteria.getKey())).findFirst().isPresent()){
-                return null;
-            }
-            else if (criteria.getOperation().equalsIgnoreCase(QueryOperationEnum.GREATER_THAN.value())) {
+        try{
+            if (criteria.getOperation().equalsIgnoreCase(QueryOperationEnum.GREATER_THAN.value())) {
                 return criteriaBuilder.greaterThan(buildPath(root,criteria.getKey()), criteria.getValue().toString());
             }
             else if (criteria.getOperation().equalsIgnoreCase(QueryOperationEnum.GREATER_OR_EQUAL.value())) {
@@ -34,6 +32,9 @@ public class AbsctractSpecification<T> implements Specification<T> {
             }
             else if (criteria.getOperation().equalsIgnoreCase(QueryOperationEnum.EQUAL.value())) {
                 return criteriaBuilder.equal(buildPath(root,criteria.getKey()), criteria.getValue());
+            }
+            else if (criteria.getOperation().equalsIgnoreCase(QueryOperationEnum.NOT_DATA.value())) {
+                return criteriaBuilder.notEqual(criteriaBuilder.literal(criteria.getKey()),criteria.getValue());
             }
             else if (criteria.getOperation().equalsIgnoreCase(QueryOperationEnum.NOT_EQUAL.value())) {
                 return criteriaBuilder.notEqual(buildPath(root,criteria.getKey()),criteria.getValue());
@@ -55,6 +56,10 @@ public class AbsctractSpecification<T> implements Specification<T> {
                 }
             }
             return null;
+        }catch (IllegalArgumentException ex){
+            return null;
+        }
+
     }
 
     private Path buildPath(Root<T> root, String key){
@@ -65,4 +70,5 @@ public class AbsctractSpecification<T> implements Specification<T> {
         }
         return path;
     }
+
 }

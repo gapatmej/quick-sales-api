@@ -41,7 +41,7 @@ public class OrganizationServiceImpl extends AbstractService implements Organiza
     @Transactional(readOnly = true)
     public Page<OrganizationDTO> findAll(String search, Pageable pageable) {
         log.debug("Request to get all Organizations");
-        return organizationRepository.findAll( UtilsSpecification.<Organization>getSpecification(search), pageable).map(organizationMapper::toDto);
+        return organizationRepository.findAll( UtilsSpecification.<Organization>getSpecificationWithWorkspace(search), pageable).map(organizationMapper::toDto);
     }
 
     @Override

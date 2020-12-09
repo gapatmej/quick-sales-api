@@ -68,6 +68,15 @@ public class BranchOfficeResource extends AbstractResource {
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
+
+    @GetMapping("/branch-offices/withoutWorkspace")
+    public ResponseEntity<List<BranchOfficeDTO>> getAllBranchOfficesWithoutWorkspace(String search, Pageable pageable) {
+        log.debug("REST request to get a page of BranchOffices");
+        Page<BranchOfficeDTO> page = branchOfficeService.findAllWithoutWorkspace(search, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
     @GetMapping("/branch-offices/{id}")
     public ResponseEntity<BranchOfficeDTO> getBranchOffice(@PathVariable Long id) {
         log.debug("REST request to get BranchOffice : {}", id);

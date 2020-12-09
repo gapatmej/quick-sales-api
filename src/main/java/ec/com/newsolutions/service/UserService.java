@@ -199,7 +199,7 @@ public class UserService extends AbstractService {
 
     public Page<UserDTO> findAll(String search, Pageable pageable) {
         log.debug("Request to get all Users");
-        return userRepository.findAll( UtilsSpecification.<User>getSpecification(search), pageable).map(userMapper::userToUserDTOLight);
+        return userRepository.findAll( UtilsSpecification.<User>getSpecificationWithWorkspace(search), pageable).map(userMapper::userToUserDTOLight);
     }
 
     public Optional<UserDTO> findOne(Long id) {

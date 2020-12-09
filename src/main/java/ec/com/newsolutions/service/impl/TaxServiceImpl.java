@@ -44,7 +44,7 @@ public class TaxServiceImpl extends AbstractService implements TaxService {
     @Transactional(readOnly = true)
     public Page<TaxDTO> findAll(String search, Pageable pageable) {
         log.debug("Request to get all Units");
-        return taxRepository.findAll(UtilsSpecification.<Tax>getSpecification(search), pageable).map(taxMapper::toDto);
+        return taxRepository.findAll(UtilsSpecification.<Tax>getSpecificationWithWorkspace(search), pageable).map(taxMapper::toDto);
     }
 
     @Override

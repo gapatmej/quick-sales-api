@@ -12,6 +12,8 @@ public interface BranchOfficeService {
 
     Page<BranchOfficeDTO> findAll(String search, Pageable pageable);
 
+    Page<BranchOfficeDTO> findAllWithoutWorkspace(String search, Pageable pageable);
+
     Optional<BranchOfficeDTO> findOne(Long id);
 
     void delete(Long id);
