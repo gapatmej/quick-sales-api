@@ -2,6 +2,7 @@ package ec.com.newsolutions.service.impl;
 
 import ec.com.newsolutions.domain.Permit;
 import ec.com.newsolutions.repository.PermitRepository;
+import ec.com.newsolutions.repository.specification.UtilsSpecification;
 import ec.com.newsolutions.service.PermitService;
 import ec.com.newsolutions.service.dto.PermitDTO;
 import ec.com.newsolutions.service.mapper.PermitMapper;
@@ -28,7 +29,8 @@ public class PermitServiceImpl extends AbstractService  implements PermitService
     }
     @Override
     public Page<PermitDTO> findAll(String search, Pageable pageable) {
-        return null;
+        log.debug("Request to get all Permits");
+        return permitRepository.findAll( UtilsSpecification.<Permit>getSpecificationWithWorkspace(search), pageable).map(permitMapper::toDto);
     }
 
     @Override
