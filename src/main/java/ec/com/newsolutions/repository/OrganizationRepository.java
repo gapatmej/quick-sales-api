@@ -8,9 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-/**
- * Spring Data  repository for the Organization entity.
- */
 @SuppressWarnings("unused")
 @Repository
 public interface OrganizationRepository extends JpaRepositoryCustom<Organization, Long> {

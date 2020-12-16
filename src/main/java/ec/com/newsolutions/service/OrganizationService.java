@@ -8,9 +8,6 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
-/**
- * Service Interface for managing {@link Organization}.
- */
 public interface OrganizationService {
 
     OrganizationDTO save(OrganizationDTO organizationDTO);

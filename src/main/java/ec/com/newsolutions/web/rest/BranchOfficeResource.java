@@ -1,7 +1,6 @@
 package ec.com.newsolutions.web.rest;
 
 import ec.com.newsolutions.service.BranchOfficeService;
-import ec.com.newsolutions.service.EmissionPointService;
 import ec.com.newsolutions.service.dto.BranchOfficeDTO;
 
 import ec.com.newsolutions.utils.GsonUtils;
@@ -10,8 +9,6 @@ import ec.com.newsolutions.web.rest.errors.InvalidIdException;
 import ec.com.newsolutions.web.rest.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -43,7 +40,7 @@ public class BranchOfficeResource extends AbstractResource {
         if (branchOfficeDTO.getId() != null) throw new IdExistException(entityName);
 
         BranchOfficeDTO result = branchOfficeService.save(branchOfficeDTO);
-        return ResponseEntity.created(new URI("/api/organizations/" + result.getId()))
+        return ResponseEntity.created(new URI("/api/branch-offices/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(true, entityName, result.getId().toString()))
             .body(result);
     }

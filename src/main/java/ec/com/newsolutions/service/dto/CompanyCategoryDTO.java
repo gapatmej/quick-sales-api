@@ -1,12 +1,14 @@
 package ec.com.newsolutions.service.dto;
 
-public class PermitDTO extends AbstractMainDTO {
+public class CompanyCategoryDTO extends AbstractMainDTO {
 
     private Long organizationId;
 
+    private String code;
+
     private String name;
 
-    private String resource;
+    private String description;
 
     public Long getOrganizationId() {
         return organizationId;
@@ -14,6 +16,14 @@ public class PermitDTO extends AbstractMainDTO {
 
     public void setOrganizationId(Long organizationId) {
         this.organizationId = organizationId;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getName() {
@@ -24,12 +34,11 @@ public class PermitDTO extends AbstractMainDTO {
         this.name = name;
     }
 
-    public String getResource() {
-        return resource;
+    public String getDescription() {
+        return description;
     }
 
-    public void setResource(String resource) {
-        this.resource = resource;
+    public void setDescription(String description) {
+        this.description = description;
     }
-
 }

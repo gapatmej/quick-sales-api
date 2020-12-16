@@ -2,11 +2,9 @@ package ec.com.newsolutions.service.dto;
 
 public class EmissionPointDTO extends AbstractMainDTO{
 
-    private String name ;
-
-    private String sequence;
-
     private String emissionPointCode;
+
+    private String name ;
 
     private Long branchOfficeId;
 
@@ -20,14 +18,6 @@ public class EmissionPointDTO extends AbstractMainDTO{
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getSequence() {
-        return sequence;
-    }
-
-    public void setSequence(String sequence) {
-        this.sequence = sequence;
     }
 
     public String getEmissionPointCode() {

@@ -32,5 +32,31 @@ update jhi_permit set resource='/configuration/organization' where name = 'Organ
  */
 alter table emission_point drop column sequence;
 
+/*
+    Modify company
+ */
+alter table company drop column address;
+alter table company drop column movil_phone;
+alter table company drop column phone;
+alter table company drop column is_client;
+alter table company drop column is_provider;
+
+/*
+    Add Company Category to permits and rol admin
+ */
+INSERT INTO public.jhi_permit (id, organization_id, name, resource, created_by, created_date, last_modified_by, last_modified_date)
+VALUES (10, 1, 'Categoría Empresa', '/base-data/company-category', 'system', null, 'system', null);
+
+INSERT INTO public.jhi_authority_permit (authority_id, permit_id)
+VALUES (1, 10);
+
+/*
+    Modify company
+ */
+alter table company drop column identification;
+/*
+
+
+
 
 

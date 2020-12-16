@@ -7,8 +7,6 @@ import ec.com.newsolutions.repository.OrganizationRepository;
 import ec.com.newsolutions.service.dto.OrganizationDTO;
 import ec.com.newsolutions.service.mapper.OrganizationMapper;
 import ec.com.newsolutions.utils.GsonUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -6,10 +6,10 @@ import org.mapstruct.*;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(config = EntityMapperConfigIgnoreAuditProps.class, uses = {PermitMapper.class})
 public interface AuthorityMapper extends EntityMapper<AuthorityDTO, Authority> {
 
-    @Mapping(target = "organizationId", ignore = true)
+    @Mapping(target = "organizationId", source = "organization.id")
     AuthorityDTO toDto(Authority authority);
 
     @Mapping(target = "organization.id", source = "organizationId")

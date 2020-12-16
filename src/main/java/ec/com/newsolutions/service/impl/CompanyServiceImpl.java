@@ -1,11 +1,12 @@
 package ec.com.newsolutions.service.impl;
 
 import com.google.common.base.Strings;
+import ec.com.newsolutions.repository.specification.UtilsSpecification;
 import ec.com.newsolutions.service.CompanyService;
 import ec.com.newsolutions.domain.Company;
 import ec.com.newsolutions.repository.CompanyRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import ec.com.newsolutions.service.dto.CompanyDTO;
+import ec.com.newsolutions.service.mapper.CompanyMapper;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,70 +15,40 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-/**
- * Service Implementation for managing {@link Company}.
- */
 @Service
 @Transactional
-public class CompanyServiceImpl implements CompanyService {
+public class CompanyServiceImpl extends AbstractService implements CompanyService {
 
-    private final Logger log = LoggerFactory.getLogger(CompanyServiceImpl.class);
-
+    private final CompanyMapper companyMapper;
     private final CompanyRepository companyRepository;
 
-    public CompanyServiceImpl(CompanyRepository companyRepository) {
+    public CompanyServiceImpl(CompanyMapper companyMapper, CompanyRepository companyRepository) {
+        super(CompanyServiceImpl.class);
+        this.companyMapper = companyMapper;
         this.companyRepository = companyRepository;
     }
 
-    /**
-     * Save a company.
-     *
-     * @param company the entity to save.
-     * @return the persisted entity.
-     */
     @Override
-    public Company save(Company company) {
-        log.debug("Request to save Company : {}", company);
-        return companyRepository.save(company);
+    public CompanyDTO save(CompanyDTO companyDTO) {
+        log.debug("Request to save Company : {}", companyDTO);
+        Company company = companyRepository.save(companyMapper.toEntity(companyDTO));
+        return companyMapper.toDto(company);
     }
 
-    /**
-     * Get all the companies.
-     *
-     * @param pageable the pagination information.
-     * @return the list of entities.
-     */
     @Override
     @Transactional(readOnly = true)
-    public Page<Company> findAll(Pageable pageable, String query) {
+    public Page<CompanyDTO> findAll(String search, Pageable pageable) {
         log.debug("Request to get all Companies");
-
-        if(Strings.isNullOrEmpty(query)){
-            return companyRepository.findAll(pageable);
-        } else{
-            return companyRepository.search(pageable, query);
-        }
-
+        return companyRepository.findAll( UtilsSpecification.<Company>getSpecificationWithWorkspace(search), pageable).map(companyMapper::toDto);
     }
 
-    /**
-     * Get one company by id.
-     *
-     * @param id the id of the entity.
-     * @return the entity.
-     */
     @Override
     @Transactional(readOnly = true)
-    public Optional<Company> findOne(Long id) {
+    public Optional<CompanyDTO> findOne(Long id) {
         log.debug("Request to get Company : {}", id);
-        return companyRepository.findById(id);
+        return companyRepository.findById(id).map(companyMapper::toDto);
     }
 
-    /**
-     * Delete the company by id.
-     *
-     * @param id the id of the entity.
-     */
     @Override
     public void delete(Long id) {
         log.debug("Request to delete Company : {}", id);

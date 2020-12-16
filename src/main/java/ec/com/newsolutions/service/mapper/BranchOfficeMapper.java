@@ -6,8 +6,8 @@ import org.mapstruct.*;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring", uses = {EmissionPointMapper.class},unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface BranchOfficeMapper extends EntityMapper<BranchOfficeDTO, BranchOffice> {
+@Mapper(config = EntityMapperConfigIgnoreAuditProps.class, uses = {EmissionPointMapper.class})
+public interface BranchOfficeMapper extends EntityMapperIgnoreAuditProps<BranchOfficeDTO, BranchOffice> {
 
     @Mapping(target = "organizationId", source = "organization.id")
     BranchOfficeDTO toDto(BranchOffice branchOffice);

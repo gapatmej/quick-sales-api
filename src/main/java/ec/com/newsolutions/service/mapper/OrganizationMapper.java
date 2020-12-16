@@ -4,7 +4,10 @@ import ec.com.newsolutions.domain.Organization;
 import ec.com.newsolutions.service.dto.OrganizationDTO;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring")
-public interface OrganizationMapper extends EntityMapper<OrganizationDTO, Organization> {
+@Mapper(config = EntityMapperConfigIgnoreAuditProps.class)
+public interface OrganizationMapper{
 
+    OrganizationDTO toDto(Organization organization);
+
+    Organization toEntity(OrganizationDTO organizationDTO);
 }

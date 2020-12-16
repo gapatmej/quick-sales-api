@@ -2,44 +2,20 @@ package ec.com.newsolutions.service;
 
 import ec.com.newsolutions.domain.Company;
 
+import ec.com.newsolutions.service.dto.CompanyDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
-/**
- * Service Interface for managing {@link Company}.
- */
 public interface CompanyService {
 
-    /**
-     * Save a company.
-     *
-     * @param company the entity to save.
-     * @return the persisted entity.
-     */
-    Company save(Company company);
 
-    /**
-     * Get all the companies.
-     *
-     * @param pageable the pagination information.
-     * @return the list of entities.
-     */
-    Page<Company> findAll(Pageable pageable, String query);
+    CompanyDTO save(CompanyDTO companyDTO);
 
-    /**
-     * Get the "id" company.
-     *
-     * @param id the id of the entity.
-     * @return the entity.
-     */
-    Optional<Company> findOne(Long id);
+    Page<CompanyDTO> findAll(String search, Pageable pageable);
 
-    /**
-     * Delete the "id" company.
-     *
-     * @param id the id of the entity.
-     */
+    Optional<CompanyDTO> findOne(Long id);
+
     void delete(Long id);
 }

@@ -4,12 +4,11 @@ import ec.com.newsolutions.domain.Product;
 import ec.com.newsolutions.service.dto.ProductDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.ReportingPolicy;
 
-@Mapper(componentModel = "spring", uses = {TaxMapper.class}, unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface ProductMapper extends EntityMapper<ProductDTO, Product> {
+@Mapper(config = EntityMapperConfigIgnoreAuditProps.class, uses = {TaxMapper.class})
+public interface ProductMapper {
 
-    @Mapping(target = "organizationId", ignore = true)
+    @Mapping(target = "organizationId", source = "organization.id")
     @Mapping(source = "iva.id", target = "ivaId")
     @Mapping(source = "ice.id", target = "iceId")
     @Mapping(source = "category.id", target = "categoryId")
@@ -17,16 +16,12 @@ public interface ProductMapper extends EntityMapper<ProductDTO, Product> {
     @Mapping(source = "unit.id", target = "unitId")
     ProductDTO toDto(Product product);
 
-    @Mapping(target = "organization.id", source = "organizationId")
+    @Mapping(source = "organizationId", target = "organization.id")
     @Mapping(source = "ivaId", target = "iva")
     @Mapping(source = "iceId", target = "ice")
     @Mapping(source = "categoryId", target = "category.id")
     @Mapping(source = "cellarId", target = "cellar.id")
     @Mapping(source = "unitId", target = "unit.id")
-    @Mapping(target = "createdBy", ignore = true)
-    @Mapping(target = "createdDate", ignore = true)
-    @Mapping(target = "lastModifiedBy", ignore = true)
-    @Mapping(target = "lastModifiedDate", ignore = true)
     Product toEntity(ProductDTO productDTO);
 
 }

@@ -3,14 +3,8 @@ package ec.com.newsolutions.service.mapper;
 import ec.com.newsolutions.domain.Category;
 import ec.com.newsolutions.service.dto.CategoryDTO;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
-public interface CategoryMapper extends EntityMapper<CategoryDTO, Category>  {
+public interface CategoryMapper extends EntityMapperIgnoreAuditPropsAndPlus<CategoryDTO,Category> {
 
-    @Mapping(target = "organizationId", ignore = true)
-    CategoryDTO toDto(Category category);
-
-    @Mapping(target = "organization.id", source = "organizationId")
-    Category toEntity(CategoryDTO categoryDTO);
 }

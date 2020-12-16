@@ -1,6 +1,5 @@
 package ec.com.newsolutions.service.impl;
 
-import com.google.common.base.Strings;
 import ec.com.newsolutions.repository.specification.UtilsSpecification;
 import ec.com.newsolutions.service.ProductService;
 import ec.com.newsolutions.domain.Product;
@@ -8,19 +7,12 @@ import ec.com.newsolutions.repository.ProductRepository;
 import ec.com.newsolutions.service.dto.ProductDTO;
 import ec.com.newsolutions.service.mapper.ProductMapper;
 import ec.com.newsolutions.utils.GsonUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Optional;
 
-/**
- * Service Implementation for managing {@link Product}.
- */
 @Service
 @Transactional
 public class ProductServiceImpl extends AbstractService implements ProductService {

@@ -4,10 +4,9 @@ import ec.com.newsolutions.domain.EmissionPoint;
 import ec.com.newsolutions.service.dto.EmissionPointDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.ReportingPolicy;
 
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface EmissionPointMapper extends EntityMapper<EmissionPointDTO, EmissionPoint> {
+@Mapper(config = EntityMapperConfigIgnoreAuditProps.class)
+public interface EmissionPointMapper {
 
     @Mapping(source = "branchOffice.id", target = "branchOfficeId")
     @Mapping(expression = "java(false)", target = "deleted")
