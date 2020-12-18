@@ -54,9 +54,23 @@ VALUES (1, 10);
     Modify company
  */
 alter table company drop column identification;
+
 /*
+    Add Company to permits and rol admin
+ */
 
+INSERT INTO public.jhi_permit (id, organization_id, name, resource, created_by, created_date, last_modified_by, last_modified_date)
+VALUES (11, 1, 'Empresa', '/base-data/company', 'system', null, 'system', null);
 
+INSERT INTO public.jhi_authority_permit (authority_id, permit_id)
+VALUES (1, 11);
+
+/*
+   Modifying the length of identification and email on company
+ */
+
+alter table company alter column identification type varchar(13)
+alter table company alter column email type varchar(200)
 
 
 

@@ -40,16 +40,16 @@ public class EmissionPointServiceImpl extends AbstractService implements Emissio
     @Override
     public List<EmissionPointDTO> saveAll(List<EmissionPointDTO> emissionPointDTOS) {
         log.debug("Request to save Emission Points : {}", emissionPointDTOS);
-        List<EmissionPointDTO> emissionPointDTO = new ArrayList<>();
+        List<EmissionPointDTO> result = new ArrayList<>();
         emissionPointDTOS.forEach(ep->{
             if(BooleanUtils.isTrue(ep.getDeleted())){
                 delete(ep.getId());
             }else{
-                emissionPointDTO.add(save(ep));
+                result.add(save(ep));
             }
         });
 
-        return emissionPointDTO;
+        return result;
     }
 
     @Override

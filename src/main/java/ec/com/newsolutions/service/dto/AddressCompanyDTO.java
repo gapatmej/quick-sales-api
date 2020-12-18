@@ -18,6 +18,8 @@ public class AddressCompanyDTO extends AbstractMainDTO {
 
     private Long parishId;
 
+    private Boolean deleted;
+
     public Long getCompanyId() {
         return companyId;
     }
@@ -80,5 +82,13 @@ public class AddressCompanyDTO extends AbstractMainDTO {
 
     public void setParishId(Long parishId) {
         this.parishId = parishId;
+    }
+
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
     }
 }

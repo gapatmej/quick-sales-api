@@ -31,7 +31,7 @@ public class Company extends AbstractMainEntity {
     @Column(name = "identification_type", nullable = false)
     private IdentificationTypeEnum identificationType;
 
-    @Column(name = "identification", unique = true, nullable = false)
+    @Column(name = "identification", length = 13, unique = true, nullable = false)
     private String identification;
 
     @Column(name = "client" )
@@ -45,7 +45,7 @@ public class Company extends AbstractMainEntity {
     private Set<AddressCompany> addressCompanies = new HashSet<>();
 
     @NotNull
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", length = 200, nullable = false)
     private String email;
 
     public Organization getOrganization() {

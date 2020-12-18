@@ -59,7 +59,6 @@ public class BranchOfficeServiceImpl extends AbstractService implements BranchOf
     @Transactional(readOnly = true)
     public Page<BranchOfficeDTO> findAllWithoutWorkspace(String search, Pageable pageable) {
         log.debug("Request to get all BranchOffices");
-        //return branchOfficeRepository.findAll( UtilsSpecification.<BranchOffice>getSpecificationWithoutWorkspaceAndValidateSearch(search), pageable).map(branchOfficeMapper::toDtoLight);
         return branchOfficeRepository.findAll( UtilsSpecification.<BranchOffice>getSpecificationWithoutWorkspaceAndValidateSearch(search), pageable).map(branchOfficeMapper::toDtoLight);
     }
 
