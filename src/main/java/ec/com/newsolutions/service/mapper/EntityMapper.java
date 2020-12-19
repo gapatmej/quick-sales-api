@@ -1,7 +1,4 @@
 package ec.com.newsolutions.service.mapper;
-
-import org.mapstruct.Mapping;
-
 import java.util.List;
 
 public interface EntityMapper<D, E> {

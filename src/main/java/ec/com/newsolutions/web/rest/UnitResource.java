@@ -34,7 +34,7 @@ public class UnitResource extends AbstractResource{
     }
 
     @PostMapping("/units")
-    public ResponseEntity<UnitDTO> createUnit(@Valid @RequestBody UnitDTO unitDTO) throws URISyntaxException {
+    public ResponseEntity<UnitDTO> create(@Valid @RequestBody UnitDTO unitDTO) throws URISyntaxException {
         log.debug("REST request to save Unit : {}", GsonUtils.entityToJson(unitDTO));
         if (unitDTO.getId() != null) throw new IdExistException(entityName);
 
@@ -45,7 +45,7 @@ public class UnitResource extends AbstractResource{
     }
 
     @PutMapping("/units")
-    public ResponseEntity<UnitDTO> updateUnit(@Valid @RequestBody UnitDTO unitDTO) throws URISyntaxException {
+    public ResponseEntity<UnitDTO> update(@Valid @RequestBody UnitDTO unitDTO) throws URISyntaxException {
         log.debug("REST request to update Unit : {}", GsonUtils.entityToJson(unitDTO));
         if (unitDTO.getId() == null) throw new InvalidIdException(entityName);
 
@@ -56,7 +56,7 @@ public class UnitResource extends AbstractResource{
     }
 
     @GetMapping("/units")
-    public ResponseEntity<List<UnitDTO>> getAllUnits(String search, Pageable pageable) {
+    public ResponseEntity<List<UnitDTO>> getAll(String search, Pageable pageable) {
         log.debug("REST request to get a page of Units");
         Page<UnitDTO> page = unitService.findAll(search, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
@@ -64,14 +64,14 @@ public class UnitResource extends AbstractResource{
     }
 
     @GetMapping("/units/{id}")
-    public ResponseEntity<UnitDTO> getUnit(@PathVariable Long id) {
+    public ResponseEntity<UnitDTO> get(@PathVariable Long id) {
         log.debug("REST request to get Unit : {}", id);
-        Optional<UnitDTO> Unit = unitService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(Unit);
+        Optional<UnitDTO> unitDTO = unitService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(unitDTO);
     }
 
     @DeleteMapping("/units/{id}")
-    public ResponseEntity<Void> deleteUnit(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         log.debug("REST request to delete Unit : {}", id);
         unitService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(true, entityName, id.toString())).build();

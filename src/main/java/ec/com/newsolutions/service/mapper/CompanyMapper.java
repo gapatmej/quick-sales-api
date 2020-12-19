@@ -1,6 +1,5 @@
 package ec.com.newsolutions.service.mapper;
 
-import ec.com.newsolutions.domain.AddressCompany;
 import ec.com.newsolutions.domain.Company;
 import ec.com.newsolutions.service.dto.CompanyDTO;
 import org.mapstruct.IterableMapping;
