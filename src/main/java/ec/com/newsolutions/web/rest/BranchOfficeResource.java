@@ -35,7 +35,7 @@ public class BranchOfficeResource extends AbstractResource {
     }
 
     @PostMapping("/branch-offices")
-    public ResponseEntity<BranchOfficeDTO> createBranchOffice(@Valid @RequestBody BranchOfficeDTO branchOfficeDTO) throws URISyntaxException {
+    public ResponseEntity<BranchOfficeDTO> create(@Valid @RequestBody BranchOfficeDTO branchOfficeDTO) throws URISyntaxException {
         log.debug("REST request to save BranchOffice : {}", GsonUtils.entityToJson(branchOfficeDTO));
         if (branchOfficeDTO.getId() != null) throw new IdExistException(entityName);
 
@@ -46,7 +46,7 @@ public class BranchOfficeResource extends AbstractResource {
     }
 
     @PutMapping("/branch-offices")
-    public ResponseEntity<BranchOfficeDTO> updateBranchOffice(@Valid @RequestBody BranchOfficeDTO branchOfficeDTO) throws URISyntaxException {
+    public ResponseEntity<BranchOfficeDTO> update(@Valid @RequestBody BranchOfficeDTO branchOfficeDTO) throws URISyntaxException {
         log.debug("REST request to update BranchOffice : {}", GsonUtils.entityToJson(branchOfficeDTO));
         if (branchOfficeDTO.getId() == null) throw new InvalidIdException(entityName);
 
@@ -58,7 +58,7 @@ public class BranchOfficeResource extends AbstractResource {
 
 
     @GetMapping("/branch-offices")
-    public ResponseEntity<List<BranchOfficeDTO>> getAllBranchOffices(String search, Pageable pageable) {
+    public ResponseEntity<List<BranchOfficeDTO>> getAll(String search, Pageable pageable) {
         log.debug("REST request to get a page of BranchOffices");
         Page<BranchOfficeDTO> page = branchOfficeService.findAll(search, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
@@ -67,7 +67,7 @@ public class BranchOfficeResource extends AbstractResource {
 
 
     @GetMapping("/branch-offices/withoutWorkspace")
-    public ResponseEntity<List<BranchOfficeDTO>> getAllBranchOfficesWithoutWorkspace(String search, Pageable pageable) {
+    public ResponseEntity<List<BranchOfficeDTO>> getAllWithoutWorkspace(String search, Pageable pageable) {
         log.debug("REST request to get a page of BranchOffices");
         Page<BranchOfficeDTO> page = branchOfficeService.findAllWithoutWorkspace(search, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
@@ -75,14 +75,14 @@ public class BranchOfficeResource extends AbstractResource {
     }
 
     @GetMapping("/branch-offices/{id}")
-    public ResponseEntity<BranchOfficeDTO> getBranchOffice(@PathVariable Long id) {
+    public ResponseEntity<BranchOfficeDTO> get(@PathVariable Long id) {
         log.debug("REST request to get BranchOffice : {}", id);
         Optional<BranchOfficeDTO> branchOfficeDTO = branchOfficeService.findOne(id);
         return ResponseUtil.wrapOrNotFound(branchOfficeDTO);
     }
 
     @DeleteMapping("/branch-offices/{id}")
-    public ResponseEntity<Void> deleteBranchOffice(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         log.debug("REST request to delete BranchOffice : {}", id);
         branchOfficeService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(true, entityName, id.toString())).build();

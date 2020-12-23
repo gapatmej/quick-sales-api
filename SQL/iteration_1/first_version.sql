@@ -82,5 +82,13 @@ VALUES (12, 1, 'Banco', '/configuration/bank', 'system', null, 'system', null);
 INSERT INTO public.jhi_authority_permit (authority_id, permit_id)
 VALUES (1, 12);
 
+/*
+    Reorganization of document table
+ */
+alter table document drop column document_type;
+alter table document drop column name;
+alter table document drop column prefix;
+alter table document drop column sequential;
+
 
 
