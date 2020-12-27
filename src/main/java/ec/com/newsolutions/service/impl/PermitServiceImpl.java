@@ -27,6 +27,12 @@ public class PermitServiceImpl extends AbstractService  implements PermitService
         this.permitRepository = permitRepository;
         this.permitMapper = permitMapper;
     }
+
+    @Override
+    public PermitDTO save(PermitDTO invoiceClientDTO) {
+        throw new UnsupportedOperationException();
+    }
+
     @Override
     public Page<PermitDTO> findAll(String search, Pageable pageable) {
         log.debug("Request to get all Permits");
@@ -36,6 +42,11 @@ public class PermitServiceImpl extends AbstractService  implements PermitService
     @Override
     public Optional<PermitDTO> findOne(Long id) {
         return Optional.empty();
+    }
+
+    @Override
+    public void delete(Long id) {
+        throw new UnsupportedOperationException();
     }
 
     @Override

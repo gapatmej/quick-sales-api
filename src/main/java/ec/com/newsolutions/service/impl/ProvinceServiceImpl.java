@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @Transactional
 public class ProvinceServiceImpl extends AbstractService implements ProvinceService {
@@ -26,9 +28,24 @@ public class ProvinceServiceImpl extends AbstractService implements ProvinceServ
     }
 
     @Override
+    public ProvinceDTO save(ProvinceDTO invoiceClientDTO) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public Page<ProvinceDTO> findAll(String search, Pageable pageable) {
         log.debug("Request to get all Provinces");
         return provinceRepository.findAll( UtilsSpecification.<Province>getSpecificationWithWorkspace(search), pageable).map(provinceMapper::toDto);
+    }
+
+    @Override
+    public Optional<ProvinceDTO> findOne(Long id) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void delete(Long id) {
+        throw new UnsupportedOperationException();
     }
 }

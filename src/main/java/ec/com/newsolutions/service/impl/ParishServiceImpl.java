@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @Transactional
 public class ParishServiceImpl extends AbstractService implements ParishService {
@@ -25,9 +27,24 @@ public class ParishServiceImpl extends AbstractService implements ParishService 
     }
 
     @Override
+    public ParishDTO save(ParishDTO invoiceClientDTO) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public Page<ParishDTO> findAll(String search, Pageable pageable) {
         log.debug("Request to get all Parishes");
         return parishRepository.findAll( UtilsSpecification.<Parish>getSpecificationWithWorkspace(search), pageable).map(parishMapper::toDto);
+    }
+
+    @Override
+    public Optional<ParishDTO> findOne(Long id) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void delete(Long id) {
+        throw new UnsupportedOperationException();
     }
 }

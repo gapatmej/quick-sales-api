@@ -6,13 +6,6 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
-public interface DocumentService {
+public interface DocumentService extends AbstractService<DocumentDTO> {
 
-    DocumentDTO save(DocumentDTO documentDTO);
-
-    Page<DocumentDTO> findAll(String search, Pageable pageable);
-
-    Optional<DocumentDTO> findOne(Long id);
-
-    void delete(Long id);
 }

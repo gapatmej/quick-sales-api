@@ -4,7 +4,6 @@ import ec.com.newsolutions.service.dto.CantonDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public interface CantonService {
+public interface CantonService extends AbstractService<CantonDTO> {
 
-    Page<CantonDTO> findAll(String search, Pageable pageable);
 }

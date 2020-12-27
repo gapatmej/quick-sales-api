@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -21,8 +22,12 @@ public class CantonServiceImpl extends AbstractService implements CantonService 
     public CantonServiceImpl(CantonMapper cantonMapper, CantonRepository cantonRepository) {
         super(CantonServiceImpl.class);
         this.cantonMapper = cantonMapper;
-
         this.cantonRepository = cantonRepository;
+    }
+
+    @Override
+    public CantonDTO save(CantonDTO invoiceClientDTO) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -30,5 +35,15 @@ public class CantonServiceImpl extends AbstractService implements CantonService 
     public Page<CantonDTO> findAll(String search, Pageable pageable) {
         log.debug("Request to get all Cantons");
         return cantonRepository.findAll( UtilsSpecification.<Canton>getSpecificationWithWorkspace(search), pageable).map(cantonMapper::toDto);
+    }
+
+    @Override
+    public Optional<CantonDTO> findOne(Long id) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void delete(Long id) {
+        throw new UnsupportedOperationException();
     }
 }

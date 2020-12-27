@@ -37,7 +37,7 @@ public class DetailInvoiceClient extends AbstractMainEntity {
     @Column(name = "total", precision = 21, scale = 2, nullable = false)
     private BigDecimal total;
 
-    @OneToMany(mappedBy = "detailInvoice")
+    @OneToMany(mappedBy = "detailInvoiceClient")
     private Set<TaxDetailInvoice> taxDetailInvoices = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
