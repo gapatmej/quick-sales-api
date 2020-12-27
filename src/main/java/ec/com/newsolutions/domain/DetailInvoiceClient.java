@@ -1,81 +1,52 @@
 package ec.com.newsolutions.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
-import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * A DetailInvoice.
- */
+
 @Entity
 @Table(name = "detail_invoice")
-public class DetailInvoice implements Serializable {
+public class DetailInvoice extends AbstractMainEntity {
 
-    private static final long serialVersionUID = 1L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
-    private Long id;
-
-    @NotNull
-    @Column(name = "main_code", nullable = false)
+    @Column(name = "main_code", length = 50, nullable = false)
     private String mainCode;
 
-    @Column(name = "auxiliary_code")
+    @Column(name = "auxiliary_code", length = 50)
     private String auxiliaryCode;
 
-    @NotNull
-    @Column(name = "description", nullable = false)
+    @Column(name = "description", length = 200, nullable = false)
     private String description;
 
-    @NotNull
-    @DecimalMin(value = "0")
     @Column(name = "quantity", precision = 21, scale = 2, nullable = false)
     private BigDecimal quantity;
 
-    @NotNull
-    @DecimalMin(value = "0")
     @Column(name = "unit_price", precision = 21, scale = 2, nullable = false)
     private BigDecimal unitPrice;
 
-    @NotNull
-    @DecimalMin(value = "0")
     @Column(name = "discount", precision = 21, scale = 2, nullable = false)
     private BigDecimal discount;
 
-    @NotNull
-    @DecimalMin(value = "0")
     @Column(name = "total", precision = 21, scale = 2, nullable = false)
     private BigDecimal total;
 
-    @OneToMany(mappedBy = "detailsInvoice")
+    @OneToMany(mappedBy = "detailInvoice")
     private Set<TaxDetailInvoice> taxDetailInvoices = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="product_id", nullable = false)
-    @JsonIgnoreProperties("detailInvoices")
     private Product product;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonBackReference
     @JoinColumn(name="invoice_client_id", nullable = false)
-    private InvoiceClient invoice;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    private InvoiceClient invoiceClient;
 
     public String getMainCode() {
         return mainCode;
@@ -149,11 +120,11 @@ public class DetailInvoice implements Serializable {
         this.product = product;
     }
 
-    public InvoiceClient getInvoice() {
-        return invoice;
+    public InvoiceClient getInvoiceClient() {
+        return invoiceClient;
     }
 
-    public void setInvoice(InvoiceClient invoice) {
-        this.invoice = invoice;
+    public void setInvoiceClient(InvoiceClient invoiceClient) {
+        this.invoiceClient = invoiceClient;
     }
 }
