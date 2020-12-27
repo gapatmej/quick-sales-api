@@ -1,123 +1,114 @@
 package ec.com.newsolutions.domain;
 
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
-import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import ec.com.newsolutions.domain.enumeration.*;
 
-/**
- * A InvoiceClient.
- */
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
 @Entity
 @Table(name = "invoice_client")
-public class InvoiceClient extends ElectronicDocument implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
-    private Long id;
+public class InvoiceClient extends ElectronicDocument{
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="company_id", nullable = false)
-    private Company company;
-
-    @NotNull
-    @Column(name = "business_name", nullable = false)
-    private String businessName;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "identification_type")
-    private IdentificationTypeEnum identificationType;
-
-    @NotNull
-    @Column(name = "identification", nullable = false)
-    private String identification;
-
-    @Column(name = "address")
-    private String address;
-
-    @Column(name = "phone")
-    private String phone;
-
-    @NotNull
-    @Column(name = "email", nullable = false)
-    private String email;
-
-    @NotNull
-    @DecimalMin(value = "0")
-    @Column(name = "total_tax_free", precision = 21, scale = 2, nullable = false)
-    private BigDecimal totalTaxFree;
-
-    @NotNull
-    @DecimalMin(value = "0")
-    @Column(name = "total_discount", precision = 21, scale = 2, nullable = false)
-    private BigDecimal totalDiscount;
-
-    @NotNull
-    @DecimalMin(value = "0")
-    @Column(name = "total_base_tax_iva", precision = 21, scale = 2, nullable = false)
-    private BigDecimal totalBaseTaxIVA;
-
-    @NotNull
-    @DecimalMin(value = "0")
-    @Column(name = "total_base_tax_ice", precision = 21, scale = 2, nullable = false)
-    private BigDecimal totalBaseTaxICE;
-
-    @NotNull
-    @DecimalMin(value = "0")
-    @Column(name = "total_tax_iva", precision = 21, scale = 2, nullable = false)
-    private BigDecimal totalTaxIVA;
-
-    @NotNull
-    @DecimalMin(value = "0")
-    @Column(name = "total_tax_ice", precision = 21, scale = 2, nullable = false)
-    private BigDecimal totalTaxICE;
-
-    @NotNull
-    @DecimalMin(value = "0")
-    @Column(name = "tip", precision = 21, scale = 2, nullable = false)
-    private BigDecimal tip;
-
-    @NotNull
-    @DecimalMin(value = "0")
-    @Column(name = "total", precision = 21, scale = 2, nullable = false)
-    private BigDecimal total;
-
-    @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(name = "currency", nullable = false)
-    private CurrencyEnum currency = CurrencyEnum.DOLAR;
-
-    @OneToMany(mappedBy = "invoice")
-    private Set<Payment> payments = new HashSet<>();
-
-    @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<DetailInvoice> detailInvoices = new HashSet<>();
-
-    @OneToMany(mappedBy = "invoice")
-    private Set<TaxInvoice> taxInvoices = new HashSet<>();
-
-    @ManyToMany(mappedBy = "invoicesClient")
-    private Set<AdditionalInformation> additionalsInformation = new HashSet<>();
+    @JoinColumn(name="document_id", nullable = false)
+    private Document document;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="emission_point_id", nullable = false)
     private EmissionPoint emissionPoint;
 
-    public Long getId() {
-        return id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="company_id", nullable = false)
+    private Company company;
+
+    @Column(name = "business_name", length = 200, nullable = false)
+    private String businessName;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "identification_type", length = 20, nullable = false)
+    private IdentificationTypeEnum identificationType;
+
+    @Column(name = "identification", length = 13, nullable = false)
+    private String identification;
+
+    @Column(name = "address", length = 200, nullable = false)
+    private String address;
+
+    @Column(name = "phone", length = 13)
+    private String phone;
+
+    @Column(name = "email", length = 200, nullable = false)
+    private String email;
+
+    @Column(name = "total_tax_free", precision = 21, scale = 2, nullable = false)
+    private BigDecimal totalTaxFree;
+
+    @Column(name = "total_discount", precision = 21, scale = 2, nullable = false)
+    private BigDecimal totalDiscount;
+
+    @Column(name = "total_base_tax_iva", precision = 21, scale = 2, nullable = false)
+    private BigDecimal totalBaseTaxIVA;
+
+    @Column(name = "total_base_tax_ice", precision = 21, scale = 2, nullable = false)
+    private BigDecimal totalBaseTaxICE;
+
+    @Column(name = "total_tax_iva", precision = 21, scale = 2, nullable = false)
+    private BigDecimal totalTaxIVA;
+
+    @Column(name = "total_tax_ice", precision = 21, scale = 2, nullable = false)
+    private BigDecimal totalTaxICE;
+
+    @Column(name = "tip", precision = 21, scale = 2, nullable = false)
+    private BigDecimal tip;
+
+    @Column(name = "total", precision = 21, scale = 2, nullable = false)
+    private BigDecimal total;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "currency", length = 20, nullable = false)
+    private CurrencyEnum currency = CurrencyEnum.DOLAR;
+
+    @OneToMany(mappedBy = "invoiceClient", fetch = FetchType.LAZY)
+    private Set<Payment> payments = new HashSet<>();
+
+    @OneToMany(mappedBy = "invoiceClient", fetch = FetchType.LAZY)
+    private Set<DetailInvoiceClient> detailInvoiceClients = new HashSet<>();
+
+    @OneToMany(mappedBy = "invoiceClient", fetch = FetchType.LAZY)
+    private Set<TaxInvoice> taxInvoices = new HashSet<>();
+
+    @OneToMany(mappedBy = "invoiceClient", fetch = FetchType.LAZY)
+    private Set<AdditionalInformation> additionalInformations = new HashSet<>();
+
+    public Document getDocument() {
+        return document;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setDocument(Document document) {
+        this.document = document;
+    }
+
+    public EmissionPoint getEmissionPoint() {
+        return emissionPoint;
+    }
+
+    public void setEmissionPoint(EmissionPoint emissionPoint) {
+        this.emissionPoint = emissionPoint;
     }
 
     public Company getCompany() {
@@ -256,12 +247,12 @@ public class InvoiceClient extends ElectronicDocument implements Serializable {
         this.payments = payments;
     }
 
-    public Set<DetailInvoice> getDetailInvoices() {
-        return detailInvoices;
+    public Set<DetailInvoiceClient> getDetailInvoiceClients() {
+        return detailInvoiceClients;
     }
 
-    public void setDetailInvoices(Set<DetailInvoice> detailInvoices) {
-        this.detailInvoices = detailInvoices;
+    public void setDetailInvoiceClients(Set<DetailInvoiceClient> detailInvoiceClients) {
+        this.detailInvoiceClients = detailInvoiceClients;
     }
 
     public Set<TaxInvoice> getTaxInvoices() {
@@ -272,19 +263,11 @@ public class InvoiceClient extends ElectronicDocument implements Serializable {
         this.taxInvoices = taxInvoices;
     }
 
-    public Set<AdditionalInformation> getAdditionalsInformation() {
-        return additionalsInformation;
+    public Set<AdditionalInformation> getAdditionalInformations() {
+        return additionalInformations;
     }
 
-    public void setAdditionalsInformation(Set<AdditionalInformation> additionalsInformation) {
-        this.additionalsInformation = additionalsInformation;
-    }
-
-    public EmissionPoint getEmissionPoint() {
-        return emissionPoint;
-    }
-
-    public void setEmissionPoint(EmissionPoint emissionPoint) {
-        this.emissionPoint = emissionPoint;
+    public void setAdditionalInformations(Set<AdditionalInformation> additionalInformations) {
+        this.additionalInformations = additionalInformations;
     }
 }

@@ -1,10 +1,8 @@
 package ec.com.newsolutions.service.impl;
 
-import ec.com.newsolutions.domain.ElectronicDocumentInfo;
 import ec.com.newsolutions.domain.Organization;
 import ec.com.newsolutions.repository.OrganizationRepository;
 import ec.com.newsolutions.repository.UserRepository;
-import ec.com.newsolutions.security.SecurityUtils;
 import ec.com.newsolutions.service.SRIElectronicDocumentService;
 import ec.com.newsolutions.service.InvoiceClientService;
 import ec.com.newsolutions.domain.InvoiceClient;
@@ -52,10 +50,10 @@ public class InvoiceClientServiceImpl implements InvoiceClientService {
     public InvoiceClient save(InvoiceClient invoiceClient) {
         log.debug("Request to save InvoiceClient : {}", invoiceClient);
         //Optional<Organization> organizationOptional = organizationRepository.findOneByUserLogin(SecurityUtils.getCurrentUserJWT().get());
-        ElectronicDocumentInfo electronicDocumentInfo = new ElectronicDocumentInfo(new Organization());
-        invoiceClient.setElectronicDocumentInfo(electronicDocumentInfo);
+        //ElectronicDocumentInfo electronicDocumentInfo = new ElectronicDocumentInfo(new Organization());
+     //   invoiceClient.setElectronicDocumentInfo(electronicDocumentInfo);
 
-        invoiceClient.getDetailInvoices().stream().forEach(d->d.setInvoice(invoiceClient));
+   //     invoiceClient.getDetailInvoices().stream().forEach(d->d.setInvoice(invoiceClient));
 
         Utils.generateAccessKey(invoiceClient);
 

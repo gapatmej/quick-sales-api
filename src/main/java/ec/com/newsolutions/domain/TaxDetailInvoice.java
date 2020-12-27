@@ -1,57 +1,35 @@
 package ec.com.newsolutions.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
-import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import java.math.BigDecimal;
 
-/**
- * A TaxDetailInvoice.
- */
 @Entity
 @Table(name = "tax_detail_invoice")
-public class TaxDetailInvoice implements Serializable {
+public class TaxDetailInvoice extends AbstractMainEntity {
 
-    private static final long serialVersionUID = 1L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
-    private Long id;
-
-    @NotNull
     @Column(name = "code", nullable = false)
     private int code;
 
-    @NotNull
-    @Column(name = "percentage_code", nullable = false)
+    @Column(name = "percentage_code", length = 20, nullable = false)
     private String percentageCode;
 
-    @NotNull
     @Column(name = "rate", nullable = false)
-    private Integer rate;
+    private int rate;
 
-    @NotNull
     @Column(name = "tax_base", precision = 21, scale = 2, nullable = false)
     private BigDecimal taxBase;
 
-    @NotNull
     @Column(name = "amount", precision = 21, scale = 2, nullable = false)
     private BigDecimal amount;
 
-    @ManyToOne
-    private DetailInvoice detailsInvoice;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="detail_invoice_client_id", nullable = false)
+    private DetailInvoiceClient detailInvoiceClient;
 
     public int getCode() {
         return code;
@@ -69,11 +47,11 @@ public class TaxDetailInvoice implements Serializable {
         this.percentageCode = percentageCode;
     }
 
-    public Integer getRate() {
+    public int getRate() {
         return rate;
     }
 
-    public void setRate(Integer rate) {
+    public void setRate(int rate) {
         this.rate = rate;
     }
 
@@ -93,11 +71,11 @@ public class TaxDetailInvoice implements Serializable {
         this.amount = amount;
     }
 
-    public DetailInvoice getDetailsInvoice() {
-        return detailsInvoice;
+    public DetailInvoiceClient getDetailInvoiceClient() {
+        return detailInvoiceClient;
     }
 
-    public void setDetailsInvoice(DetailInvoice detailsInvoice) {
-        this.detailsInvoice = detailsInvoice;
+    public void setDetailInvoiceClient(DetailInvoiceClient detailInvoiceClient) {
+        this.detailInvoiceClient = detailInvoiceClient;
     }
 }

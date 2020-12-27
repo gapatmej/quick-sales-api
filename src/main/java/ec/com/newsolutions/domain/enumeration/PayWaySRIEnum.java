@@ -1,6 +1,6 @@
 package ec.com.newsolutions.domain.enumeration;
 
-public enum PayWayEnum {
+public enum PayWaySRIEnum {
     WITHOUT_FINANCIAL_SYSTEM ("01","SIN UTILIZACION DEL SISTEMA FINANCIERO"),
     DEBTS_COMPENSATION ("15","COMPENSACIÓN DE DEUDAS"),
     DEBIT ("16","TARJETA DE DÉBITO"),
@@ -13,7 +13,7 @@ public enum PayWayEnum {
     private final String code;
     private final String receipt;
 
-    PayWayEnum(String code, String receipt) {
+    PayWaySRIEnum(String code, String receipt) {
         this.code = code;
         this.receipt = receipt;
     }

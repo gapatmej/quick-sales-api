@@ -21,6 +21,6 @@ public interface BranchOfficeMapper extends EntityMapperIgnoreAuditProps<BranchO
     BranchOfficeDTO toDtoLight(BranchOffice branchOffice);
 
     @IterableMapping(qualifiedByName = "light")
-    List<BranchOfficeDTO> toDtoLight(List<BranchOffice> BranchOffices);
+    List<BranchOfficeDTO> toDtoLight(List<BranchOffice> branchOffices);
 
 }

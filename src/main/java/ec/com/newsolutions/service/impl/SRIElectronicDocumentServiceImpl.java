@@ -31,7 +31,7 @@ public class SRIElectronicDocumentServiceImpl implements SRIElectronicDocumentSe
             InvoiceClientJaxb invoiceClientJaxb = new InvoiceClientJaxb();
 
             TributaryInformationJaxb tributaryInformationJaxb = new TributaryInformationJaxb();
-            tributaryInformationJaxb.setEnvironment(invoiceClient.getElectronicDocumentInfo().getSriEnvironment().code());
+           /* tributaryInformationJaxb.setEnvironment(invoiceClient.getElectronicDocumentInfo().getSriEnvironment().code());
             tributaryInformationJaxb.setEmissionType(invoiceClient.getElectronicDocumentInfo().getEmissionType().code());
             tributaryInformationJaxb.setBusinessName(invoiceClient.getElectronicDocumentInfo().getBusinessName());
             tributaryInformationJaxb.setTradename(invoiceClient.getElectronicDocumentInfo().getTradename());
@@ -41,14 +41,14 @@ public class SRIElectronicDocumentServiceImpl implements SRIElectronicDocumentSe
             tributaryInformationJaxb.setEstablishmentCode(invoiceClient.getEstablishmentCode());
             tributaryInformationJaxb.setEmissionPointCode(invoiceClient.getEmissionPointCode());
             tributaryInformationJaxb.setSequence(invoiceClient.getSequence());
-            tributaryInformationJaxb.setMatrizAddress(invoiceClient.getElectronicDocumentInfo().getMainAddress());
+            tributaryInformationJaxb.setMatrizAddress(invoiceClient.getElectronicDocumentInfo().getMainAddress());*/
             invoiceClientJaxb.setTributaryInformationJaxb(tributaryInformationJaxb);
 
             InvoiceInformationJaxb invoiceInformationJaxb = new InvoiceInformationJaxb();
-            invoiceInformationJaxb.setDateIssue(invoiceClient.getDateIssue().toString());
+           /* invoiceInformationJaxb.setDateIssue(invoiceClient.getDateIssue().toString());
             invoiceInformationJaxb.setEstablishmentAddress(invoiceClient.getElectronicDocumentInfo().getEstablishmentAddress());
             invoiceInformationJaxb.setSpecialTaxpayer(invoiceClient.getElectronicDocumentInfo().getSpecialTaxpayerNumber());
-            invoiceInformationJaxb.setObligedAccounting(invoiceClient.getElectronicDocumentInfo().isKeepAccounting()?"SI":"NO");
+            invoiceInformationJaxb.setObligedAccounting(invoiceClient.getElectronicDocumentInfo().isKeepAccounting()?"SI":"NO");*/
             invoiceInformationJaxb.setBuyerIdentificationType(invoiceClient.getIdentificationType().code());
             invoiceInformationJaxb.setBuyerBusinessName(invoiceClient.getBusinessName());
             invoiceInformationJaxb.setBuyerIdentification(invoiceClient.getIdentification());
@@ -74,7 +74,7 @@ public class SRIElectronicDocumentServiceImpl implements SRIElectronicDocumentSe
             PaymentsJaxb paymentsJaxb= new PaymentsJaxb();
             for (Payment payment : invoiceClient.getPayments()){
                 PaymentJaxb paymentJaxb = new PaymentJaxb();
-                paymentJaxb.setPayWay(payment.getWayPay().getCode());
+                paymentJaxb.setPayWay(payment.getPayWay().getCode());
                 paymentJaxb.setTotal(payment.getAmount());
                 paymentJaxb.setTimeUnit(payment.getTimeUnit().value());
                 paymentsJaxb.getPayment().add(paymentJaxb);
@@ -84,7 +84,7 @@ public class SRIElectronicDocumentServiceImpl implements SRIElectronicDocumentSe
 
 
             DetailsJaxb detailsJaxb = new DetailsJaxb();
-            for (DetailInvoice detailInvoice : invoiceClient.getDetailInvoices()){
+            for (DetailInvoiceClient detailInvoice : invoiceClient.getDetailInvoiceClients()){
                 DetailJaxb detailJaxb = new DetailJaxb();
                 detailJaxb.setMainCode(detailInvoice.getMainCode());
                 detailJaxb.setAuxiliaryCode(detailInvoice.getAuxiliaryCode());
@@ -110,9 +110,9 @@ public class SRIElectronicDocumentServiceImpl implements SRIElectronicDocumentSe
             invoiceClientJaxb.setDetailsJaxb(detailsJaxb);
 
             AdditionalsInformationJaxb additionalsInformationJaxb = new AdditionalsInformationJaxb();
-            for (AdditionalInformation additionalInformation: invoiceClient.getAdditionalsInformation()){
+         /*   for (AdditionalInformation additionalInformation: invoiceClient.getAdditionalsInformation()){
                 additionalsInformationJaxb.getAdditionalInformation().add(additionalInformation.getValue());
-            }
+            }*/
             invoiceClientJaxb.setAdditionalsInformationJaxb(additionalsInformationJaxb);
 
             JAXBContext context = JAXBContext.newInstance(InvoiceClientJaxb.class);

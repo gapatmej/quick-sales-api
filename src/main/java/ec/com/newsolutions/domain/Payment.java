@@ -1,66 +1,47 @@
 package ec.com.newsolutions.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
 
 import ec.com.newsolutions.domain.enumeration.TimeUnitEnum;
 
-/**
- * A Payment.
- */
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+
 @Entity
 @Table(name = "payment")
-public class Payment implements Serializable {
+public class Payment extends AbstractMainEntity {
 
-    private static final long serialVersionUID = 1L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
-    private Long id;
-
-    @NotNull
     @Column(name = "date", nullable = false)
     private Instant date;
 
-    @NotNull
-    @DecimalMin(value = "0")
     @Column(name = "amount", precision = 21, scale = 2, nullable = false)
     private BigDecimal amount;
 
-    @Min(value = 0)
     @Column(name = "time_limit")
     private int timeLimit;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "time_unit")
+    @Column(name = "time_unit", length = 20)
     private TimeUnitEnum timeUnit;
 
-    @Column(name = "decription")
+    @Column(name = "decription", length = 200)
     private String decription;
 
-    @ManyToOne(optional = false)
-    @NotNull
-    @JsonIgnoreProperties("payments")
-    private PayWay wayPay;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="pay_way_id", nullable = false)
+    private PayWay payWay;
 
-    @ManyToOne
-    @JsonIgnoreProperties("payments")
-    private InvoiceClient invoice;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="invoice_id", nullable = false)
+    private InvoiceClient invoiceClient;
 
     public Instant getDate() {
         return date;
@@ -102,19 +83,19 @@ public class Payment implements Serializable {
         this.decription = decription;
     }
 
-    public PayWay getWayPay() {
-        return wayPay;
+    public PayWay getPayWay() {
+        return payWay;
     }
 
-    public void setWayPay(PayWay wayPay) {
-        this.wayPay = wayPay;
+    public void setPayWay(PayWay payWay) {
+        this.payWay = payWay;
     }
 
-    public InvoiceClient getInvoice() {
-        return invoice;
+    public InvoiceClient getInvoiceClient() {
+        return invoiceClient;
     }
 
-    public void setInvoice(InvoiceClient invoice) {
-        this.invoice = invoice;
+    public void setInvoiceClient(InvoiceClient invoiceClient) {
+        this.invoiceClient = invoiceClient;
     }
 }

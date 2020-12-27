@@ -1,38 +1,29 @@
 package ec.com.newsolutions.domain;
 
+import ec.com.newsolutions.domain.enumeration.PayWaySRIEnum;
 
-import javax.persistence.*;
-import javax.validation.constraints.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Table;
 
-import java.io.Serializable;
-
-/**
- * A PayWay.
- */
 @Entity
 @Table(name = "pay_way")
-public class PayWay implements Serializable {
+public class PayWay extends AbstractMainEntity {
 
-    private static final long serialVersionUID = 1L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
-    private Long id;
-
-    @Column(name = "code", nullable = false, unique = true)
+    @Column(name = "code", length = 20, unique = true, nullable = false)
     private String code;
 
-    @Column(name = "description", nullable = false)
+    @Column(name = "name", length = 50, nullable = false)
+    private String name;
+
+    @Column(name = "description", length = 200)
     private String description;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @Enumerated(EnumType.STRING)
+    @Column(name = "pay_way_sri", length = 40, nullable = false)
+    private PayWaySRIEnum payWaySRIEnum;
 
     public String getCode() {
         return code;
@@ -42,11 +33,27 @@ public class PayWay implements Serializable {
         this.code = code;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public PayWaySRIEnum getPayWaySRIEnum() {
+        return payWaySRIEnum;
+    }
+
+    public void setPayWaySRIEnum(PayWaySRIEnum payWaySRIEnum) {
+        this.payWaySRIEnum = payWaySRIEnum;
     }
 }

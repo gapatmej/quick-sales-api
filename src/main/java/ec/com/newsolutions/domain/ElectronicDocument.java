@@ -1,40 +1,50 @@
 package ec.com.newsolutions.domain;
 
+import ec.com.newsolutions.domain.enumeration.EmissionTypeEnum;
 import ec.com.newsolutions.domain.enumeration.ReceiptTypeEnum;
+import ec.com.newsolutions.domain.enumeration.SRIEnvironmentEnum;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.MappedSuperclass;
 import java.time.Instant;
 
 @MappedSuperclass
-public class ElectronicDocument extends AbstractAuditingEntity {
+public class ElectronicDocument extends AbstractMainEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="organization_id", nullable = false)
     private Organization organization;
 
-    @NotNull
-    @Column(name = "establishment_code", nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "sri_environment", length = 20, nullable = false)
+    private SRIEnvironmentEnum sriEnvironment;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "emission_type",length = 20, nullable = false)
+    private EmissionTypeEnum emissionType ;
+
+    @Column(name = "establishment_code", length = 3, nullable = false)
     private String establishmentCode;
 
-    @NotNull
-    @Column(name = "emission_point_code", nullable = false)
+    @Column(name = "emission_point_code", length = 3, nullable = false)
     private String emissionPointCode;
 
-    @NotNull
     @Column(name = "sequence", nullable = false)
-    private String sequence;
+    private int sequence;
 
-    @NotNull
     @Column(name = "date_issue", nullable = false)
     private Instant dateIssue;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="electronic_document_id", unique = true)
-    private ElectronicDocumentInfo electronicDocumentInfo;
+    @Column(name = "accessKey", nullable = false, unique = true)
+    private String accessKey;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "receipt_type", nullable = false)
+    @Column(name = "receipt_type",length = 20, nullable = false)
     private ReceiptTypeEnum receiptType;
 
     public Organization getOrganization() {
@@ -43,6 +53,22 @@ public class ElectronicDocument extends AbstractAuditingEntity {
 
     public void setOrganization(Organization organization) {
         this.organization = organization;
+    }
+
+    public SRIEnvironmentEnum getSriEnvironment() {
+        return sriEnvironment;
+    }
+
+    public void setSriEnvironment(SRIEnvironmentEnum sriEnvironment) {
+        this.sriEnvironment = sriEnvironment;
+    }
+
+    public EmissionTypeEnum getEmissionType() {
+        return emissionType;
+    }
+
+    public void setEmissionType(EmissionTypeEnum emissionType) {
+        this.emissionType = emissionType;
     }
 
     public String getEstablishmentCode() {
@@ -61,11 +87,11 @@ public class ElectronicDocument extends AbstractAuditingEntity {
         this.emissionPointCode = emissionPointCode;
     }
 
-    public String getSequence() {
+    public int getSequence() {
         return sequence;
     }
 
-    public void setSequence(String sequence) {
+    public void setSequence(int sequence) {
         this.sequence = sequence;
     }
 
@@ -77,12 +103,12 @@ public class ElectronicDocument extends AbstractAuditingEntity {
         this.dateIssue = dateIssue;
     }
 
-    public ElectronicDocumentInfo getElectronicDocumentInfo() {
-        return electronicDocumentInfo;
+    public String getAccessKey() {
+        return accessKey;
     }
 
-    public void setElectronicDocumentInfo(ElectronicDocumentInfo electronicDocumentInfo) {
-        this.electronicDocumentInfo = electronicDocumentInfo;
+    public void setAccessKey(String accessKey) {
+        this.accessKey = accessKey;
     }
 
     public ReceiptTypeEnum getReceiptType() {

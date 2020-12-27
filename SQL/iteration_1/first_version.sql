@@ -90,5 +90,20 @@ alter table document drop column name;
 alter table document drop column prefix;
 alter table document drop column sequential;
 
+/*
+    Reorganization of the invoice table
+ */
+alter table invoice_client drop column electronic_document_id;
+drop table electronic_document_info;
+drop table tax_detail_invoice;
+drop table detail_invoice;
+drop table tax_invoice;
+drop table invoice_client_additional_information;
+drop table additional_information;
+drop table pay_way;
+drop table payment;
+drop table invoice_client;
+
+
 
 

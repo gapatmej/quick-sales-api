@@ -9,7 +9,7 @@ import java.util.List;
 public class Utils {
 
     public static void generateAccessKey(ElectronicDocument electronicDocument){
-        StringBuilder accessKey = new StringBuilder();
+        /*StringBuilder accessKey = new StringBuilder();
         accessKey.append(Constants.accessKeyFormatDate.format(electronicDocument.getDateIssue()));
         accessKey.append(electronicDocument.getReceiptType());
         accessKey.append(electronicDocument.getOrganization().getIdentification());
@@ -22,7 +22,7 @@ public class Utils {
         accessKey.append(generarDigitoVerificador(accessKey.toString()));
 
 
-        electronicDocument.getElectronicDocumentInfo().setAccessKey(accessKey.toString());
+        electronicDocument.getElectronicDocumentInfo().setAccessKey(accessKey.toString());*/
 
     }
 

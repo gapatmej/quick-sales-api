@@ -13,8 +13,8 @@ import java.util.Set;
 
 
 @Entity
-@Table(name = "detail_invoice")
-public class DetailInvoice extends AbstractMainEntity {
+@Table(name = "detail_invoice_client")
+public class DetailInvoiceClient extends AbstractMainEntity {
 
     @Column(name = "main_code", length = 50, nullable = false)
     private String mainCode;

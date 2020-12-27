@@ -1,2 +1,21 @@
-package ec.com.newsolutions.service.mapper;public class DetailInvoice {
+package ec.com.newsolutions.service.mapper;
+
+import ec.com.newsolutions.domain.DetailInvoiceClient;
+import ec.com.newsolutions.service.dto.DetailInvoiceClientDTO;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+
+@Mapper(config = EntityMapperConfigIgnoreAuditProps.class)
+public interface DetailInvoiceClientMapper {
+
+    @Mapping(source = "product.id", target = "productId")
+    @Mapping(source = "invoiceClient.id", target = "invoiceClientId")
+    DetailInvoiceClientDTO toDto(DetailInvoiceClient detailInvoiceClient);
+
+    @Mapping(source = "productId", target = "product.id")
+    @Mapping(source = "invoiceClientId", target = "invoiceClient.id")
+    @Mapping( ignore = true, target = "taxDetailInvoices")
+    DetailInvoiceClient toEntity(DetailInvoiceClientDTO detailInvoiceClientDTO);
 }
+
+

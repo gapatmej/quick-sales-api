@@ -1,89 +1,51 @@
 package ec.com.newsolutions.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
-import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import java.math.BigDecimal;
 
-/**
- * A TaxInvoice.
- */
 @Entity
 @Table(name = "tax_invoice")
-public class TaxInvoice implements Serializable {
+public class TaxInvoice extends AbstractMainEntity {
 
-    private static final long serialVersionUID = 1L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
-    private Long id;
-
-    @NotNull
     @Column(name = "code", nullable = false)
-    private Integer code;
+    private int code;
 
-    @NotNull
     @Column(name = "percentage_code", nullable = false)
-    private Integer percentageCode;
+    private int percentageCode;
 
-    @NotNull
     @Column(name = "tax_base", precision = 21, scale = 2, nullable = false)
     private BigDecimal taxBase;
 
-    @NotNull
     @Column(name = "amount", precision = 21, scale = 2, nullable = false)
     private BigDecimal amount;
 
-    @ManyToOne
-    @JsonIgnoreProperties("taxInvoices")
-    private InvoiceClient invoice;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="invoice_id", nullable = false)
+    private InvoiceClient invoiceClient;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Integer getCode() {
+    public int getCode() {
         return code;
     }
 
-    public TaxInvoice code(Integer code) {
-        this.code = code;
-        return this;
-    }
-
-    public void setCode(Integer code) {
+    public void setCode(int code) {
         this.code = code;
     }
 
-    public Integer getPercentageCode() {
+    public int getPercentageCode() {
         return percentageCode;
     }
 
-    public TaxInvoice percentageCode(Integer percentageCode) {
-        this.percentageCode = percentageCode;
-        return this;
-    }
-
-    public void setPercentageCode(Integer percentageCode) {
+    public void setPercentageCode(int percentageCode) {
         this.percentageCode = percentageCode;
     }
 
     public BigDecimal getTaxBase() {
         return taxBase;
-    }
-
-    public TaxInvoice taxBase(BigDecimal taxBase) {
-        this.taxBase = taxBase;
-        return this;
     }
 
     public void setTaxBase(BigDecimal taxBase) {
@@ -94,53 +56,15 @@ public class TaxInvoice implements Serializable {
         return amount;
     }
 
-    public TaxInvoice amount(BigDecimal amount) {
-        this.amount = amount;
-        return this;
-    }
-
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
 
-    public InvoiceClient getInvoice() {
-        return invoice;
+    public InvoiceClient getInvoiceClient() {
+        return invoiceClient;
     }
 
-    public TaxInvoice invoice(InvoiceClient invoiceClient) {
-        this.invoice = invoiceClient;
-        return this;
-    }
-
-    public void setInvoice(InvoiceClient invoiceClient) {
-        this.invoice = invoiceClient;
-    }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof TaxInvoice)) {
-            return false;
-        }
-        return id != null && id.equals(((TaxInvoice) o).id);
-    }
-
-    @Override
-    public int hashCode() {
-        return 31;
-    }
-
-    @Override
-    public String toString() {
-        return "TaxInvoice{" +
-            "id=" + getId() +
-            ", code=" + getCode() +
-            ", percentageCode=" + getPercentageCode() +
-            ", taxBase=" + getTaxBase() +
-            ", amount=" + getAmount() +
-            "}";
+    public void setInvoiceClient(InvoiceClient invoiceClient) {
+        this.invoiceClient = invoiceClient;
     }
 }

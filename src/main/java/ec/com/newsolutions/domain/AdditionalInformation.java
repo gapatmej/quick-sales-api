@@ -1,37 +1,25 @@
 package ec.com.newsolutions.domain;
 
-import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "additional_information")
-public class AdditionalInformation extends AbstractAuditingEntity  {
+public class AdditionalInformation extends AbstractMainEntity  {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
-    private Long id;
-
-    @Column(name = "additional_field", nullable = false)
+    @Column(name = "additional_field", length = 300, nullable = false)
     private String additionalField;
 
-    @Column(name = "value", nullable = false)
+    @Column(name = "value", length = 300, nullable = false)
     private String value;
 
-    @ManyToMany()
-    @JoinTable(
-        name = "invoice_client_additional_information"
-    )
-    private Set<InvoiceClient> invoicesClient = new HashSet<>();
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="invoice_client_id", nullable = false)
+    private InvoiceClient invoiceClient;
 
     public String getAdditionalField() {
         return additionalField;
@@ -49,11 +37,11 @@ public class AdditionalInformation extends AbstractAuditingEntity  {
         this.value = value;
     }
 
-    public Set<InvoiceClient> getInvoicesClient() {
-        return invoicesClient;
+    public InvoiceClient getInvoiceClient() {
+        return invoiceClient;
     }
 
-    public void setInvoicesClient(Set<InvoiceClient> invoicesClient) {
-        this.invoicesClient = invoicesClient;
+    public void setInvoiceClient(InvoiceClient invoiceClient) {
+        this.invoiceClient = invoiceClient;
     }
 }

@@ -1,15 +1,10 @@
 package ec.com.newsolutions.repository;
 
-import ec.com.newsolutions.domain.DetailInvoice;
-
-import org.springframework.data.jpa.repository.*;
+import ec.com.newsolutions.domain.DetailInvoiceClient;
 import org.springframework.stereotype.Repository;
 
-/**
- * Spring Data  repository for the DetailInvoice entity.
- */
-@SuppressWarnings("unused")
+
 @Repository
-public interface DetailInvoiceRepository extends JpaRepository<DetailInvoice, Long> {
+public interface DetailInvoiceRepository extends JpaRepositoryCustom<DetailInvoiceClient, Long> {
 
 }

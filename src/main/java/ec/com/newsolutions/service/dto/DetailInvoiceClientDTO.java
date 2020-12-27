@@ -2,7 +2,7 @@ package ec.com.newsolutions.service.dto;
 
 import java.math.BigDecimal;
 
-public class DetailInvoiceDTO extends AbstractMainDTO {
+public class DetailInvoiceClientDTO extends AbstractMainDTO {
 
     private String mainCode;
 

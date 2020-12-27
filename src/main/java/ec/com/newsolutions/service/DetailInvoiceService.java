@@ -1,15 +1,10 @@
 package ec.com.newsolutions.service;
-
-import ec.com.newsolutions.domain.DetailInvoice;
-
+import ec.com.newsolutions.domain.DetailInvoiceClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
-/**
- * Service Interface for managing {@link DetailInvoice}.
- */
 public interface DetailInvoiceService {
 
     /**
@@ -18,7 +13,7 @@ public interface DetailInvoiceService {
      * @param detailInvoice the entity to save.
      * @return the persisted entity.
      */
-    DetailInvoice save(DetailInvoice detailInvoice);
+    DetailInvoiceClient save(DetailInvoiceClient detailInvoice);
 
     /**
      * Get all the detailInvoices.
@@ -26,7 +21,7 @@ public interface DetailInvoiceService {
      * @param pageable the pagination information.
      * @return the list of entities.
      */
-    Page<DetailInvoice> findAll(Pageable pageable);
+    Page<DetailInvoiceClient> findAll(Pageable pageable);
 
     /**
      * Get the "id" detailInvoice.
@@ -34,7 +29,7 @@ public interface DetailInvoiceService {
      * @param id the id of the entity.
      * @return the entity.
      */
-    Optional<DetailInvoice> findOne(Long id);
+    Optional<DetailInvoiceClient> findOne(Long id);
 
     /**
      * Delete the "id" detailInvoice.
