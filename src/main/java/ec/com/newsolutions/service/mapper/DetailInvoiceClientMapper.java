@@ -10,6 +10,7 @@ public interface DetailInvoiceClientMapper {
 
     @Mapping(source = "product.id", target = "productId")
     @Mapping(source = "invoiceClient.id", target = "invoiceClientId")
+    @Mapping(expression = "java(false)", target = "deleted")
     DetailInvoiceClientDTO toDto(DetailInvoiceClient detailInvoiceClient);
 
     @Mapping(source = "productId", target = "product.id")

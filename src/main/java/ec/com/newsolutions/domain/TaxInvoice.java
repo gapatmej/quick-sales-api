@@ -12,6 +12,10 @@ import java.math.BigDecimal;
 @Table(name = "tax_invoice")
 public class TaxInvoice extends AbstractMainEntity {
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="tax_id", nullable = false)
+    private Tax tax;
+
     @Column(name = "code", nullable = false)
     private int code;
 
@@ -27,6 +31,14 @@ public class TaxInvoice extends AbstractMainEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="invoice_id", nullable = false)
     private InvoiceClient invoiceClient;
+
+    public Tax getTax() {
+        return tax;
+    }
+
+    public void setTax(Tax tax) {
+        this.tax = tax;
+    }
 
     public int getCode() {
         return code;

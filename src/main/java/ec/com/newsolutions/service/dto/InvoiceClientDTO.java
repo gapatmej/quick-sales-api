@@ -47,11 +47,9 @@ public class InvoiceClientDTO extends ElectronicDocumentDTO {
 
     private List<PaymentDTO> payments  = new ArrayList<>();
 
-    private List<DetailInvoiceClientDTO> detailInvoiceClients = new ArrayList<>();
+    private List<DetailInvoiceClientDTO> detailsInvoiceClient = new ArrayList<>();
 
-    //private Set<TaxInvoice> taxInvoices = new HashSet<>();
-
-    //private Set<AdditionalInformation> additionalInformations = new HashSet<>();
+    private List<AdditionalInformationDTO> additionalsInformation = new ArrayList<>();
 
     public Long getDocumentId() {
         return documentId;
@@ -205,11 +203,19 @@ public class InvoiceClientDTO extends ElectronicDocumentDTO {
         this.payments = payments;
     }
 
-    public List<DetailInvoiceClientDTO> getDetailInvoiceClients() {
-        return detailInvoiceClients;
+    public List<DetailInvoiceClientDTO> getDetailsInvoiceClient() {
+        return detailsInvoiceClient;
     }
 
-    public void setDetailInvoiceClients(List<DetailInvoiceClientDTO> detailInvoiceClients) {
-        this.detailInvoiceClients = detailInvoiceClients;
+    public void setDetailsInvoiceClient(List<DetailInvoiceClientDTO> detailsInvoiceClient) {
+        this.detailsInvoiceClient = detailsInvoiceClient;
+    }
+
+    public List<AdditionalInformationDTO> getAdditionalsInformation() {
+        return additionalsInformation;
+    }
+
+    public void setAdditionalsInformation(List<AdditionalInformationDTO> additionalsInformation) {
+        this.additionalsInformation = additionalsInformation;
     }
 }

@@ -20,6 +20,14 @@ public class ElectronicDocument extends AbstractMainEntity {
     @JoinColumn(name="organization_id", nullable = false)
     private Organization organization;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="document_id", nullable = false)
+    private Document document;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="emission_point_id", nullable = false)
+    private EmissionPoint emissionPoint;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "sri_environment", length = 20, nullable = false)
     private SRIEnvironmentEnum sriEnvironment;
@@ -53,6 +61,22 @@ public class ElectronicDocument extends AbstractMainEntity {
 
     public void setOrganization(Organization organization) {
         this.organization = organization;
+    }
+
+    public Document getDocument() {
+        return document;
+    }
+
+    public void setDocument(Document document) {
+        this.document = document;
+    }
+
+    public EmissionPoint getEmissionPoint() {
+        return emissionPoint;
+    }
+
+    public void setEmissionPoint(EmissionPoint emissionPoint) {
+        this.emissionPoint = emissionPoint;
     }
 
     public SRIEnvironmentEnum getSriEnvironment() {

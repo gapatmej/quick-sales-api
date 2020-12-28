@@ -9,7 +9,7 @@ import org.mapstruct.Named;
 
 import java.util.List;
 
-@Mapper(config = EntityMapperConfigIgnoreAuditProps.class, uses = {PaymentMapper.class, DetailInvoiceClientMapper.class})
+@Mapper(config = EntityMapperConfigIgnoreAuditProps.class, uses = { AdditionalInformationMapper.class, DetailInvoiceClientMapper.class, PaymentMapper.class })
 public interface InvoiceClientMapper extends EntityMapperIgnoreAuditProps<InvoiceClientDTO, InvoiceClient> {
 
     @Mapping(target = "organizationId", source = "organization.id")
@@ -22,8 +22,7 @@ public interface InvoiceClientMapper extends EntityMapperIgnoreAuditProps<Invoic
     @Mapping(target = "document.id", source = "documentId")
     @Mapping(target = "emissionPoint.id", source = "emissionPointId")
     @Mapping(target = "company.id", source = "companyId")
-    @Mapping(target = "taxInvoices", ignore = true)
-    @Mapping(target = "additionalInformations", ignore = true)
+    @Mapping(target = "taxesInvoice", ignore = true)
     InvoiceClient toEntity(InvoiceClientDTO invoiceClientDTO);
 
     @Mapping(target = "organizationId", source = "organization.id")
@@ -31,7 +30,7 @@ public interface InvoiceClientMapper extends EntityMapperIgnoreAuditProps<Invoic
     @Mapping(target = "emissionPointId", source = "emissionPoint.id")
     @Mapping(target = "companyId", source = "company.id")
     @Mapping(target = "payments",  ignore = true)
-    @Mapping(target = "detailInvoiceClients",  ignore = true)
+    @Mapping(target = "detailsInvoiceClient",  ignore = true)
     @Named(value = "light")
     InvoiceClientDTO toDtoLight(InvoiceClient invoiceClient);
 

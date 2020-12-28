@@ -10,6 +10,7 @@ public final class ErrorConstants {
     public static final String ERR_ID_EXISTS = "error.idexists";
     public static final String ERR_INVALID_ID = "error.invalidId";
     public static final String ERR_ENTITY_NOT_FOUND = "error.entityNotFound";
+    public static final String ERR_WORKSPACE_NOT_FOUND = "error.workspaceNotFound";
     public static final String PROBLEM_BASE_URL = "https://www.jhipster.tech/problem";
     public static final URI DEFAULT_TYPE = URI.create(PROBLEM_BASE_URL + "/problem-with-message");
     public static final URI CONSTRAINT_VIOLATION_TYPE = URI.create(PROBLEM_BASE_URL + "/constraint-violation");

@@ -2,8 +2,8 @@ package ec.com.newsolutions.web.rest;
 
 import ec.com.newsolutions.QuickSalesApiApp;
 import ec.com.newsolutions.domain.DetailInvoice;
-import ec.com.newsolutions.repository.DetailInvoiceRepository;
-import ec.com.newsolutions.service.DetailInvoiceService;
+import ec.com.newsolutions.repository.DetailInvoiceClientRepository;
+import ec.com.newsolutions.service.DetailInvoiceClientService;
 import ec.com.newsolutions.web.rest.errors.ExceptionTranslator;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -57,10 +57,10 @@ public class DetailInvoiceResourceIT {
     private static final BigDecimal UPDATED_TOTAL = new BigDecimal(1);
 
     @Autowired
-    private DetailInvoiceRepository detailInvoiceRepository;
+    private DetailInvoiceClientRepository detailInvoiceClientRepository;
 
     @Autowired
-    private DetailInvoiceService detailInvoiceService;
+    private DetailInvoiceClientService detailInvoiceService;
 
     @Autowired
     private MappingJackson2HttpMessageConverter jacksonMessageConverter;
@@ -136,7 +136,7 @@ public class DetailInvoiceResourceIT {
     @Test
     @Transactional
     public void createDetailInvoice() throws Exception {
-        int databaseSizeBeforeCreate = detailInvoiceRepository.findAll().size();
+        int databaseSizeBeforeCreate = detailInvoiceClientRepository.findAll().size();
 
         // Create the DetailInvoice
         restDetailInvoiceMockMvc.perform(post("/api/detail-invoices")
@@ -145,7 +145,7 @@ public class DetailInvoiceResourceIT {
             .andExpect(status().isCreated());
 
         // Validate the DetailInvoice in the database
-        List<DetailInvoice> detailInvoiceList = detailInvoiceRepository.findAll();
+        List<DetailInvoice> detailInvoiceList = detailInvoiceClientRepository.findAll();
         assertThat(detailInvoiceList).hasSize(databaseSizeBeforeCreate + 1);
         DetailInvoice testDetailInvoice = detailInvoiceList.get(detailInvoiceList.size() - 1);
         assertThat(testDetailInvoice.getMainCode()).isEqualTo(DEFAULT_MAIN_CODE);
@@ -160,7 +160,7 @@ public class DetailInvoiceResourceIT {
     @Test
     @Transactional
     public void createDetailInvoiceWithExistingId() throws Exception {
-        int databaseSizeBeforeCreate = detailInvoiceRepository.findAll().size();
+        int databaseSizeBeforeCreate = detailInvoiceClientRepository.findAll().size();
 
         // Create the DetailInvoice with an existing ID
         detailInvoice.setId(1L);
@@ -172,7 +172,7 @@ public class DetailInvoiceResourceIT {
             .andExpect(status().isBadRequest());
 
         // Validate the DetailInvoice in the database
-        List<DetailInvoice> detailInvoiceList = detailInvoiceRepository.findAll();
+        List<DetailInvoice> detailInvoiceList = detailInvoiceClientRepository.findAll();
         assertThat(detailInvoiceList).hasSize(databaseSizeBeforeCreate);
     }
 
@@ -180,7 +180,7 @@ public class DetailInvoiceResourceIT {
     @Test
     @Transactional
     public void checkMainCodeIsRequired() throws Exception {
-        int databaseSizeBeforeTest = detailInvoiceRepository.findAll().size();
+        int databaseSizeBeforeTest = detailInvoiceClientRepository.findAll().size();
         // set the field null
         detailInvoice.setMainCode(null);
 
@@ -191,14 +191,14 @@ public class DetailInvoiceResourceIT {
             .content(TestUtil.convertObjectToJsonBytes(detailInvoice)))
             .andExpect(status().isBadRequest());
 
-        List<DetailInvoice> detailInvoiceList = detailInvoiceRepository.findAll();
+        List<DetailInvoice> detailInvoiceList = detailInvoiceClientRepository.findAll();
         assertThat(detailInvoiceList).hasSize(databaseSizeBeforeTest);
     }
 
     @Test
     @Transactional
     public void checkQuantityIsRequired() throws Exception {
-        int databaseSizeBeforeTest = detailInvoiceRepository.findAll().size();
+        int databaseSizeBeforeTest = detailInvoiceClientRepository.findAll().size();
         // set the field null
         detailInvoice.setQuantity(null);
 
@@ -209,14 +209,14 @@ public class DetailInvoiceResourceIT {
             .content(TestUtil.convertObjectToJsonBytes(detailInvoice)))
             .andExpect(status().isBadRequest());
 
-        List<DetailInvoice> detailInvoiceList = detailInvoiceRepository.findAll();
+        List<DetailInvoice> detailInvoiceList = detailInvoiceClientRepository.findAll();
         assertThat(detailInvoiceList).hasSize(databaseSizeBeforeTest);
     }
 
     @Test
     @Transactional
     public void checkUnitPriceIsRequired() throws Exception {
-        int databaseSizeBeforeTest = detailInvoiceRepository.findAll().size();
+        int databaseSizeBeforeTest = detailInvoiceClientRepository.findAll().size();
         // set the field null
         detailInvoice.setUnitPrice(null);
 
@@ -227,14 +227,14 @@ public class DetailInvoiceResourceIT {
             .content(TestUtil.convertObjectToJsonBytes(detailInvoice)))
             .andExpect(status().isBadRequest());
 
-        List<DetailInvoice> detailInvoiceList = detailInvoiceRepository.findAll();
+        List<DetailInvoice> detailInvoiceList = detailInvoiceClientRepository.findAll();
         assertThat(detailInvoiceList).hasSize(databaseSizeBeforeTest);
     }
 
     @Test
     @Transactional
     public void checkDiscountIsRequired() throws Exception {
-        int databaseSizeBeforeTest = detailInvoiceRepository.findAll().size();
+        int databaseSizeBeforeTest = detailInvoiceClientRepository.findAll().size();
         // set the field null
         detailInvoice.setDiscount(null);
 
@@ -245,14 +245,14 @@ public class DetailInvoiceResourceIT {
             .content(TestUtil.convertObjectToJsonBytes(detailInvoice)))
             .andExpect(status().isBadRequest());
 
-        List<DetailInvoice> detailInvoiceList = detailInvoiceRepository.findAll();
+        List<DetailInvoice> detailInvoiceList = detailInvoiceClientRepository.findAll();
         assertThat(detailInvoiceList).hasSize(databaseSizeBeforeTest);
     }
 
     @Test
     @Transactional
     public void checkTotalIsRequired() throws Exception {
-        int databaseSizeBeforeTest = detailInvoiceRepository.findAll().size();
+        int databaseSizeBeforeTest = detailInvoiceClientRepository.findAll().size();
         // set the field null
         detailInvoice.setTotal(null);
 
@@ -263,7 +263,7 @@ public class DetailInvoiceResourceIT {
             .content(TestUtil.convertObjectToJsonBytes(detailInvoice)))
             .andExpect(status().isBadRequest());
 
-        List<DetailInvoice> detailInvoiceList = detailInvoiceRepository.findAll();
+        List<DetailInvoice> detailInvoiceList = detailInvoiceClientRepository.findAll();
         assertThat(detailInvoiceList).hasSize(databaseSizeBeforeTest);
     }
 
@@ -271,7 +271,7 @@ public class DetailInvoiceResourceIT {
     @Transactional
     public void getAllDetailInvoices() throws Exception {
         // Initialize the database
-        detailInvoiceRepository.saveAndFlush(detailInvoice);
+        detailInvoiceClientRepository.saveAndFlush(detailInvoice);
 
         // Get all the detailInvoiceList
         restDetailInvoiceMockMvc.perform(get("/api/detail-invoices?sort=id,desc"))
@@ -286,12 +286,12 @@ public class DetailInvoiceResourceIT {
             .andExpect(jsonPath("$.[*].discount").value(hasItem(DEFAULT_DISCOUNT.intValue())))
             .andExpect(jsonPath("$.[*].total").value(hasItem(DEFAULT_TOTAL.intValue())));
     }
-    
+
     @Test
     @Transactional
     public void getDetailInvoice() throws Exception {
         // Initialize the database
-        detailInvoiceRepository.saveAndFlush(detailInvoice);
+        detailInvoiceClientRepository.saveAndFlush(detailInvoice);
 
         // Get the detailInvoice
         restDetailInvoiceMockMvc.perform(get("/api/detail-invoices/{id}", detailInvoice.getId()))
@@ -321,10 +321,10 @@ public class DetailInvoiceResourceIT {
         // Initialize the database
         detailInvoiceService.save(detailInvoice);
 
-        int databaseSizeBeforeUpdate = detailInvoiceRepository.findAll().size();
+        int databaseSizeBeforeUpdate = detailInvoiceClientRepository.findAll().size();
 
         // Update the detailInvoice
-        DetailInvoice updatedDetailInvoice = detailInvoiceRepository.findById(detailInvoice.getId()).get();
+        DetailInvoice updatedDetailInvoice = detailInvoiceClientRepository.findById(detailInvoice.getId()).get();
         // Disconnect from session so that the updates on updatedDetailInvoice are not directly saved in db
         em.detach(updatedDetailInvoice);
         updatedDetailInvoice
@@ -342,7 +342,7 @@ public class DetailInvoiceResourceIT {
             .andExpect(status().isOk());
 
         // Validate the DetailInvoice in the database
-        List<DetailInvoice> detailInvoiceList = detailInvoiceRepository.findAll();
+        List<DetailInvoice> detailInvoiceList = detailInvoiceClientRepository.findAll();
         assertThat(detailInvoiceList).hasSize(databaseSizeBeforeUpdate);
         DetailInvoice testDetailInvoice = detailInvoiceList.get(detailInvoiceList.size() - 1);
         assertThat(testDetailInvoice.getMainCode()).isEqualTo(UPDATED_MAIN_CODE);
@@ -357,7 +357,7 @@ public class DetailInvoiceResourceIT {
     @Test
     @Transactional
     public void updateNonExistingDetailInvoice() throws Exception {
-        int databaseSizeBeforeUpdate = detailInvoiceRepository.findAll().size();
+        int databaseSizeBeforeUpdate = detailInvoiceClientRepository.findAll().size();
 
         // Create the DetailInvoice
 
@@ -368,7 +368,7 @@ public class DetailInvoiceResourceIT {
             .andExpect(status().isBadRequest());
 
         // Validate the DetailInvoice in the database
-        List<DetailInvoice> detailInvoiceList = detailInvoiceRepository.findAll();
+        List<DetailInvoice> detailInvoiceList = detailInvoiceClientRepository.findAll();
         assertThat(detailInvoiceList).hasSize(databaseSizeBeforeUpdate);
     }
 
@@ -378,7 +378,7 @@ public class DetailInvoiceResourceIT {
         // Initialize the database
         detailInvoiceService.save(detailInvoice);
 
-        int databaseSizeBeforeDelete = detailInvoiceRepository.findAll().size();
+        int databaseSizeBeforeDelete = detailInvoiceClientRepository.findAll().size();
 
         // Delete the detailInvoice
         restDetailInvoiceMockMvc.perform(delete("/api/detail-invoices/{id}", detailInvoice.getId())
@@ -386,7 +386,7 @@ public class DetailInvoiceResourceIT {
             .andExpect(status().isNoContent());
 
         // Validate the database contains one less item
-        List<DetailInvoice> detailInvoiceList = detailInvoiceRepository.findAll();
+        List<DetailInvoice> detailInvoiceList = detailInvoiceClientRepository.findAll();
         assertThat(detailInvoiceList).hasSize(databaseSizeBeforeDelete - 1);
     }
 }

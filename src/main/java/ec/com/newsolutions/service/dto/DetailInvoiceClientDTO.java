@@ -24,6 +24,8 @@ public class DetailInvoiceClientDTO extends AbstractMainDTO {
 
     private Long invoiceClientId;
 
+    private boolean deleted;
+
     public String getMainCode() {
         return mainCode;
     }
@@ -94,5 +96,13 @@ public class DetailInvoiceClientDTO extends AbstractMainDTO {
 
     public void setInvoiceClientId(Long invoiceClientId) {
         this.invoiceClientId = invoiceClientId;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }

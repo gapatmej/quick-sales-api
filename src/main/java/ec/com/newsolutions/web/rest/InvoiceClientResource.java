@@ -32,6 +32,7 @@ public class InvoiceClientResource extends AbstractResource {
         super(InvoiceClientService.class,"invoiceClient");
         this.invoiceClientService = invoiceClientService;
     }
+
     @PostMapping("/invoices-client")
     public ResponseEntity<InvoiceClientDTO> create(@Valid @RequestBody InvoiceClientDTO invoiceClientDTO) throws URISyntaxException {
         log.debug("REST request to save InvoiceClientDTO : {}", GsonUtils.entityToJson(invoiceClientDTO));
@@ -53,7 +54,6 @@ public class InvoiceClientResource extends AbstractResource {
             .headers(ec.com.newsolutions.web.rest.util.HeaderUtil.createEntityUpdateAlert(true, entityName, result.getId().toString()))
             .body(result);
     }
-
 
     @GetMapping("/invoices-client")
     public ResponseEntity<List<InvoiceClientDTO>> getAll(String search, Pageable pageable) {

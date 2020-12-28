@@ -17,6 +17,8 @@ public interface DocumentAuthorizationService {
 
     Optional<DocumentAuthorizationDTO> findOne(Long id);
 
+    Optional<DocumentAuthorizationDTO>  findByDocumentIdAndEmissionPointId(Long documentId, Long emissionPointId);
+
     void delete(Long id);
 
     void deleteByDocument(Long branchOfficeId);

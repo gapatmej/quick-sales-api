@@ -57,7 +57,7 @@ public class SRIElectronicDocumentServiceImpl implements SRIElectronicDocumentSe
             invoiceInformationJaxb.setTotalDiscount(invoiceClient.getTotalDiscount());
 
             TotalWithTaxesJaxb totalWithTaxesJaxb = new TotalWithTaxesJaxb();
-            for (TaxInvoice taxInvoice : invoiceClient.getTaxInvoices()){
+            for (TaxInvoice taxInvoice : invoiceClient.getTaxesInvoice()){
                 TotalTaxJaxb totalTaxJaxb = new TotalTaxJaxb();
                 totalTaxJaxb.setCode(taxInvoice.getCode());
                 totalTaxJaxb.setPercentageCode(taxInvoice.getPercentageCode());
@@ -84,7 +84,7 @@ public class SRIElectronicDocumentServiceImpl implements SRIElectronicDocumentSe
 
 
             DetailsJaxb detailsJaxb = new DetailsJaxb();
-            for (DetailInvoiceClient detailInvoice : invoiceClient.getDetailInvoiceClients()){
+            for (DetailInvoiceClient detailInvoice : invoiceClient.getDetailsInvoiceClient()){
                 DetailJaxb detailJaxb = new DetailJaxb();
                 detailJaxb.setMainCode(detailInvoice.getMainCode());
                 detailJaxb.setAuxiliaryCode(detailInvoice.getAuxiliaryCode());

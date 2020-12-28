@@ -52,12 +52,18 @@ public class DocumentAuthorizationServiceImpl extends AbstractService implements
 
     @Override
     public Page<DocumentAuthorizationDTO> findAll(String search, Pageable pageable) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public Optional<DocumentAuthorizationDTO> findOne(Long id) {
-        return Optional.empty();
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Optional<DocumentAuthorizationDTO> findByDocumentIdAndEmissionPointId(Long documentId, Long emissionPointId) {
+        log.debug("Request to get Document Authorization by documentId :{}, emissionPointId : {}", documentId, emissionPointId);
+        return documentAuthorizationRepository.findByDocumentIdAndEmissionPointId(documentId,emissionPointId).map(documentAuthorizationMapper::toDto);
     }
 
     @Override

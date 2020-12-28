@@ -1,10 +1,11 @@
 package ec.com.newsolutions.domain;
 
+import ec.com.newsolutions.domain.enumeration.CurrencyEnum;
+import ec.com.newsolutions.domain.enumeration.IdentificationTypeEnum;
+
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
-
-import ec.com.newsolutions.domain.enumeration.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,13 +21,6 @@ import javax.persistence.Table;
 @Table(name = "invoice_client")
 public class InvoiceClient extends ElectronicDocument{
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="document_id", nullable = false)
-    private Document document;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="emission_point_id", nullable = false)
-    private EmissionPoint emissionPoint;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="company_id", nullable = false)
@@ -83,29 +77,13 @@ public class InvoiceClient extends ElectronicDocument{
     private Set<Payment> payments = new HashSet<>();
 
     @OneToMany(mappedBy = "invoiceClient", fetch = FetchType.LAZY)
-    private Set<DetailInvoiceClient> detailInvoiceClients = new HashSet<>();
+    private Set<DetailInvoiceClient> detailsInvoiceClient = new HashSet<>();
 
     @OneToMany(mappedBy = "invoiceClient", fetch = FetchType.LAZY)
-    private Set<TaxInvoice> taxInvoices = new HashSet<>();
+    private Set<TaxInvoice> taxesInvoice = new HashSet<>();
 
     @OneToMany(mappedBy = "invoiceClient", fetch = FetchType.LAZY)
-    private Set<AdditionalInformation> additionalInformations = new HashSet<>();
-
-    public Document getDocument() {
-        return document;
-    }
-
-    public void setDocument(Document document) {
-        this.document = document;
-    }
-
-    public EmissionPoint getEmissionPoint() {
-        return emissionPoint;
-    }
-
-    public void setEmissionPoint(EmissionPoint emissionPoint) {
-        this.emissionPoint = emissionPoint;
-    }
+    private Set<AdditionalInformation> additionalsInformation = new HashSet<>();
 
     public Company getCompany() {
         return company;
@@ -243,27 +221,27 @@ public class InvoiceClient extends ElectronicDocument{
         this.payments = payments;
     }
 
-    public Set<DetailInvoiceClient> getDetailInvoiceClients() {
-        return detailInvoiceClients;
+    public Set<DetailInvoiceClient> getDetailsInvoiceClient() {
+        return detailsInvoiceClient;
     }
 
-    public void setDetailInvoiceClients(Set<DetailInvoiceClient> detailInvoiceClients) {
-        this.detailInvoiceClients = detailInvoiceClients;
+    public void setDetailsInvoiceClient(Set<DetailInvoiceClient> detailsInvoiceClient) {
+        this.detailsInvoiceClient = detailsInvoiceClient;
     }
 
-    public Set<TaxInvoice> getTaxInvoices() {
-        return taxInvoices;
+    public Set<TaxInvoice> getTaxesInvoice() {
+        return taxesInvoice;
     }
 
-    public void setTaxInvoices(Set<TaxInvoice> taxInvoices) {
-        this.taxInvoices = taxInvoices;
+    public void setTaxesInvoice(Set<TaxInvoice> taxesInvoice) {
+        this.taxesInvoice = taxesInvoice;
     }
 
-    public Set<AdditionalInformation> getAdditionalInformations() {
-        return additionalInformations;
+    public Set<AdditionalInformation> getAdditionalsInformation() {
+        return additionalsInformation;
     }
 
-    public void setAdditionalInformations(Set<AdditionalInformation> additionalInformations) {
-        this.additionalInformations = additionalInformations;
+    public void setAdditionalsInformation(Set<AdditionalInformation> additionalsInformation) {
+        this.additionalsInformation = additionalsInformation;
     }
 }

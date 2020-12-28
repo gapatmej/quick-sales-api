@@ -53,13 +53,16 @@ public class EmissionPointServiceImpl extends AbstractService implements Emissio
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<EmissionPointDTO> findAll(String search, Pageable pageable) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<EmissionPointDTO> findOne(Long id) {
-        return Optional.empty();
+        log.debug("Request to get Emission Point  : {}", id);
+        return emissionPointRepository.findById(id).map(emissionPointMapper::toDto);
     }
 
     @Override

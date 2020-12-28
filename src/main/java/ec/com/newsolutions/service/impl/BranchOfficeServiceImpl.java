@@ -70,6 +70,13 @@ public class BranchOfficeServiceImpl extends AbstractService implements BranchOf
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public Optional<BranchOfficeDTO> findOneLight(Long id) {
+        log.debug("Request to get BranchOffice : {}", id);
+        return branchOfficeRepository.findById(id).map(branchOfficeMapper::toDtoLight);
+    }
+
+    @Override
     public void delete(Long id) {
         log.debug("Request to delete BranchOffice : {}", id);
         emissionPointService.deleteByBranchOffice(id);
