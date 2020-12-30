@@ -73,7 +73,7 @@ public class DocumentResource extends AbstractResource {
     @GetMapping("/documents/{id}")
     public ResponseEntity<DocumentDTO> get(@PathVariable Long id) {
         log.debug("REST request to get Document : {}", id);
-        Optional<DocumentDTO> result = documentService.findOne(id);
+        Optional<DocumentDTO> result = documentService.findOneDto(id);
         return ResponseUtil.wrapOrNotFound(result);
     }
 

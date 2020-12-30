@@ -69,10 +69,10 @@ public class ElectronicDocumentServiceImpl extends AbstractService implements El
             .map(WorkspaceDTO::getBranchOfficeId)
             .orElseThrow(() -> new WorkspaceNotFoundException(BranchOffice.class.getSimpleName()));
 
-        Organization organization = organizationService.findOne(electronicDocument.getOrganization().getId())
+        Organization organization = organizationService.findOneDto(electronicDocument.getOrganization().getId())
             .map(organizationMapper::toEntity).orElseThrow(()-> new EntityNotFoundException(electronicDocument.getOrganization().getId()));
 
-        EmissionPoint emissionPoint = emissionPointService.findOne(emissionPointId)
+        EmissionPoint emissionPoint = emissionPointService.findOneDto(emissionPointId)
             .map(emissionPointMapper::toEntity).orElseThrow(()-> new EntityNotFoundException(emissionPointId));
 
         BranchOffice branchOffice = branchOfficeService.findOneLight(branchOfficeId)

@@ -44,9 +44,14 @@ public class OrganizationServiceImpl extends AbstractService implements Organiza
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<OrganizationDTO> findOne(Long id) {
+    public Optional<OrganizationDTO> findOneDto(Long id) {
+        return findOne(id).map(organizationMapper::toDto);
+    }
+
+    @Override
+    public Optional<Organization> findOne(Long id) {
         log.debug("Request to get Organization : {}", id);
-        return organizationRepository.findById(id).map(organizationMapper::toDto);
+        return organizationRepository.findById(id);
     }
 
     @Override

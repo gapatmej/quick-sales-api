@@ -68,7 +68,7 @@ public class ProductResource extends AbstractResource {
     @GetMapping("/products/{id}")
     public ResponseEntity<ProductDTO> getProduct(@PathVariable Long id) {
         log.debug("REST request to get Product : {}", id);
-        Optional<ProductDTO> productDTO = productService.findOne(id);
+        Optional<ProductDTO> productDTO = productService.findOneDto(id);
         return ResponseUtil.wrapOrNotFound(productDTO);
     }
 

@@ -45,9 +45,14 @@ public class UnitServiceImpl extends AbstractService implements UnitService {
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<UnitDTO> findOne(Long id) {
+    public Optional<UnitDTO> findOneDto(Long id) {
+        return findOne(id).map(unitMapper::toDto);
+    }
+
+    @Override
+    public Optional<Unit> findOne(Long id) {
         log.debug("Request to get Unit : {}", id);
-        return unitRepository.findById(id).map(unitMapper::toDto);
+        return unitRepository.findById(id);
     }
 
     @Override

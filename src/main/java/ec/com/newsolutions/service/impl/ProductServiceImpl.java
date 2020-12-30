@@ -42,10 +42,14 @@ public class ProductServiceImpl extends AbstractService implements ProductServic
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<ProductDTO> findOne(Long id) {
+    public Optional<ProductDTO> findOneDto(Long id) {
+        return findOne(id).map(productMapper::toDto);
+    }
+
+    @Override
+    public Optional<Product> findOne(Long id) {
         log.debug("Request to get Product : {}", id);
-        Optional<Product> productOpt =  productRepository.findById(id);
-        return productOpt.map(productMapper::toDto);
+        return productRepository.findById(id);
     }
 
     @Override

@@ -66,7 +66,7 @@ public class InvoiceClientResource extends AbstractResource {
     @GetMapping("/invoices-client/{id}")
     public ResponseEntity<InvoiceClientDTO> get(@PathVariable Long id) {
         log.debug("REST request to get InvoiceClientDTO : {}", id);
-        Optional<InvoiceClientDTO> result = invoiceClientService.findOne(id);
+        Optional<InvoiceClientDTO> result = invoiceClientService.findOneDto(id);
         return ResponseUtil.wrapOrNotFound(result);
     }
 

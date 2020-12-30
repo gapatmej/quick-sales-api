@@ -1,18 +1,19 @@
 package ec.com.newsolutions.service;
 
+import ec.com.newsolutions.domain.Category;
 import ec.com.newsolutions.service.dto.CategoryDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
-public interface CategoryService extends AbstractService<CategoryDTO> {
+public interface CategoryService extends AbstractService<CategoryDTO, Category> {
 
     CategoryDTO save(CategoryDTO categoryDTO);
 
     Page<CategoryDTO> findAll(String search, Pageable pageable);
 
-    Optional<CategoryDTO> findOne(Long id);
+    Optional<CategoryDTO> findOneDto(Long id);
 
     void delete(Long id);
 }

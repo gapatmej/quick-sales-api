@@ -51,9 +51,14 @@ public class DocumentServiceImpl extends AbstractService implements DocumentServ
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<DocumentDTO> findOne(Long id) {
+    public Optional<DocumentDTO> findOneDto(Long id) {
+        return findOne(id).map(documentMapper::toDto);
+    }
+
+    @Override
+    public Optional<Document> findOne(Long id) {
         log.debug("Request to get Document : {}", id);
-        return documentRepository.findById(id).map(documentMapper::toDto);
+        return documentRepository.findById(id);
     }
 
     @Override

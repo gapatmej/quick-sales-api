@@ -5,13 +5,15 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
-public interface AbstractService<T> {
+public interface AbstractService<D,E> {
 
-    T save(T invoiceClientDTO);
+    D save(D invoiceClientDTO);
 
-    Page<T> findAll(String search, Pageable pageable);
+    Page<D> findAll(String search, Pageable pageable);
 
-    Optional<T> findOne(Long id);
+    Optional<D> findOneDto(Long id);
+
+    Optional<E> findOne(Long id);
 
     void delete(Long id);
 }

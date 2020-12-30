@@ -17,9 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-/**
- * Service Implementation for managing {@link Tax}.
- */
 @Service
 @Transactional
 public class TaxServiceImpl extends AbstractService implements TaxService {
@@ -49,9 +46,14 @@ public class TaxServiceImpl extends AbstractService implements TaxService {
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<TaxDTO> findOne(Long id) {
+    public Optional<TaxDTO> findOneDto(Long id) {
+        return findOne(id).map(taxMapper::toDto);
+    }
+
+    @Override
+    public Optional<Tax> findOne(Long id) {
         log.debug("Request to get Unit : {}", id);
-        return taxRepository.findById(id).map(taxMapper::toDto);
+        return taxRepository.findById(id);
     }
 
     @Override

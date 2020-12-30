@@ -38,7 +38,12 @@ public class CantonServiceImpl extends AbstractService implements CantonService 
     }
 
     @Override
-    public Optional<CantonDTO> findOne(Long id) {
+    public Optional<CantonDTO> findOneDto(Long id) {
+        return findOne(id).map(cantonMapper::toDto);
+    }
+
+    @Override
+    public Optional<Canton> findOne(Long id) {
         throw new UnsupportedOperationException();
     }
 

@@ -64,9 +64,14 @@ public class BranchOfficeServiceImpl extends AbstractService implements BranchOf
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<BranchOfficeDTO> findOne(Long id) {
+    public Optional<BranchOfficeDTO> findOneDto(Long id) {
+        return findOne(id).map(branchOfficeMapper::toDto);
+    }
+
+    @Override
+    public Optional<BranchOffice> findOne(Long id) {
         log.debug("Request to get BranchOffice : {}", id);
-        return branchOfficeRepository.findById(id).map(branchOfficeMapper::toDto);
+        return branchOfficeRepository.findById(id);
     }
 
     @Override

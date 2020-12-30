@@ -43,9 +43,14 @@ public class CompanyCategoryServiceImpl extends AbstractService implements Compa
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<CompanyCategoryDTO> findOne(Long id) {
+    public Optional<CompanyCategoryDTO> findOneDto(Long id) {
+        return findOne(id).map(companyCategoryMapper::toDto);
+    }
+
+    @Override
+    public Optional<CompanyCategory> findOne(Long id) {
         log.debug("Request to get Company Category : {}", id);
-        return companyCategoryRepository.findById(id).map(companyCategoryMapper::toDto);
+        return companyCategoryRepository.findById(id);
     }
 
     @Override

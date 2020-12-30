@@ -41,8 +41,13 @@ public class AddressCompanyServiceImpl extends AbstractService implements Addres
     }
 
     @Override
-    public Optional<AddressCompanyDTO> findOne(Long id) {
-        throw new UnsupportedOperationException();
+    public Optional<AddressCompanyDTO> findOneDto(Long id) {
+        return findOne(id).map(addressCompanyMapper::toDto);
+    }
+
+    @Override
+    public Optional<AddressCompany> findOne(Long id) {
+        return Optional.empty();
     }
 
     @Override

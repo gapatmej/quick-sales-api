@@ -8,8 +8,6 @@ import ec.com.newsolutions.web.rest.errors.InvalidIdException;
 import ec.com.newsolutions.web.rest.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -66,7 +64,7 @@ public class UnitResource extends AbstractResource{
     @GetMapping("/units/{id}")
     public ResponseEntity<UnitDTO> get(@PathVariable Long id) {
         log.debug("REST request to get Unit : {}", id);
-        Optional<UnitDTO> unitDTO = unitService.findOne(id);
+        Optional<UnitDTO> unitDTO = unitService.findOneDto(id);
         return ResponseUtil.wrapOrNotFound(unitDTO);
     }
 

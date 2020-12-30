@@ -58,7 +58,12 @@ public class DetailInvoiceClientServiceImpl extends AbstractService implements D
     }
 
     @Override
-    public Optional<DetailInvoiceClientDTO> findOne(Long id) {
+    public Optional<DetailInvoiceClientDTO> findOneDto(Long id) {
+        return findOne(id).map(detailInvoiceClientMapper::toDto);
+    }
+
+    @Override
+    public Optional<DetailInvoiceClient> findOne(Long id) {
         throw new UnsupportedOperationException();
     }
 

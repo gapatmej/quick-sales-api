@@ -3,16 +3,12 @@ package ec.com.newsolutions.web.rest;
 import ec.com.newsolutions.service.OrganizationService;
 import ec.com.newsolutions.service.dto.OrganizationDTO;
 import ec.com.newsolutions.utils.GsonUtils;
-import ec.com.newsolutions.web.rest.errors.BadRequestAlertException;
 
 import ec.com.newsolutions.web.rest.errors.IdExistException;
 import ec.com.newsolutions.web.rest.errors.InvalidIdException;
 import ec.com.newsolutions.web.rest.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -71,7 +67,7 @@ public class OrganizationResource extends  AbstractResource {
     @GetMapping("/organizations/{id}")
     public ResponseEntity<OrganizationDTO> getOrganization(@PathVariable Long id) {
         log.debug("REST request to get Organization : {}", id);
-        Optional<OrganizationDTO> organizationDTO = organizationService.findOne(id);
+        Optional<OrganizationDTO> organizationDTO = organizationService.findOneDto(id);
         return ResponseUtil.wrapOrNotFound(organizationDTO);
     }
 

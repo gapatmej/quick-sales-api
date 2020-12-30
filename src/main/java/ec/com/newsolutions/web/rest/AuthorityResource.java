@@ -67,7 +67,7 @@ public class AuthorityResource extends AbstractResource {
     @GetMapping("/authorities/{id}")
     public ResponseEntity<AuthorityDTO> getAuthority(@PathVariable Long id) {
         log.debug("REST request to get Authority : {}", id);
-        Optional<AuthorityDTO> authorityDTO = authorityService.findOne(id);
+        Optional<AuthorityDTO> authorityDTO = authorityService.findOneDto(id);
         return ResponseUtil.wrapOrNotFound(authorityDTO);
     }
 

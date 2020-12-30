@@ -47,9 +47,14 @@ public class CellarServiceImpl extends AbstractService implements CellarService 
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<CellarDTO> findOne(Long id) {
+    public Optional<CellarDTO> findOneDto(Long id) {
+        return findOne(id).map(cellarMapper::toDto);
+    }
+
+    @Override
+    public Optional<Cellar> findOne(Long id) {
         log.debug("Request to get Cellar : {}", id);
-        return cellarRepository.findById(id).map(cellarMapper::toDto);
+        return cellarRepository.findById(id);
     }
 
     @Override

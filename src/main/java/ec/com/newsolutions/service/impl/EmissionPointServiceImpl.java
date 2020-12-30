@@ -60,9 +60,14 @@ public class EmissionPointServiceImpl extends AbstractService implements Emissio
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<EmissionPointDTO> findOne(Long id) {
+    public Optional<EmissionPointDTO> findOneDto(Long id) {
+        return findOne(id).map(emissionPointMapper::toDto);
+    }
+
+    @Override
+    public Optional<EmissionPoint> findOne(Long id) {
         log.debug("Request to get Emission Point  : {}", id);
-        return emissionPointRepository.findById(id).map(emissionPointMapper::toDto);
+        return emissionPointRepository.findById(id);
     }
 
     @Override

@@ -67,7 +67,7 @@ public class CompanyCategoryResource extends AbstractResource {
     @GetMapping("/company-categories/{id}")
     public ResponseEntity<CompanyCategoryDTO> get(@PathVariable Long id) {
         log.debug("REST request to get CompanyCategory : {}", id);
-        Optional<CompanyCategoryDTO> companyCategoryDTO = companyCategoryService.findOne(id);
+        Optional<CompanyCategoryDTO> companyCategoryDTO = companyCategoryService.findOneDto(id);
         return ResponseUtil.wrapOrNotFound(companyCategoryDTO);
     }
 

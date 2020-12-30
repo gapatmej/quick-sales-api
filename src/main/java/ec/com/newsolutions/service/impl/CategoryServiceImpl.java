@@ -46,9 +46,14 @@ public class CategoryServiceImpl extends AbstractService implements CategoryServ
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<CategoryDTO> findOne(Long id) {
+    public Optional<CategoryDTO> findOneDto(Long id) {
+        return findOne(id).map(categoryMapper::toDto);
+    }
+
+    @Override
+    public Optional<Category> findOne(Long id) {
         log.debug("Request to get Category : {}", id);
-        return categoryRepository.findById(id).map(categoryMapper::toDto);
+        return categoryRepository.findById(id);
     }
 
     @Override

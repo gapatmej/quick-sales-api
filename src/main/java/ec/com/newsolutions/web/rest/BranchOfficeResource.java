@@ -77,7 +77,7 @@ public class BranchOfficeResource extends AbstractResource {
     @GetMapping("/branch-offices/{id}")
     public ResponseEntity<BranchOfficeDTO> get(@PathVariable Long id) {
         log.debug("REST request to get BranchOffice : {}", id);
-        Optional<BranchOfficeDTO> branchOfficeDTO = branchOfficeService.findOne(id);
+        Optional<BranchOfficeDTO> branchOfficeDTO = branchOfficeService.findOneDto(id);
         return ResponseUtil.wrapOrNotFound(branchOfficeDTO);
     }
 

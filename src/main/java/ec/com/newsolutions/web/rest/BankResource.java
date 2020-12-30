@@ -73,7 +73,7 @@ public class BankResource extends AbstractResource{
     @GetMapping("/banks/{id}")
     public ResponseEntity<BankDTO> get(@PathVariable Long id) {
         log.debug("REST request to get Bank : {}", id);
-        Optional<BankDTO> bankDTO = bankService.findOne(id);
+        Optional<BankDTO> bankDTO = bankService.findOneDto(id);
         return ResponseUtil.wrapOrNotFound(bankDTO);
     }
 

@@ -39,7 +39,12 @@ public class ParishServiceImpl extends AbstractService implements ParishService 
     }
 
     @Override
-    public Optional<ParishDTO> findOne(Long id) {
+    public Optional<ParishDTO> findOneDto(Long id) {
+        return findOne(id).map(parishMapper::toDto);
+    }
+
+    @Override
+    public Optional<Parish> findOne(Long id) {
         throw new UnsupportedOperationException();
     }
 

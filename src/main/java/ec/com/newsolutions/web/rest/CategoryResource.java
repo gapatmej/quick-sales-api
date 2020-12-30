@@ -9,8 +9,6 @@ import ec.com.newsolutions.web.rest.util.HeaderUtil;
 
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -68,7 +66,7 @@ public class CategoryResource extends AbstractResource{
     @GetMapping("/categories/{id}")
     public ResponseEntity<CategoryDTO> getCategory(@PathVariable Long id) {
         log.debug("REST request to get Category : {}", id);
-        Optional<CategoryDTO> category = categoryService.findOne(id);
+        Optional<CategoryDTO> category = categoryService.findOneDto(id);
         return ResponseUtil.wrapOrNotFound(category);
     }
 

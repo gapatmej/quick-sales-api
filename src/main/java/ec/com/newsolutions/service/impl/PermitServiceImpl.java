@@ -40,8 +40,13 @@ public class PermitServiceImpl extends AbstractService  implements PermitService
     }
 
     @Override
-    public Optional<PermitDTO> findOne(Long id) {
-        return Optional.empty();
+    public Optional<PermitDTO> findOneDto(Long id) {
+        return findOne(id).map(permitMapper::toDto);
+    }
+
+    @Override
+    public Optional<Permit> findOne(Long id) {
+        throw new UnsupportedOperationException();
     }
 
     @Override

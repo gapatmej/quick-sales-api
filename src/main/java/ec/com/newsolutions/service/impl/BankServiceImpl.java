@@ -40,9 +40,14 @@ public class BankServiceImpl extends AbstractService implements BankService {
     }
 
     @Override
-    public Optional<BankDTO> findOne(Long id) {
+    public Optional<BankDTO> findOneDto(Long id) {
+        return findOne(id).map(bankMapper::toDto);
+    }
+
+    @Override
+    public Optional<Bank> findOne(Long id) {
         log.debug("Request to get Bank : {}", id);
-        return bankRepository.findById(id).map(bankMapper::toDto);
+        return bankRepository.findById(id);
     }
 
     @Override

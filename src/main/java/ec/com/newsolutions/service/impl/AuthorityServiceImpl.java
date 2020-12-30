@@ -46,9 +46,14 @@ public class AuthorityServiceImpl extends AbstractService implements AuthoritySe
     }
 
     @Override
-    public Optional<AuthorityDTO> findOne(Long id) {
+    public Optional<AuthorityDTO> findOneDto(Long id) {
+        return findOne(id).map(authorityMapper::toDto);
+    }
+
+    @Override
+    public Optional<Authority> findOne(Long id) {
         log.debug("Request to get Authority : {}", id);
-        return authorityRepository.findById(id).map(authorityMapper::toDto);
+        return authorityRepository.findById(id);
     }
 
     @Override

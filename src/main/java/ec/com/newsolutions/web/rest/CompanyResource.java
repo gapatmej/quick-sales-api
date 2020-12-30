@@ -1,6 +1,5 @@
 package ec.com.newsolutions.web.rest;
 
-import ec.com.newsolutions.domain.Company;
 import ec.com.newsolutions.service.CompanyService;
 import ec.com.newsolutions.service.dto.CompanyDTO;
 import ec.com.newsolutions.web.rest.errors.IdExistException;
@@ -64,7 +63,7 @@ public class CompanyResource extends AbstractResource {
     @GetMapping("/companies/{id}")
     public ResponseEntity<CompanyDTO> getCompany(@PathVariable Long id) {
         log.debug("REST request to get Company : {}", id);
-        Optional<CompanyDTO> companyDTO = companyService.findOne(id);
+        Optional<CompanyDTO> companyDTO = companyService.findOneDto(id);
         return ResponseUtil.wrapOrNotFound(companyDTO);
     }
 

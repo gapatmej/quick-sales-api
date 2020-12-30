@@ -53,9 +53,14 @@ public class CompanyServiceImpl extends AbstractService implements CompanyServic
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<CompanyDTO> findOne(Long id) {
+    public Optional<CompanyDTO> findOneDto(Long id) {
+        return findOne(id).map(companyMapper::toDto);
+    }
+
+    @Override
+    public Optional<Company> findOne(Long id) {
         log.debug("Request to get Company : {}", id);
-        return companyRepository.findById(id).map(companyMapper::toDto);
+        return companyRepository.findById(id);
     }
 
     @Override

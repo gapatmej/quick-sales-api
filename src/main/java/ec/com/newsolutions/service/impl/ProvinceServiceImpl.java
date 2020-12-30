@@ -40,7 +40,12 @@ public class ProvinceServiceImpl extends AbstractService implements ProvinceServ
     }
 
     @Override
-    public Optional<ProvinceDTO> findOne(Long id) {
+    public Optional<ProvinceDTO> findOneDto(Long id) {
+        return findOne(id).map(provinceMapper::toDto);
+    }
+
+    @Override
+    public Optional<Province> findOne(Long id) {
         throw new UnsupportedOperationException();
     }
 

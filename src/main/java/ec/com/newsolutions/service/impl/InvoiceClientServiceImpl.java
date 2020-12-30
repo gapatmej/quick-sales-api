@@ -70,9 +70,14 @@ public class InvoiceClientServiceImpl extends AbstractService implements Invoice
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<InvoiceClientDTO> findOne(Long id) {
+    public Optional<InvoiceClientDTO> findOneDto(Long id) {
+        return findOne(id).map(invoiceClientMapper::toDto);
+    }
+
+    @Override
+    public Optional<InvoiceClient> findOne(Long id) {
         log.debug("Request to get InvoiceClient : {}", id);
-        return invoiceClientRepository.findById(id).map(invoiceClientMapper::toDto);
+        return invoiceClientRepository.findById(id);
     }
 
     @Override
