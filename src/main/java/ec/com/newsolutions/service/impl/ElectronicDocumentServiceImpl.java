@@ -60,7 +60,6 @@ public class ElectronicDocumentServiceImpl extends AbstractService implements El
     }
 
     @Override
-    @Transactional(readOnly = true)
     public void build(ElectronicDocument electronicDocument) {
         Long emissionPointId = SecurityUtils.getCurrentWorkspace()
             .map(WorkspaceDTO::getEmissionPointId)
@@ -83,13 +82,16 @@ public class ElectronicDocumentServiceImpl extends AbstractService implements El
             .findByDocumentIdAndEmissionPointId(electronicDocument.getDocument().getId(),emissionPointId)
             .map(documentAuthorizationMapper::toEntity).orElseThrow(()->new EntityNotFoundException(electronicDocument.getDocument().getId()));
 
+        documentAuthorization.setSequence(documentAuthorization.getSequence()+1);
+        documentAuthorizationService.save(documentAuthorizationMapper.toDto(documentAuthorization));
+
       /*  electronicDocument.setOrganization(organization);
         electronicDocument.setEmissionPoint(emissionPoint);*/
         electronicDocument.setSriEnvironment(organization.getSriEnvironment());
         electronicDocument.setEmissionType(organization.getEmissionType());
         electronicDocument.setEstablishmentCode(branchOffice.getEstablishmentCode());
         electronicDocument.setEmissionPointCode(emissionPoint.getEmissionPointCode());
-        electronicDocument.setSequence(documentAuthorization.getSequence()+1);
+        electronicDocument.setSequence(documentAuthorization.getSequence());
 
         if(electronicDocument instanceof InvoiceClient){
             electronicDocument.setReceiptType(ReceiptTypeEnum.INVOICE);

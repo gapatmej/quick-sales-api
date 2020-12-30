@@ -1,8 +1,11 @@
 package ec.com.newsolutions.service.impl;
 
+import ec.com.newsolutions.domain.Company;
 import ec.com.newsolutions.domain.InvoiceClient;
 import ec.com.newsolutions.repository.InvoiceClientRepository;
 import ec.com.newsolutions.repository.specification.UtilsSpecification;
+import ec.com.newsolutions.service.AddressCompanyService;
+import ec.com.newsolutions.service.CompanyService;
 import ec.com.newsolutions.service.DetailInvoiceClientService;
 import ec.com.newsolutions.service.ElectronicDocumentService;
 import ec.com.newsolutions.service.InvoiceClientService;
@@ -24,26 +27,35 @@ public class InvoiceClientServiceImpl extends AbstractService implements Invoice
     private final InvoiceClientRepository invoiceClientRepository;
     private final DetailInvoiceClientService detailInvoiceClientService;
     private final ElectronicDocumentService electronicDocumentService;
+    private final AddressCompanyService addressCompanyService;
+    private final CompanyService companyService;
+   //private final CompanyService companyService;
 
-    public InvoiceClientServiceImpl(InvoiceClientMapper invoiceClientMapper, InvoiceClientRepository invoiceClientRepository, DetailInvoiceClientService detailInvoiceClientService, ElectronicDocumentService electronicDocumentService) {
+    public InvoiceClientServiceImpl(InvoiceClientMapper invoiceClientMapper, InvoiceClientRepository invoiceClientRepository, DetailInvoiceClientService detailInvoiceClientService, ElectronicDocumentService electronicDocumentService, AddressCompanyService addressCompanyService, CompanyService companyService) {
         super(InvoiceClientServiceImpl.class);
         this.invoiceClientMapper = invoiceClientMapper;
         this.invoiceClientRepository = invoiceClientRepository;
         this.detailInvoiceClientService = detailInvoiceClientService;
         this.electronicDocumentService = electronicDocumentService;
+        this.addressCompanyService = addressCompanyService;
+        this.companyService = companyService;
     }
 
     @Override
     public InvoiceClientDTO save(InvoiceClientDTO invoiceClientDTO) {
-        InvoiceClientDTO result ;
         log.debug("Request to save InvoiceClient : {}", GsonUtils.entityToJson(invoiceClientDTO));
+       /* Company company = companyService.findOne(invoiceClientDTO.getCompanyId())
+            .map(com::toEntity).orElseThrow(()-> new EntityNotFoundException(electronicDocument.getOrganization().getId()));*/
+
+        InvoiceClientDTO result;
         InvoiceClient invoiceClient = invoiceClientMapper.toEntity(invoiceClientDTO);
         electronicDocumentService.build(invoiceClient);
 
-        //final InvoiceClient invoiceClient = invoiceClientRepository.save(invoiceClientMapper.toEntity(invoiceClientDTO));
+
+        invoiceClient = invoiceClientRepository.save(invoiceClient);
         result = invoiceClientMapper.toDto(invoiceClient);
 
-       /* invoiceClientDTO.getDetailsInvoiceClient().forEach(iC -> iC.setInvoiceClientId(invoiceClient.getId()));
+     /*   invoiceClientDTO.getDetailsInvoiceClient().forEach(iC -> iC.setInvoiceClientId(result.getId()));
         result.setDetailsInvoiceClient(detailInvoiceClientService.saveAll(invoiceClientDTO.getDetailsInvoiceClient()));*/
 
         return result;
