@@ -1,7 +1,11 @@
 package ec.com.newsolutions.service.impl;
 
+import ec.com.newsolutions.domain.AddressCompany;
 import ec.com.newsolutions.domain.Company;
+import ec.com.newsolutions.domain.DetailInvoiceClient;
 import ec.com.newsolutions.domain.InvoiceClient;
+import ec.com.newsolutions.domain.TaxDetailInvoice;
+import ec.com.newsolutions.domain.enumeration.TaxTypeEnum;
 import ec.com.newsolutions.repository.InvoiceClientRepository;
 import ec.com.newsolutions.repository.specification.UtilsSpecification;
 import ec.com.newsolutions.service.AddressCompanyService;
@@ -12,12 +16,17 @@ import ec.com.newsolutions.service.InvoiceClientService;
 import ec.com.newsolutions.service.dto.InvoiceClientDTO;
 import ec.com.newsolutions.service.mapper.InvoiceClientMapper;
 import ec.com.newsolutions.utils.GsonUtils;
+import ec.com.newsolutions.web.rest.errors.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -29,7 +38,6 @@ public class InvoiceClientServiceImpl extends AbstractService implements Invoice
     private final ElectronicDocumentService electronicDocumentService;
     private final AddressCompanyService addressCompanyService;
     private final CompanyService companyService;
-   //private final CompanyService companyService;
 
     public InvoiceClientServiceImpl(InvoiceClientMapper invoiceClientMapper, InvoiceClientRepository invoiceClientRepository, DetailInvoiceClientService detailInvoiceClientService, ElectronicDocumentService electronicDocumentService, AddressCompanyService addressCompanyService, CompanyService companyService) {
         super(InvoiceClientServiceImpl.class);
@@ -44,19 +52,30 @@ public class InvoiceClientServiceImpl extends AbstractService implements Invoice
     @Override
     public InvoiceClientDTO save(InvoiceClientDTO invoiceClientDTO) {
         log.debug("Request to save InvoiceClient : {}", GsonUtils.entityToJson(invoiceClientDTO));
-       /* Company company = companyService.findOne(invoiceClientDTO.getCompanyId())
-            .map(com::toEntity).orElseThrow(()-> new EntityNotFoundException(electronicDocument.getOrganization().getId()));*/
+        Company company = companyService.findOne(invoiceClientDTO.getCompanyId())
+            .orElseThrow(()-> new EntityNotFoundException(invoiceClientDTO.getCompanyId()));
+
+        AddressCompany addressCompany = company.getAddressCompanies().stream()
+            .filter(aC->aC.getId().equals(invoiceClientDTO.getAddressCompanyId()))
+            .findFirst().orElseThrow(()-> new EntityNotFoundException(invoiceClientDTO.getAddressCompanyId()));
 
         InvoiceClientDTO result;
         InvoiceClient invoiceClient = invoiceClientMapper.toEntity(invoiceClientDTO);
         electronicDocumentService.build(invoiceClient);
+        invoiceClient.setBusinessName(company.getBusinessName());
+        invoiceClient.setIdentificationType(company.getIdentificationType());
+        invoiceClient.setIdentification(company.getIdentification());
+        invoiceClient.setAddress(addressCompany.getAddress());
+        invoiceClient.setPhone(addressCompany.getPhone());
+        invoiceClient.setEmail(company.getEmail());
 
-
+        detailInvoiceClientService.build(invoiceClient.getDetailsInvoiceClient());
+        calculateTotals(invoiceClient);
         invoiceClient = invoiceClientRepository.save(invoiceClient);
         result = invoiceClientMapper.toDto(invoiceClient);
 
-     /*   invoiceClientDTO.getDetailsInvoiceClient().forEach(iC -> iC.setInvoiceClientId(result.getId()));
-        result.setDetailsInvoiceClient(detailInvoiceClientService.saveAll(invoiceClientDTO.getDetailsInvoiceClient()));*/
+        invoiceClientDTO.getDetailsInvoiceClient().forEach(iC -> iC.setInvoiceClientId(result.getId()));
+        result.setDetailsInvoiceClient(detailInvoiceClientService.saveAll(invoiceClientDTO.getDetailsInvoiceClient()));
 
         return result;
     }
@@ -85,5 +104,39 @@ public class InvoiceClientServiceImpl extends AbstractService implements Invoice
         log.debug("Request to delete InvoiceClient : {}", id);
         detailInvoiceClientService.deleteByInvoiceClient(id);
         invoiceClientRepository.deleteById(id);
+    }
+
+    @Override
+    public void calculateTotals(InvoiceClient invoiceClient) {
+        BigDecimal totalDiscount = BigDecimal.ZERO;
+        BigDecimal totalBaseTaxIVA = BigDecimal.ZERO;
+        BigDecimal totalBaseTaxICE = BigDecimal.ZERO;
+        BigDecimal totalTaxIVA = BigDecimal.ZERO;
+        BigDecimal totalTaxICE = BigDecimal.ZERO;
+        BigDecimal totalWithoutTax;
+        BigDecimal total;
+
+        for (DetailInvoiceClient detailInvoiceClient :invoiceClient.getDetailsInvoiceClient()) {
+            for (TaxDetailInvoice taxDetailInvoice : detailInvoiceClient.getTaxesDetailInvoice()){
+                if(taxDetailInvoice.getTax().getTaxType().equals(TaxTypeEnum.IVA)){
+                    totalBaseTaxIVA = totalBaseTaxIVA.add(taxDetailInvoice.getTaxBase());
+                    totalTaxIVA = totalTaxIVA.add(taxDetailInvoice.getAmount());
+                }else if(taxDetailInvoice.getTax().equals(TaxTypeEnum.ICE)){
+                    totalBaseTaxICE = totalBaseTaxICE.add(taxDetailInvoice.getTaxBase());
+                    totalTaxICE = totalTaxICE.add(taxDetailInvoice.getAmount());
+                }
+            }
+            totalDiscount = totalDiscount.add(detailInvoiceClient.getDiscount());
+        }
+        totalWithoutTax = totalBaseTaxIVA.add(totalBaseTaxICE);
+        total= totalWithoutTax.add(totalTaxIVA).add(totalBaseTaxICE);
+
+        invoiceClient.setTotalWithoutTax(totalWithoutTax);
+        invoiceClient.setTotalDiscount(totalDiscount);
+        invoiceClient.setTotalBaseTaxIVA(totalBaseTaxIVA);
+        invoiceClient.setTotalBaseTaxICE(totalBaseTaxICE);
+        invoiceClient.setTotalTaxIVA(totalTaxIVA);
+        invoiceClient.setTotalTaxICE(totalTaxICE);
+        invoiceClient.setTotal(total);
     }
 }

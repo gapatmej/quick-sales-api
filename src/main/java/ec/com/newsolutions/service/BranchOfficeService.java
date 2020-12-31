@@ -9,6 +9,5 @@ import java.util.Optional;
 
 public interface BranchOfficeService extends AbstractService<BranchOfficeDTO, BranchOffice> {
 
-    Optional<BranchOfficeDTO> findOneLight(Long id);
     Page<BranchOfficeDTO> findAllWithoutWorkspace(String search, Pageable pageable);
 }

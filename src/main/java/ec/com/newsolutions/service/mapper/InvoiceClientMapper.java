@@ -16,12 +16,14 @@ public interface InvoiceClientMapper extends EntityMapperIgnoreAuditProps<Invoic
     @Mapping(target = "documentId", source = "document.id")
     @Mapping(target = "emissionPointId", source = "emissionPoint.id")
     @Mapping(target = "companyId", source = "company.id")
+    @Mapping(target = "addressCompanyId", source = "addressCompany.id")
     InvoiceClientDTO toDto(InvoiceClient invoiceClient);
 
     @Mapping(target = "organization.id", source = "organizationId")
     @Mapping(target = "document.id", source = "documentId")
     @Mapping(target = "emissionPoint.id", source = "emissionPointId")
     @Mapping(target = "company.id", source = "companyId")
+    @Mapping(target = "addressCompany.id", source = "addressCompanyId")
     @Mapping(target = "taxesInvoice", ignore = true)
     InvoiceClient toEntity(InvoiceClientDTO invoiceClientDTO);
 
@@ -29,6 +31,7 @@ public interface InvoiceClientMapper extends EntityMapperIgnoreAuditProps<Invoic
     @Mapping(target = "documentId", source = "document.id")
     @Mapping(target = "emissionPointId", source = "emissionPoint.id")
     @Mapping(target = "companyId", source = "company.id")
+    @Mapping(target = "addressCompanyId", source = "addressCompany.id")
     @Mapping(target = "payments",  ignore = true)
     @Mapping(target = "detailsInvoiceClient",  ignore = true)
     @Named(value = "light")

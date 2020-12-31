@@ -15,7 +15,7 @@ public interface DetailInvoiceClientMapper {
 
     @Mapping(source = "productId", target = "product.id")
     @Mapping(source = "invoiceClientId", target = "invoiceClient.id")
-    @Mapping( ignore = true, target = "taxDetailInvoices")
+    @Mapping( ignore = true, target = "taxesDetailInvoice")
     DetailInvoiceClient toEntity(DetailInvoiceClientDTO detailInvoiceClientDTO);
 }
 

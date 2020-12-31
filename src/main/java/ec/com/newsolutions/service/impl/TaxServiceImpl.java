@@ -7,14 +7,13 @@ import ec.com.newsolutions.repository.TaxRepository;
 import ec.com.newsolutions.service.dto.TaxDTO;
 import ec.com.newsolutions.service.mapper.TaxMapper;
 import ec.com.newsolutions.utils.GsonUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -60,5 +59,10 @@ public class TaxServiceImpl extends AbstractService implements TaxService {
     public void delete(Long id) {
         log.debug("Request to delete Unit : {}", id);
         taxRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Tax> findByIdIn(List<Long> ids) {
+        return taxRepository.findByIdIn(ids);
     }
 }

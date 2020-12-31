@@ -21,13 +21,15 @@ public class InvoiceClientDTO extends ElectronicDocumentDTO {
 
     private String identification;
 
+    private Long addressCompanyId;
+
     private String address;
 
     private String phone;
 
     private String email;
 
-    private BigDecimal totalTaxFree;
+    private BigDecimal totalWithoutTax;
 
     private BigDecimal totalDiscount;
 
@@ -99,6 +101,14 @@ public class InvoiceClientDTO extends ElectronicDocumentDTO {
         this.identification = identification;
     }
 
+    public Long getAddressCompanyId() {
+        return addressCompanyId;
+    }
+
+    public void setAddressCompanyId(Long addressCompanyId) {
+        this.addressCompanyId = addressCompanyId;
+    }
+
     public String getAddress() {
         return address;
     }
@@ -123,12 +133,12 @@ public class InvoiceClientDTO extends ElectronicDocumentDTO {
         this.email = email;
     }
 
-    public BigDecimal getTotalTaxFree() {
-        return totalTaxFree;
+    public BigDecimal getTotalWithoutTax() {
+        return totalWithoutTax;
     }
 
-    public void setTotalTaxFree(BigDecimal totalTaxFree) {
-        this.totalTaxFree = totalTaxFree;
+    public void setTotalWithoutTax(BigDecimal totalWithoutTax) {
+        this.totalWithoutTax = totalWithoutTax;
     }
 
     public BigDecimal getTotalDiscount() {

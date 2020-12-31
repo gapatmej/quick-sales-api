@@ -11,7 +11,8 @@ public enum TaxTypeEnum {
     TaxTypeEnum (String codeTax){
         this.codeTax = codeTax;
     }
-    public String codeTax(String codeTax) {
+
+    public String codeTax() {
         return codeTax;
     }
 }

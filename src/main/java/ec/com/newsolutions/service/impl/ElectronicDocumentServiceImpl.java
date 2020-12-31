@@ -68,25 +68,22 @@ public class ElectronicDocumentServiceImpl extends AbstractService implements El
         Long branchOfficeId = SecurityUtils.getCurrentWorkspace()
             .map(WorkspaceDTO::getBranchOfficeId)
             .orElseThrow(() -> new WorkspaceNotFoundException(BranchOffice.class.getSimpleName()));
+        Organization organization = organizationService.findOne(electronicDocument.getOrganization().getId())
+            .orElseThrow(()-> new EntityNotFoundException(electronicDocument.getOrganization().getId()));
 
-        Organization organization = organizationService.findOneDto(electronicDocument.getOrganization().getId())
-            .map(organizationMapper::toEntity).orElseThrow(()-> new EntityNotFoundException(electronicDocument.getOrganization().getId()));
+        EmissionPoint emissionPoint = emissionPointService.findOne(emissionPointId)
+            .orElseThrow(()-> new EntityNotFoundException(emissionPointId));
 
-        EmissionPoint emissionPoint = emissionPointService.findOneDto(emissionPointId)
-            .map(emissionPointMapper::toEntity).orElseThrow(()-> new EntityNotFoundException(emissionPointId));
-
-        BranchOffice branchOffice = branchOfficeService.findOneLight(branchOfficeId)
-            .map(branchOfficeMapper::toEntity).orElseThrow(()-> new EntityNotFoundException(branchOfficeId));
+        BranchOffice branchOffice = branchOfficeService.findOne(branchOfficeId)
+            .orElseThrow(()-> new EntityNotFoundException(branchOfficeId));
 
         DocumentAuthorization documentAuthorization = documentAuthorizationService
             .findByDocumentIdAndEmissionPointId(electronicDocument.getDocument().getId(),emissionPointId)
-            .map(documentAuthorizationMapper::toEntity).orElseThrow(()->new EntityNotFoundException(electronicDocument.getDocument().getId()));
+            .orElseThrow(()->new EntityNotFoundException(electronicDocument.getDocument().getId()));
 
         documentAuthorization.setSequence(documentAuthorization.getSequence()+1);
         documentAuthorizationService.save(documentAuthorizationMapper.toDto(documentAuthorization));
 
-      /*  electronicDocument.setOrganization(organization);
-        electronicDocument.setEmissionPoint(emissionPoint);*/
         electronicDocument.setSriEnvironment(organization.getSriEnvironment());
         electronicDocument.setEmissionType(organization.getEmissionType());
         electronicDocument.setEstablishmentCode(branchOffice.getEstablishmentCode());

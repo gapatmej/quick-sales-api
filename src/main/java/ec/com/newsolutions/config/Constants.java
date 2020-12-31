@@ -1,5 +1,6 @@
 package ec.com.newsolutions.config;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 
 /**
@@ -16,6 +17,8 @@ public final class Constants {
     public static final String ANONYMOUS_USER = "anonymoususer";
     public static final SimpleDateFormat accessKeyFormatDate = new SimpleDateFormat("ddMMyyyy");
     public static final String numericCode = "01234567";
+
+    public static final BigDecimal ONE_HUNDRED = new BigDecimal("100");
 
     private Constants() {
     }

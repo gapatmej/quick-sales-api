@@ -104,6 +104,15 @@ drop table pay_way;
 drop table payment;
 drop table invoice_client;
 
+/*
+    Modifyng Tax Detail Invoice
+ */
+alter table tax_detail_invoice alter column rate type real using rate::real;
+
+/*
+    Modifying Invoice Cliente Table
+ */
+alter table invoice_client rename column total_tax_free to total_without_tax;
 
 
 

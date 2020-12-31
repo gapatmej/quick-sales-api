@@ -21,7 +21,6 @@ import javax.persistence.Table;
 @Table(name = "invoice_client")
 public class InvoiceClient extends ElectronicDocument{
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="company_id", nullable = false)
     private Company company;
@@ -36,6 +35,10 @@ public class InvoiceClient extends ElectronicDocument{
     @Column(name = "identification", length = 13, nullable = false)
     private String identification;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="address_company_id", nullable = false)
+    private AddressCompany addressCompany;
+
     @Column(name = "address", length = 200, nullable = false)
     private String address;
 
@@ -45,8 +48,8 @@ public class InvoiceClient extends ElectronicDocument{
     @Column(name = "email", length = 200, nullable = false)
     private String email;
 
-    @Column(name = "total_tax_free", precision = 21, scale = 2, nullable = false)
-    private BigDecimal totalTaxFree;
+    @Column(name = "total_without_tax", precision = 21, scale = 2, nullable = false)
+    private BigDecimal totalWithoutTax;
 
     @Column(name = "total_discount", precision = 21, scale = 2, nullable = false)
     private BigDecimal totalDiscount;
@@ -117,6 +120,14 @@ public class InvoiceClient extends ElectronicDocument{
         this.identification = identification;
     }
 
+    public AddressCompany getAddressCompany() {
+        return addressCompany;
+    }
+
+    public void setAddressCompany(AddressCompany addressCompany) {
+        this.addressCompany = addressCompany;
+    }
+
     public String getAddress() {
         return address;
     }
@@ -141,12 +152,12 @@ public class InvoiceClient extends ElectronicDocument{
         this.email = email;
     }
 
-    public BigDecimal getTotalTaxFree() {
-        return totalTaxFree;
+    public BigDecimal getTotalWithoutTax() {
+        return totalWithoutTax;
     }
 
-    public void setTotalTaxFree(BigDecimal totalTaxFree) {
-        this.totalTaxFree = totalTaxFree;
+    public void setTotalWithoutTax(BigDecimal totalWithoutTax) {
+        this.totalWithoutTax = totalWithoutTax;
     }
 
     public BigDecimal getTotalDiscount() {

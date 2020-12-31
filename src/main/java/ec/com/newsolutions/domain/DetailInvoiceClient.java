@@ -38,7 +38,7 @@ public class DetailInvoiceClient extends AbstractMainEntity {
     private BigDecimal total;
 
     @OneToMany(mappedBy = "detailInvoiceClient")
-    private Set<TaxDetailInvoice> taxDetailInvoices = new HashSet<>();
+    private Set<TaxDetailInvoice> taxesDetailInvoice = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="product_id", nullable = false)
@@ -104,12 +104,12 @@ public class DetailInvoiceClient extends AbstractMainEntity {
         this.total = total;
     }
 
-    public Set<TaxDetailInvoice> getTaxDetailInvoices() {
-        return taxDetailInvoices;
+    public Set<TaxDetailInvoice> getTaxesDetailInvoice() {
+        return taxesDetailInvoice;
     }
 
-    public void setTaxDetailInvoices(Set<TaxDetailInvoice> taxDetailInvoices) {
-        this.taxDetailInvoices = taxDetailInvoices;
+    public void setTaxesDetailInvoice(Set<TaxDetailInvoice> taxesDetailInvoice) {
+        this.taxesDetailInvoice = taxesDetailInvoice;
     }
 
     public Product getProduct() {

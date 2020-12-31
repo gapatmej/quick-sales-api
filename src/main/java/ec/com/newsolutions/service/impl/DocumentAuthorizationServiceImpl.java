@@ -56,14 +56,19 @@ public class DocumentAuthorizationServiceImpl extends AbstractService implements
     }
 
     @Override
-    public Optional<DocumentAuthorizationDTO> findOne(Long id) {
+    public Optional<DocumentAuthorizationDTO> findOneDto(Long id) {
+        return findOne(id).map(documentAuthorizationMapper::toDto);
+    }
+
+    @Override
+    public Optional<DocumentAuthorization> findOne(Long id) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public Optional<DocumentAuthorizationDTO> findByDocumentIdAndEmissionPointId(Long documentId, Long emissionPointId) {
+    public Optional<DocumentAuthorization> findByDocumentIdAndEmissionPointId(Long documentId, Long emissionPointId) {
         log.debug("Request to get Document Authorization by documentId :{}, emissionPointId : {}", documentId, emissionPointId);
-        return documentAuthorizationRepository.findByDocumentIdAndEmissionPointId(documentId,emissionPointId).map(documentAuthorizationMapper::toDto);
+        return documentAuthorizationRepository.findByDocumentIdAndEmissionPointId(documentId,emissionPointId);
     }
 
     @Override
