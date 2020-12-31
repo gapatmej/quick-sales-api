@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DetailInvoiceClientRepository extends JpaRepositoryCustom<DetailInvoiceClient, Long> {
 
-    void deleteByInvoiceClient(Long idInvoiceClient);
+    void deleteByInvoiceClientId (Long idInvoiceClient);
 }

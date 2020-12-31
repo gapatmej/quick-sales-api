@@ -69,14 +69,15 @@ public class InvoiceClientServiceImpl extends AbstractService implements Invoice
         invoiceClient.setPhone(addressCompany.getPhone());
         invoiceClient.setEmail(company.getEmail());
 
-        detailInvoiceClientService.build(invoiceClient.getDetailsInvoiceClient());
+        detailInvoiceClientService.build(invoiceClient);
         calculateTotals(invoiceClient);
         invoiceClient = invoiceClientRepository.save(invoiceClient);
+
+        //invoiceClientDTO.getDetailsInvoiceClient().forEach(iC -> iC.setInvoiceClientId(result.getId()));
+        detailInvoiceClientService.saveAll2(invoiceClient.getDetailsInvoiceClient());
+
         result = invoiceClientMapper.toDto(invoiceClient);
-
-        invoiceClientDTO.getDetailsInvoiceClient().forEach(iC -> iC.setInvoiceClientId(result.getId()));
-        result.setDetailsInvoiceClient(detailInvoiceClientService.saveAll(invoiceClientDTO.getDetailsInvoiceClient()));
-
+        //result.setDetailsInvoiceClient();
         return result;
     }
 

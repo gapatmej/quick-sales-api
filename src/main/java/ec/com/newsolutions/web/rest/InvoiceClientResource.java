@@ -72,7 +72,7 @@ public class InvoiceClientResource extends AbstractResource {
 
     @DeleteMapping("/invoices-client/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        log.debug("REST request to delete InvoicesClientDTO : {}", id);
+        log.debug("REST request to delete id : {}", id);
         invoiceClientService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(true, entityName, id.toString())).build();
     }

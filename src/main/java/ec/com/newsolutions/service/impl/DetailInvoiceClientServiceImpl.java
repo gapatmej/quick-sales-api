@@ -1,6 +1,7 @@
 package ec.com.newsolutions.service.impl;
 
 import ec.com.newsolutions.domain.DetailInvoiceClient;
+import ec.com.newsolutions.domain.InvoiceClient;
 import ec.com.newsolutions.domain.Product;
 import ec.com.newsolutions.domain.Tax;
 import ec.com.newsolutions.domain.TaxDetailInvoice;
@@ -61,10 +62,27 @@ public class DetailInvoiceClientServiceImpl extends AbstractService implements D
     }
 
     @Override
+    public List<DetailInvoiceClient> saveAll2(Set<DetailInvoiceClient> detailsInvoiceClient) {
+        List<DetailInvoiceClient> result = new ArrayList<>();
+        detailsInvoiceClient.forEach(ep->{
+            if(BooleanUtils.isTrue(ep.getDeleted())){
+                delete(ep.getId());
+            }else{
+                result.add(save(ep));
+            }
+        });
+        return result;
+    }
+
+    @Override
     public DetailInvoiceClientDTO save(DetailInvoiceClientDTO invoiceClientDTO) {
         log.debug("Request to save Detail Invoce : {}", invoiceClientDTO);
         DetailInvoiceClient detailInvoiceClient = detailInvoiceClientRepository.save(detailInvoiceClientMapper.toEntity(invoiceClientDTO));
         return detailInvoiceClientMapper.toDto(detailInvoiceClient);
+    }
+
+    private DetailInvoiceClient save (DetailInvoiceClient detailInvoiceClient){
+        return detailInvoiceClientRepository.save(detailInvoiceClient);
     }
 
     @Override
@@ -90,17 +108,18 @@ public class DetailInvoiceClientServiceImpl extends AbstractService implements D
 
     @Override
     public void deleteByInvoiceClient(Long idInvoiceClient) {
-        detailInvoiceClientRepository.deleteByInvoiceClient(idInvoiceClient);
+        detailInvoiceClientRepository.deleteByInvoiceClientId(idInvoiceClient);
     }
 
     @Override
-    public void build(Set<DetailInvoiceClient> detailsInvoiceClient) {
-        List<Product> products = productService.findByIdIn(detailsInvoiceClient.stream()
+    public void build(InvoiceClient invoiceClient) {
+
+        List<Product> products = productService.findByIdIn(invoiceClient.getDetailsInvoiceClient().stream()
             .map(dIC->dIC.getProduct().getId()).collect(Collectors.toList()));
         List<Tax> taxes = taxService.findByIdIn(products.stream()
             .flatMap(p-> Stream.of(p.getIva().getId(),p.getIce()!=null?p.getIce().getId():null)).collect(Collectors.toList()));
 
-        for (DetailInvoiceClient detailInvoiceClient :detailsInvoiceClient) {
+        for (DetailInvoiceClient detailInvoiceClient :invoiceClient.getDetailsInvoiceClient()) {
             Long productId = detailInvoiceClient.getProduct().getId();
             Product product = products.stream().filter(p -> p.getId().equals(productId))
                 .findFirst().orElseThrow(()->new EntityNotFoundException(productId));
@@ -109,6 +128,7 @@ public class DetailInvoiceClientServiceImpl extends AbstractService implements D
                 detailInvoiceClient.getUnitPrice().subtract(detailInvoiceClient.getDiscount())
             );
 
+            detailInvoiceClient.setInvoiceClient(invoiceClient);
             detailInvoiceClient.setMainCode(product.getMainCode());
             detailInvoiceClient.setAuxiliaryCode(product.getAuxiliaryCode());
             detailInvoiceClient.setDescription(product.getName());

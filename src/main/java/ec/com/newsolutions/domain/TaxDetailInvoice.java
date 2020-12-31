@@ -37,6 +37,9 @@ public class TaxDetailInvoice extends AbstractMainEntity {
     @JoinColumn(name="detail_invoice_client_id", nullable = false)
     private DetailInvoiceClient detailInvoiceClient;
 
+    public TaxDetailInvoice() {
+    }
+
     public TaxDetailInvoice(Tax tax, DetailInvoiceClient detailInvoiceClient) {
         this.tax = tax;
         this.code = Integer.parseInt(tax.getTaxType().codeTax());

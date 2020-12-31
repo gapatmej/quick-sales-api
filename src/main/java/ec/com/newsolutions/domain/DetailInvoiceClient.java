@@ -1,5 +1,6 @@
 package ec.com.newsolutions.domain;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -7,6 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
@@ -37,7 +39,7 @@ public class DetailInvoiceClient extends AbstractMainEntity {
     @Column(name = "total", precision = 21, scale = 2, nullable = false)
     private BigDecimal total;
 
-    @OneToMany(mappedBy = "detailInvoiceClient")
+    @OneToMany(mappedBy = "detailInvoiceClient", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<TaxDetailInvoice> taxesDetailInvoice = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -47,6 +49,9 @@ public class DetailInvoiceClient extends AbstractMainEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="invoice_client_id", nullable = false)
     private InvoiceClient invoiceClient;
+
+    @Transient
+    private Boolean deleted;
 
     public String getMainCode() {
         return mainCode;
@@ -126,5 +131,13 @@ public class DetailInvoiceClient extends AbstractMainEntity {
 
     public void setInvoiceClient(InvoiceClient invoiceClient) {
         this.invoiceClient = invoiceClient;
+    }
+
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
     }
 }
