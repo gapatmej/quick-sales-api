@@ -17,6 +17,7 @@ import ec.com.newsolutions.service.dto.InvoiceClientDTO;
 import ec.com.newsolutions.service.mapper.InvoiceClientMapper;
 import ec.com.newsolutions.utils.GsonUtils;
 import ec.com.newsolutions.web.rest.errors.EntityNotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -71,13 +72,12 @@ public class InvoiceClientServiceImpl extends AbstractService implements Invoice
 
         detailInvoiceClientService.build(invoiceClient);
         calculateTotals(invoiceClient);
-        invoiceClient = invoiceClientRepository.save(invoiceClient);
+        invoiceClientRepository.save(invoiceClient);
 
-        //invoiceClientDTO.getDetailsInvoiceClient().forEach(iC -> iC.setInvoiceClientId(result.getId()));
-        detailInvoiceClientService.saveAll2(invoiceClient.getDetailsInvoiceClient());
+        detailInvoiceClientService.saveAll(invoiceClient.getDetailsInvoiceClient());
 
         result = invoiceClientMapper.toDto(invoiceClient);
-        //result.setDetailsInvoiceClient();
+
         return result;
     }
 
@@ -109,6 +109,8 @@ public class InvoiceClientServiceImpl extends AbstractService implements Invoice
 
     @Override
     public void calculateTotals(InvoiceClient invoiceClient) {
+        List<DetailInvoiceClient> detailsInvoiceClient = invoiceClient.getDetailsInvoiceClient().stream()
+            .filter(dIC->dIC.getDeleted() == false).collect(Collectors.toList());
         BigDecimal totalDiscount = BigDecimal.ZERO;
         BigDecimal totalBaseTaxIVA = BigDecimal.ZERO;
         BigDecimal totalBaseTaxICE = BigDecimal.ZERO;
@@ -117,7 +119,7 @@ public class InvoiceClientServiceImpl extends AbstractService implements Invoice
         BigDecimal totalWithoutTax;
         BigDecimal total;
 
-        for (DetailInvoiceClient detailInvoiceClient :invoiceClient.getDetailsInvoiceClient()) {
+        for (DetailInvoiceClient detailInvoiceClient : detailsInvoiceClient) {
             for (TaxDetailInvoice taxDetailInvoice : detailInvoiceClient.getTaxesDetailInvoice()){
                 if(taxDetailInvoice.getTax().getTaxType().equals(TaxTypeEnum.IVA)){
                     totalBaseTaxIVA = totalBaseTaxIVA.add(taxDetailInvoice.getTaxBase());

@@ -8,13 +8,11 @@ import ec.com.newsolutions.domain.TaxDetailInvoice;
 import ec.com.newsolutions.repository.DetailInvoiceClientRepository;
 import ec.com.newsolutions.service.DetailInvoiceClientService;
 import ec.com.newsolutions.service.ProductService;
+import ec.com.newsolutions.service.TaxDetailInvoiceService;
 import ec.com.newsolutions.service.TaxService;
-import ec.com.newsolutions.service.dto.DetailInvoiceClientDTO;
 import ec.com.newsolutions.service.mapper.DetailInvoiceClientMapper;
 import ec.com.newsolutions.web.rest.errors.EntityNotFoundException;
 import net.logstash.logback.encoder.org.apache.commons.lang3.BooleanUtils;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,90 +34,65 @@ public class DetailInvoiceClientServiceImpl extends AbstractService implements D
     private final DetailInvoiceClientRepository detailInvoiceClientRepository;
     private final ProductService productService;
     private final TaxService taxService;
+    private final TaxDetailInvoiceService taxDetailInvoiceService;
 
-    public DetailInvoiceClientServiceImpl(DetailInvoiceClientMapper detailInvoiceClientMapper, DetailInvoiceClientRepository detailInvoiceClientRepository, ProductService productService, TaxService taxService) {
+    public DetailInvoiceClientServiceImpl(DetailInvoiceClientMapper detailInvoiceClientMapper, DetailInvoiceClientRepository detailInvoiceClientRepository, ProductService productService, TaxService taxService, TaxDetailInvoiceService taxDetailInvoiceService) {
         super(DetailInvoiceClientServiceImpl.class);
         this.detailInvoiceClientMapper = detailInvoiceClientMapper;
         this.detailInvoiceClientRepository = detailInvoiceClientRepository;
         this.productService = productService;
         this.taxService = taxService;
-    }
-
-
-    @Override
-    public List<DetailInvoiceClientDTO> saveAll(List<DetailInvoiceClientDTO> detailInvoiceClientDTOS) {
-        log.debug("Request to save Detail Invoice Client : {}", detailInvoiceClientDTOS);
-        List<DetailInvoiceClientDTO> result = new ArrayList<>();
-        detailInvoiceClientDTOS.forEach(ep->{
-            if(BooleanUtils.isTrue(ep.isDeleted())){
-                delete(ep.getId());
-            }else{
-                result.add(save(ep));
-            }
-        });
-
-        return result;
+        this.taxDetailInvoiceService = taxDetailInvoiceService;
     }
 
     @Override
-    public List<DetailInvoiceClient> saveAll2(Set<DetailInvoiceClient> detailsInvoiceClient) {
-        List<DetailInvoiceClient> result = new ArrayList<>();
+    public void saveAll(Set<DetailInvoiceClient> detailsInvoiceClient) {
+        List<Long> detailInvoiceClientIds = new ArrayList<>();
         detailsInvoiceClient.forEach(ep->{
             if(BooleanUtils.isTrue(ep.getDeleted())){
-                delete(ep.getId());
+                detailInvoiceClientIds.add(ep.getId());
+                detailsInvoiceClient.remove(ep);
             }else{
-                result.add(save(ep));
+                save(ep);
             }
         });
-        return result;
+        deleteByIdIn(detailInvoiceClientIds);
     }
+
 
     @Override
-    public DetailInvoiceClientDTO save(DetailInvoiceClientDTO invoiceClientDTO) {
-        log.debug("Request to save Detail Invoce : {}", invoiceClientDTO);
-        DetailInvoiceClient detailInvoiceClient = detailInvoiceClientRepository.save(detailInvoiceClientMapper.toEntity(invoiceClientDTO));
-        return detailInvoiceClientMapper.toDto(detailInvoiceClient);
-    }
-
-    private DetailInvoiceClient save (DetailInvoiceClient detailInvoiceClient){
-        return detailInvoiceClientRepository.save(detailInvoiceClient);
-    }
-
-    @Override
-    public Page<DetailInvoiceClientDTO> findAll(String search, Pageable pageable) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public Optional<DetailInvoiceClientDTO> findOneDto(Long id) {
-        return findOne(id).map(detailInvoiceClientMapper::toDto);
-    }
-
-    @Override
-    public Optional<DetailInvoiceClient> findOne(Long id) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void delete(Long id) {
-        log.debug("Request to delete Detail Invoice Client : {}", id);
-        detailInvoiceClientRepository.deleteById(id);
+    public void save (DetailInvoiceClient detailInvoiceClient){
+        detailInvoiceClientRepository.save(detailInvoiceClient);
+        taxDetailInvoiceService.saveAll(detailInvoiceClient.getTaxesDetailInvoice());
     }
 
     @Override
     public void deleteByInvoiceClient(Long idInvoiceClient) {
+        taxDetailInvoiceService.deleteByInvoiceClientId(idInvoiceClient);
         detailInvoiceClientRepository.deleteByInvoiceClientId(idInvoiceClient);
+    }
+
+    @Override
+    public void deleteByIdIn(List<Long> ids) {
+        taxDetailInvoiceService.deleteByDetailInvoiceClientIdIn(ids);
+        detailInvoiceClientRepository.deleteByIdIn(ids);
     }
 
     @Override
     public void build(InvoiceClient invoiceClient) {
 
-        List<Product> products = productService.findByIdIn(invoiceClient.getDetailsInvoiceClient().stream()
+        List<DetailInvoiceClient> detailsInvoiceClient = invoiceClient.getDetailsInvoiceClient().stream().filter(dIC->dIC.getDeleted() == false).collect(Collectors.toList());
+
+        List<Product> products = productService.findByIdIn(detailsInvoiceClient.stream()
             .map(dIC->dIC.getProduct().getId()).collect(Collectors.toList()));
         List<Tax> taxes = taxService.findByIdIn(products.stream()
             .flatMap(p-> Stream.of(p.getIva().getId(),p.getIce()!=null?p.getIce().getId():null)).collect(Collectors.toList()));
 
         for (DetailInvoiceClient detailInvoiceClient :invoiceClient.getDetailsInvoiceClient()) {
+            if(detailInvoiceClient.getDeleted()){
+                continue;
+            }
+
             Long productId = detailInvoiceClient.getProduct().getId();
             Product product = products.stream().filter(p -> p.getId().equals(productId))
                 .findFirst().orElseThrow(()->new EntityNotFoundException(productId));
@@ -145,9 +118,12 @@ public class DetailInvoiceClientServiceImpl extends AbstractService implements D
                 taxesDetailInvoice.add(new TaxDetailInvoice(tax,detailInvoiceClient));
             }
             detailInvoiceClient.setTaxesDetailInvoice(taxesDetailInvoice);
-
         }
 
+    }
 
+    @Override
+    public Optional<DetailInvoiceClient> findOne(Long id) {
+        return Optional.empty();
     }
 }

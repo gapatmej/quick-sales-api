@@ -14,6 +14,7 @@ import ec.com.newsolutions.service.DocumentAuthorizationService;
 import ec.com.newsolutions.service.DocumentService;
 import ec.com.newsolutions.service.ElectronicDocumentService;
 import ec.com.newsolutions.service.EmissionPointService;
+import ec.com.newsolutions.service.InvoiceClientService;
 import ec.com.newsolutions.service.OrganizationService;
 import ec.com.newsolutions.service.dto.WorkspaceDTO;
 import ec.com.newsolutions.service.mapper.BranchOfficeMapper;
@@ -24,6 +25,7 @@ import ec.com.newsolutions.service.mapper.OrganizationMapper;
 import ec.com.newsolutions.web.rest.errors.EntityNotFoundException;
 import ec.com.newsolutions.web.rest.errors.WorkspaceNotFoundException;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,8 +46,14 @@ public class ElectronicDocumentServiceImpl extends AbstractService implements El
     private final BranchOfficeMapper branchOfficeMapper;
     private final DocumentMapper documentMapper;
     private final DocumentAuthorizationMapper documentAuthorizationMapper;
+    private final InvoiceClientService invoiceClientService;
 
-    public ElectronicDocumentServiceImpl(OrganizationService organizationService, EmissionPointService emissionPointService, BranchOfficeService branchOfficeService, DocumentService documentService, DocumentAuthorizationService documentAuthorizationService, OrganizationMapper organizationMapper, EmissionPointMapper emissionPointMapper, BranchOfficeMapper branchOfficeMapper, DocumentMapper documentMapper, DocumentAuthorizationMapper documentAuthorizationMapper) {
+    public ElectronicDocumentServiceImpl(OrganizationService organizationService, EmissionPointService emissionPointService,
+                                         BranchOfficeService branchOfficeService, DocumentService documentService,
+                                         DocumentAuthorizationService documentAuthorizationService, OrganizationMapper organizationMapper,
+                                         EmissionPointMapper emissionPointMapper, BranchOfficeMapper branchOfficeMapper,
+                                         DocumentMapper documentMapper, DocumentAuthorizationMapper documentAuthorizationMapper,
+                                         @Lazy InvoiceClientService invoiceClientService) {
         super(ElectronicDocumentServiceImpl.class);
         this.organizationService = organizationService;
         this.emissionPointService = emissionPointService;
@@ -57,6 +65,7 @@ public class ElectronicDocumentServiceImpl extends AbstractService implements El
         this.branchOfficeMapper = branchOfficeMapper;
         this.documentMapper = documentMapper;
         this.documentAuthorizationMapper = documentAuthorizationMapper;
+        this.invoiceClientService = invoiceClientService;
     }
 
     @Override
@@ -77,18 +86,25 @@ public class ElectronicDocumentServiceImpl extends AbstractService implements El
         BranchOffice branchOffice = branchOfficeService.findOne(branchOfficeId)
             .orElseThrow(()-> new EntityNotFoundException(branchOfficeId));
 
-        DocumentAuthorization documentAuthorization = documentAuthorizationService
-            .findByDocumentIdAndEmissionPointId(electronicDocument.getDocument().getId(),emissionPointId)
-            .orElseThrow(()->new EntityNotFoundException(electronicDocument.getDocument().getId()));
-
-        documentAuthorization.setSequence(documentAuthorization.getSequence()+1);
-        documentAuthorizationService.save(documentAuthorizationMapper.toDto(documentAuthorization));
 
         electronicDocument.setSriEnvironment(organization.getSriEnvironment());
         electronicDocument.setEmissionType(organization.getEmissionType());
         electronicDocument.setEstablishmentCode(branchOffice.getEstablishmentCode());
         electronicDocument.setEmissionPointCode(emissionPoint.getEmissionPointCode());
-        electronicDocument.setSequence(documentAuthorization.getSequence());
+
+        if(electronicDocument.getId() == null){
+            DocumentAuthorization documentAuthorization = documentAuthorizationService
+                .findByDocumentIdAndEmissionPointId(electronicDocument.getDocument().getId(),emissionPointId)
+                .orElseThrow(()->new EntityNotFoundException(electronicDocument.getDocument().getId()));
+            documentAuthorization.setSequence(documentAuthorization.getSequence()+1);
+            documentAuthorizationService.save(documentAuthorizationMapper.toDto(documentAuthorization));
+            electronicDocument.setSequence(documentAuthorization.getSequence());
+        }else{
+            electronicDocument.setSequence(invoiceClientService.findOne(electronicDocument.getId())
+                .map(InvoiceClient::getSequence)
+                .orElseThrow(()->new EntityNotFoundException(electronicDocument.getId())));
+        }
+
 
         if(electronicDocument instanceof InvoiceClient){
             electronicDocument.setReceiptType(ReceiptTypeEnum.INVOICE);

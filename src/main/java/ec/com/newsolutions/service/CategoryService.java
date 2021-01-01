@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
-public interface CategoryService extends AbstractService<CategoryDTO, Category> {
+public interface CategoryService extends AbstractServiceRest<CategoryDTO>, AbstractService<Category> {
 
     CategoryDTO save(CategoryDTO categoryDTO);
 

@@ -3,13 +3,12 @@ package ec.com.newsolutions.service.impl;
 import ec.com.newsolutions.domain.Unit;
 import ec.com.newsolutions.repository.UnitRepository;
 import ec.com.newsolutions.repository.specification.UtilsSpecification;
+import ec.com.newsolutions.service.InvoiceClientService;
 import ec.com.newsolutions.service.UnitService;
 import ec.com.newsolutions.service.dto.UnitDTO;
 import ec.com.newsolutions.service.mapper.UnitMapper;
 
 import ec.com.newsolutions.utils.GsonUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

@@ -5,7 +5,7 @@ import ec.com.newsolutions.service.dto.ProductDTO;
 
 import java.util.List;
 
-public interface ProductService extends AbstractService<ProductDTO, Product> {
+public interface ProductService extends AbstractServiceRest<ProductDTO>, AbstractService<Product> {
 
     List<Product> findByIdIn(List<Long> ids);
 }

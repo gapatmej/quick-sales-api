@@ -2,9 +2,8 @@ package ec.com.newsolutions.service;
 
 import ec.com.newsolutions.domain.Canton;
 import ec.com.newsolutions.service.dto.CantonDTO;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.dom4j.tree.AbstractEntity;
 
-public interface CantonService extends AbstractService<CantonDTO, Canton> {
+public interface CantonService extends AbstractServiceRest<CantonDTO>, AbstractService<Canton> {
 
 }

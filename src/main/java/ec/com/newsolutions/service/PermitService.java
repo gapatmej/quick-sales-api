@@ -5,7 +5,7 @@ import ec.com.newsolutions.service.dto.PermitDTO;
 
 import java.util.List;
 
-public interface PermitService extends AbstractService<PermitDTO, Permit> {
+public interface PermitService extends AbstractServiceRest<PermitDTO>, AbstractService<Permit> {
 
     List<PermitDTO> findAllByAuthoritiesIn(List<Long> authorityIds);
 

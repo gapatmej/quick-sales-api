@@ -2,44 +2,14 @@ package ec.com.newsolutions.service;
 
 import ec.com.newsolutions.domain.TaxDetailInvoice;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import java.util.List;
+import java.util.Set;
 
-import java.util.Optional;
+public interface TaxDetailInvoiceService extends AbstractService<TaxDetailInvoice> {
 
-/**
- * Service Interface for managing {@link TaxDetailInvoice}.
- */
-public interface TaxDetailInvoiceService {
+    void save(TaxDetailInvoice taxDetailInvoice);
+    void saveAll(Set<TaxDetailInvoice> taxesDetailInvoice);
+    void deleteByInvoiceClientId(Long invoiceClientId);
+    void deleteByDetailInvoiceClientIdIn(List<Long> detailInvoiceClientIds);
 
-    /**
-     * Save a taxDetailInvoice.
-     *
-     * @param taxDetailInvoice the entity to save.
-     * @return the persisted entity.
-     */
-    TaxDetailInvoice save(TaxDetailInvoice taxDetailInvoice);
-
-    /**
-     * Get all the taxDetailInvoices.
-     *
-     * @param pageable the pagination information.
-     * @return the list of entities.
-     */
-    Page<TaxDetailInvoice> findAll(Pageable pageable);
-
-    /**
-     * Get the "id" taxDetailInvoice.
-     *
-     * @param id the id of the entity.
-     * @return the entity.
-     */
-    Optional<TaxDetailInvoice> findOne(Long id);
-
-    /**
-     * Delete the "id" taxDetailInvoice.
-     *
-     * @param id the id of the entity.
-     */
-    void delete(Long id);
 }
