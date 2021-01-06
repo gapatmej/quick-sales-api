@@ -31,7 +31,7 @@ public class OrganizationServiceImpl extends AbstractService implements Organiza
     @Override
     public OrganizationDTO save(OrganizationDTO organizationDTO) {
         log.debug("Request to save Organization : {}", GsonUtils.entityToJson(organizationDTO));
-        Organization organization =  organizationRepository.save(organizationMapper.toEntity(organizationDTO));
+        Organization organization =  save(organizationMapper.toEntity(organizationDTO));
         return organizationMapper.toDto(organization);
     }
 
@@ -46,6 +46,12 @@ public class OrganizationServiceImpl extends AbstractService implements Organiza
     @Transactional(readOnly = true)
     public Optional<OrganizationDTO> findOneDto(Long id) {
         return findOne(id).map(organizationMapper::toDto);
+    }
+
+    @Override
+    public Organization save(Organization organization) {
+        Organization result =  organizationRepository.save(organization);
+        return result;
     }
 
     @Override

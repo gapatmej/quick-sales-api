@@ -37,10 +37,9 @@ public class BranchOfficeServiceImpl extends AbstractService implements BranchOf
 
     @Override
     public BranchOfficeDTO save(BranchOfficeDTO branchOfficeDTO) {
-        BranchOfficeDTO result ;
         log.debug("Request to save BranchOffice : {}", GsonUtils.entityToJson(branchOfficeDTO));
-        final BranchOffice branchOffice = branchOfficeRepository.save(branchOfficeMapper.toEntity(branchOfficeDTO));
-        result = branchOfficeMapper.toDto(branchOffice);
+        BranchOffice branchOffice = save(branchOfficeMapper.toEntity(branchOfficeDTO));
+        BranchOfficeDTO result = branchOfficeMapper.toDto(branchOffice);
 
         branchOfficeDTO.getEmissionPoints().forEach(eP -> eP.setBranchOfficeId(branchOffice.getId()));
         result.setEmissionPoints(emissionPointService.saveAll(branchOfficeDTO.getEmissionPoints()));
@@ -66,6 +65,12 @@ public class BranchOfficeServiceImpl extends AbstractService implements BranchOf
     @Transactional(readOnly = true)
     public Optional<BranchOfficeDTO> findOneDto(Long id) {
         return findOne(id).map(branchOfficeMapper::toDto);
+    }
+
+    @Override
+    public BranchOffice save(BranchOffice branchOffice) {
+        BranchOffice result = branchOfficeRepository.save(branchOffice);
+        return result;
     }
 
     @Override

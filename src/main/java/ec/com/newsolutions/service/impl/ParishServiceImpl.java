@@ -44,6 +44,11 @@ public class ParishServiceImpl extends AbstractService implements ParishService 
     }
 
     @Override
+    public Parish save(Parish parish) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public Optional<Parish> findOne(Long id) {
         throw new UnsupportedOperationException();
     }

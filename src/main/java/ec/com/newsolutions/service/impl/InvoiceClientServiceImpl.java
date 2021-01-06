@@ -72,7 +72,7 @@ public class InvoiceClientServiceImpl extends AbstractService implements Invoice
 
         detailInvoiceClientService.build(invoiceClient);
         calculateTotals(invoiceClient);
-        invoiceClientRepository.save(invoiceClient);
+        save(invoiceClient);
 
         detailInvoiceClientService.saveAll(invoiceClient.getDetailsInvoiceClient());
 
@@ -92,6 +92,12 @@ public class InvoiceClientServiceImpl extends AbstractService implements Invoice
     @Transactional(readOnly = true)
     public Optional<InvoiceClientDTO> findOneDto(Long id) {
         return findOne(id).map(invoiceClientMapper::toDto);
+    }
+
+    @Override
+    public InvoiceClient save(InvoiceClient invoiceClient) {
+        InvoiceClient result = invoiceClientRepository.save(invoiceClient);
+        return result;
     }
 
     @Override

@@ -33,7 +33,7 @@ public class EmissionPointServiceImpl extends AbstractService implements Emissio
     @Override
     public EmissionPointDTO save(EmissionPointDTO emissionPointDTO) {
         log.debug("Request to save Emission Point : {}", emissionPointDTO);
-        EmissionPoint emissionPoint = emissionPointRepository.save(emissionPointMapper.toEntity(emissionPointDTO));
+        EmissionPoint emissionPoint = save(emissionPointMapper.toEntity(emissionPointDTO));
         return emissionPointMapper.toDto(emissionPoint);
     }
 
@@ -62,6 +62,12 @@ public class EmissionPointServiceImpl extends AbstractService implements Emissio
     @Transactional(readOnly = true)
     public Optional<EmissionPointDTO> findOneDto(Long id) {
         return findOne(id).map(emissionPointMapper::toDto);
+    }
+
+    @Override
+    public EmissionPoint save(EmissionPoint emissionPoint) {
+        EmissionPoint result = emissionPointRepository.save(emissionPoint);
+        return result;
     }
 
     @Override

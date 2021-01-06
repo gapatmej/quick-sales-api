@@ -31,10 +31,9 @@ public class AuthorityServiceImpl extends AbstractService implements AuthoritySe
 
     @Override
     public AuthorityDTO save(AuthorityDTO authorityDTO) {
-        AuthorityDTO result ;
         log.debug("Request to save Authority : {}", GsonUtils.entityToJson(authorityDTO));
-        final Authority authority = authorityRepository.save(authorityMapper.toEntity(authorityDTO));
-        result = authorityMapper.toDto(authority);
+        Authority authority = save(authorityMapper.toEntity(authorityDTO));
+        AuthorityDTO result = authorityMapper.toDto(authority);
 
         return result;
     }
@@ -48,6 +47,12 @@ public class AuthorityServiceImpl extends AbstractService implements AuthoritySe
     @Override
     public Optional<AuthorityDTO> findOneDto(Long id) {
         return findOne(id).map(authorityMapper::toDto);
+    }
+
+    @Override
+    public Authority save(Authority authority) {
+        Authority result = authorityRepository.save(authority);
+        return result;
     }
 
     @Override

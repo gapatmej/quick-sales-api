@@ -45,6 +45,11 @@ public class PermitServiceImpl extends AbstractService  implements PermitService
     }
 
     @Override
+    public Permit save(Permit permit) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public Optional<Permit> findOne(Long id) {
         throw new UnsupportedOperationException();
     }

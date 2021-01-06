@@ -43,6 +43,11 @@ public class CantonServiceImpl extends AbstractService implements CantonService 
     }
 
     @Override
+    public Canton save(Canton canton) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public Optional<Canton> findOne(Long id) {
         throw new UnsupportedOperationException();
     }

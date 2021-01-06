@@ -61,9 +61,10 @@ public class DetailInvoiceClientServiceImpl extends AbstractService implements D
 
 
     @Override
-    public void save (DetailInvoiceClient detailInvoiceClient){
-        detailInvoiceClientRepository.save(detailInvoiceClient);
+    public DetailInvoiceClient save (DetailInvoiceClient detailInvoiceClient){
+        DetailInvoiceClient result =  detailInvoiceClientRepository.save(detailInvoiceClient);
         taxDetailInvoiceService.saveAll(detailInvoiceClient.getTaxesDetailInvoice());
+        return result;
     }
 
     @Override

@@ -31,7 +31,7 @@ public class ProductServiceImpl extends AbstractService implements ProductServic
     @Override
     public ProductDTO save(ProductDTO productDTO) {
         log.debug("Request to save Product : {}", GsonUtils.entityToJson(productDTO));
-        Product product = productRepository.save(productMapper.toEntity(productDTO));
+        Product product = save(productMapper.toEntity(productDTO));
         return productMapper.toDto(product);
     }
 
@@ -46,6 +46,12 @@ public class ProductServiceImpl extends AbstractService implements ProductServic
     @Transactional(readOnly = true)
     public Optional<ProductDTO> findOneDto(Long id) {
         return findOne(id).map(productMapper::toDto);
+    }
+
+    @Override
+    public Product save(Product product) {
+        Product result = productRepository.save(product);
+        return result;
     }
 
     @Override

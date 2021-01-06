@@ -33,7 +33,7 @@ public class CategoryServiceImpl extends AbstractService implements CategoryServ
     @Override
     public CategoryDTO save(CategoryDTO categoryDTO) {
         log.debug("Request to save Category : {}", GsonUtils.entityToJson(categoryDTO));
-        Category category =  categoryRepository.save(categoryMapper.toEntity(categoryDTO));
+        Category category =  save(categoryMapper.toEntity(categoryDTO));
         return categoryMapper.toDto(category);
     }
 
@@ -48,6 +48,12 @@ public class CategoryServiceImpl extends AbstractService implements CategoryServ
     @Transactional(readOnly = true)
     public Optional<CategoryDTO> findOneDto(Long id) {
         return findOne(id).map(categoryMapper::toDto);
+    }
+
+    @Override
+    public Category save(Category category) {
+        Category result =  categoryRepository.save(category);
+        return result;
     }
 
     @Override

@@ -31,7 +31,7 @@ public class UnitServiceImpl extends AbstractService implements UnitService {
     @Override
     public UnitDTO save(UnitDTO unitDTO) {
         log.debug("Request to save Unit : {}", GsonUtils.entityToJson(unitDTO));
-        Unit unit =  unitRepository.save(unitMapper.toEntity(unitDTO));
+        Unit unit =  save(unitMapper.toEntity(unitDTO));
         return unitMapper.toDto(unit);
     }
 
@@ -39,13 +39,18 @@ public class UnitServiceImpl extends AbstractService implements UnitService {
     @Transactional(readOnly = true)
     public Page<UnitDTO> findAll(String search, Pageable pageable) {
         return unitRepository.findAll( UtilsSpecification.<Unit>getSpecificationWithWorkspace(search), pageable).map(unitMapper::toDto);
-
     }
 
     @Override
     @Transactional(readOnly = true)
     public Optional<UnitDTO> findOneDto(Long id) {
         return findOne(id).map(unitMapper::toDto);
+    }
+
+    @Override
+    public Unit save(Unit unit) {
+        Unit result =  unitRepository.save(unit);
+        return result;
     }
 
     @Override

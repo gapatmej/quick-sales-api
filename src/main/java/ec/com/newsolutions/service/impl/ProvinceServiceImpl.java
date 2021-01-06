@@ -45,6 +45,11 @@ public class ProvinceServiceImpl extends AbstractService implements ProvinceServ
     }
 
     @Override
+    public Province save(Province province) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public Optional<Province> findOne(Long id) {
         throw new UnsupportedOperationException();
     }

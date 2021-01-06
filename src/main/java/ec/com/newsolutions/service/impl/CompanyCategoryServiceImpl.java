@@ -30,7 +30,7 @@ public class CompanyCategoryServiceImpl extends AbstractService implements Compa
     @Override
     public CompanyCategoryDTO save(CompanyCategoryDTO companyCategoryDTO) {
         log.debug("Request to save Company Category : {}", GsonUtils.entityToJson(companyCategoryDTO));
-        CompanyCategory companyCategory =  companyCategoryRepository.save(companyCategoryMapper.toEntity(companyCategoryDTO));
+        CompanyCategory companyCategory =  save(companyCategoryMapper.toEntity(companyCategoryDTO));
         return companyCategoryMapper.toDto(companyCategory);
     }
 
@@ -45,6 +45,12 @@ public class CompanyCategoryServiceImpl extends AbstractService implements Compa
     @Transactional(readOnly = true)
     public Optional<CompanyCategoryDTO> findOneDto(Long id) {
         return findOne(id).map(companyCategoryMapper::toDto);
+    }
+
+    @Override
+    public CompanyCategory save(CompanyCategory companyCategory) {
+        CompanyCategory result =  companyCategoryRepository.save(companyCategory);
+        return result;
     }
 
     @Override

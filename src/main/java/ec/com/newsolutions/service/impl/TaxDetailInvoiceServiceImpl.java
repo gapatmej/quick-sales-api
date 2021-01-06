@@ -25,8 +25,8 @@ public class TaxDetailInvoiceServiceImpl extends AbstractService implements TaxD
     }
 
     @Override
-    public void save(TaxDetailInvoice taxDetailInvoice) {
-        taxDetailInvoiceRepository.save(taxDetailInvoice);
+    public TaxDetailInvoice save(TaxDetailInvoice taxDetailInvoice) {
+        return taxDetailInvoiceRepository.save(taxDetailInvoice);
     }
 
     @Override

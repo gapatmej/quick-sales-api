@@ -52,6 +52,12 @@ public class CellarServiceImpl extends AbstractService implements CellarService 
     }
 
     @Override
+    public Cellar save(Cellar cellar) {
+        Cellar result =  cellarRepository.save(cellar);
+        return result;
+    }
+
+    @Override
     public Optional<Cellar> findOne(Long id) {
         log.debug("Request to get Cellar : {}", id);
         return cellarRepository.findById(id);

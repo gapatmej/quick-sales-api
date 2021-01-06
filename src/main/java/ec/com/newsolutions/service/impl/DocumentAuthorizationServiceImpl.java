@@ -31,7 +31,7 @@ public class DocumentAuthorizationServiceImpl extends AbstractService implements
     @Override
     public DocumentAuthorizationDTO save(DocumentAuthorizationDTO documentAuthorizationDTO) {
         log.debug("Request to save Document Authorization : {}", documentAuthorizationDTO);
-        DocumentAuthorization documentAuthorization = documentAuthorizationRepository.save(documentAuthorizationMapper.toEntity(documentAuthorizationDTO));
+        DocumentAuthorization documentAuthorization = save(documentAuthorizationMapper.toEntity(documentAuthorizationDTO));
         return documentAuthorizationMapper.toDto(documentAuthorization);
     }
 
@@ -58,6 +58,12 @@ public class DocumentAuthorizationServiceImpl extends AbstractService implements
     @Override
     public Optional<DocumentAuthorizationDTO> findOneDto(Long id) {
         return findOne(id).map(documentAuthorizationMapper::toDto);
+    }
+
+    @Override
+    public DocumentAuthorization save(DocumentAuthorization documentAuthorization) {
+        DocumentAuthorization result = documentAuthorizationRepository.save(documentAuthorization);
+        return result;
     }
 
     @Override

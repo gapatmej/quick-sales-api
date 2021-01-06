@@ -30,8 +30,8 @@ public class BankServiceImpl extends AbstractService implements BankService {
     @Override
     public BankDTO save(BankDTO bankDTO) {
         log.debug("Request to save Banck : {}", GsonUtils.entityToJson(bankDTO));
-        Bank bank =  bankRepository.save(bankMapper.toEntity(bankDTO));
-        return bankMapper.toDto(bank);
+        Bank result =  save(bankMapper.toEntity(bankDTO));
+        return bankMapper.toDto(result);
     }
 
     @Override
@@ -42,6 +42,12 @@ public class BankServiceImpl extends AbstractService implements BankService {
     @Override
     public Optional<BankDTO> findOneDto(Long id) {
         return findOne(id).map(bankMapper::toDto);
+    }
+
+    @Override
+    public Bank save(Bank bank) {
+        Bank result =  bankRepository.save(bank);
+        return result;
     }
 
     @Override

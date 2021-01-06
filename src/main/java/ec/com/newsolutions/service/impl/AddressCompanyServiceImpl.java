@@ -31,7 +31,7 @@ public class AddressCompanyServiceImpl extends AbstractService implements Addres
     @Override
     public AddressCompanyDTO save(AddressCompanyDTO addressCompanyDTO) {
         log.debug("Request to save Address Company : {}", addressCompanyDTO);
-        AddressCompany addressCompany = addressCompanyRepository.save(addressCompanyMapper.toEntity(addressCompanyDTO));
+        AddressCompany addressCompany = save(addressCompanyMapper.toEntity(addressCompanyDTO));
         return addressCompanyMapper.toDto(addressCompany);
     }
 
@@ -43,6 +43,11 @@ public class AddressCompanyServiceImpl extends AbstractService implements Addres
     @Override
     public Optional<AddressCompanyDTO> findOneDto(Long id) {
         return findOne(id).map(addressCompanyMapper::toDto);
+    }
+
+    @Override
+    public AddressCompany save(AddressCompany addressCompany) {
+        return addressCompanyRepository.save(addressCompany);
     }
 
     @Override

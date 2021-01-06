@@ -32,7 +32,7 @@ public class TaxServiceImpl extends AbstractService implements TaxService {
     @Override
     public TaxDTO save(TaxDTO taxDTO) {
         log.debug("Request to save Unit : {}", GsonUtils.entityToJson(taxDTO));
-        Tax tax =  taxRepository.save(taxMapper.toEntity(taxDTO));
+        Tax tax =  save(taxMapper.toEntity(taxDTO));
         return taxMapper.toDto(tax);
     }
 
@@ -47,6 +47,12 @@ public class TaxServiceImpl extends AbstractService implements TaxService {
     @Transactional(readOnly = true)
     public Optional<TaxDTO> findOneDto(Long id) {
         return findOne(id).map(taxMapper::toDto);
+    }
+
+    @Override
+    public Tax save(Tax tax) {
+        Tax result =  taxRepository.save(tax);
+        return result;
     }
 
     @Override

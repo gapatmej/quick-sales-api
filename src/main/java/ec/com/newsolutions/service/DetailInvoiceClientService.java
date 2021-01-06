@@ -8,7 +8,6 @@ import java.util.Set;
 
 public interface DetailInvoiceClientService extends AbstractService<DetailInvoiceClient> {
 
-    void save(DetailInvoiceClient detailInvoiceClient);
     void saveAll(Set<DetailInvoiceClient> detailsInvoiceClient);
     void deleteByInvoiceClient(Long idInvoiceClient);
     void deleteByIdIn(List<Long> ids);

@@ -33,10 +33,9 @@ public class CompanyServiceImpl extends AbstractService implements CompanyServic
 
     @Override
     public CompanyDTO save(CompanyDTO companyDTO) {
-        CompanyDTO result ;
         log.debug("Request to save Company : {}", GsonUtils.entityToJson(companyDTO));
-        final Company company = companyRepository.save(companyMapper.toEntity(companyDTO));
-        result = companyMapper.toDto(company);
+        final Company company = save(companyMapper.toEntity(companyDTO));
+        CompanyDTO result = companyMapper.toDto(company);
 
         companyDTO.getAddressCompanies().forEach(aC -> aC.setCompanyId(company.getId()));
         result.setAddressCompanies(addressCompanyService.saveAll(companyDTO.getAddressCompanies()));
@@ -55,6 +54,12 @@ public class CompanyServiceImpl extends AbstractService implements CompanyServic
     @Transactional(readOnly = true)
     public Optional<CompanyDTO> findOneDto(Long id) {
         return findOne(id).map(companyMapper::toDto);
+    }
+
+    @Override
+    public Company save(Company company) {
+        Company result = companyRepository.save(company);
+        return result;
     }
 
     @Override
