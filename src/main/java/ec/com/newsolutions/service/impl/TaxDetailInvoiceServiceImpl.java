@@ -6,8 +6,6 @@ import ec.com.newsolutions.service.TaxDetailInvoiceService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -48,6 +46,6 @@ public class TaxDetailInvoiceServiceImpl extends AbstractService implements TaxD
 
     @Override
     public Optional<TaxDetailInvoice> findOne(Long id) {
-        return Optional.empty();
+        throw new UnsupportedOperationException();
     }
 }

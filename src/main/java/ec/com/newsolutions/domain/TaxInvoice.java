@@ -1,5 +1,7 @@
 package ec.com.newsolutions.domain;
 
+import ec.com.newsolutions.config.Constants;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -19,8 +21,11 @@ public class TaxInvoice extends AbstractMainEntity {
     @Column(name = "code", nullable = false)
     private int code;
 
-    @Column(name = "percentage_code", nullable = false)
-    private int percentageCode;
+    @Column(name = "percentage_code", length = 20, nullable = false)
+    private String percentageCode;
+
+    @Column(name = "rate", nullable = false)
+    private Float rate;
 
     @Column(name = "tax_base", precision = 21, scale = 2, nullable = false)
     private BigDecimal taxBase;
@@ -31,6 +36,18 @@ public class TaxInvoice extends AbstractMainEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="invoice_id", nullable = false)
     private InvoiceClient invoiceClient;
+
+    public TaxInvoice(){ }
+
+    public TaxInvoice(Tax tax, InvoiceClient invoiceClient) {
+        this.tax = tax;
+        this.code = Integer.parseInt(tax.getTaxType().codeTax());
+        this.percentageCode = tax.getCode();
+        this.rate = tax.getPercentage();
+        this.taxBase = invoiceClient.getTotal();
+        this.amount = taxBase.multiply(BigDecimal.valueOf(this.rate)).divide(Constants.ONE_HUNDRED);
+        this.invoiceClient = invoiceClient;
+    }
 
     public Tax getTax() {
         return tax;
@@ -48,12 +65,20 @@ public class TaxInvoice extends AbstractMainEntity {
         this.code = code;
     }
 
-    public int getPercentageCode() {
+    public String getPercentageCode() {
         return percentageCode;
     }
 
-    public void setPercentageCode(int percentageCode) {
+    public void setPercentageCode(String percentageCode) {
         this.percentageCode = percentageCode;
+    }
+
+    public Float getRate() {
+        return rate;
+    }
+
+    public void setRate(Float rate) {
+        this.rate = rate;
     }
 
     public BigDecimal getTaxBase() {

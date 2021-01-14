@@ -5,6 +5,7 @@ import ec.com.newsolutions.domain.Company;
 import ec.com.newsolutions.domain.DetailInvoiceClient;
 import ec.com.newsolutions.domain.InvoiceClient;
 import ec.com.newsolutions.domain.TaxDetailInvoice;
+import ec.com.newsolutions.domain.TaxInvoice;
 import ec.com.newsolutions.domain.enumeration.TaxTypeEnum;
 import ec.com.newsolutions.repository.InvoiceClientRepository;
 import ec.com.newsolutions.repository.specification.UtilsSpecification;
@@ -13,17 +14,18 @@ import ec.com.newsolutions.service.CompanyService;
 import ec.com.newsolutions.service.DetailInvoiceClientService;
 import ec.com.newsolutions.service.ElectronicDocumentService;
 import ec.com.newsolutions.service.InvoiceClientService;
+import ec.com.newsolutions.service.TaxInvoiceService;
 import ec.com.newsolutions.service.dto.InvoiceClientDTO;
 import ec.com.newsolutions.service.mapper.InvoiceClientMapper;
 import ec.com.newsolutions.utils.GsonUtils;
 import ec.com.newsolutions.web.rest.errors.EntityNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -35,15 +37,17 @@ public class InvoiceClientServiceImpl extends AbstractService implements Invoice
 
     private final InvoiceClientMapper invoiceClientMapper;
     private final InvoiceClientRepository invoiceClientRepository;
+    private final TaxInvoiceService taxInvoiceService;
     private final DetailInvoiceClientService detailInvoiceClientService;
     private final ElectronicDocumentService electronicDocumentService;
     private final AddressCompanyService addressCompanyService;
     private final CompanyService companyService;
 
-    public InvoiceClientServiceImpl(InvoiceClientMapper invoiceClientMapper, InvoiceClientRepository invoiceClientRepository, DetailInvoiceClientService detailInvoiceClientService, ElectronicDocumentService electronicDocumentService, AddressCompanyService addressCompanyService, CompanyService companyService) {
+    public InvoiceClientServiceImpl(InvoiceClientMapper invoiceClientMapper, InvoiceClientRepository invoiceClientRepository, TaxInvoiceService taxInvoiceService, DetailInvoiceClientService detailInvoiceClientService, ElectronicDocumentService electronicDocumentService, AddressCompanyService addressCompanyService, CompanyService companyService) {
         super(InvoiceClientServiceImpl.class);
         this.invoiceClientMapper = invoiceClientMapper;
         this.invoiceClientRepository = invoiceClientRepository;
+        this.taxInvoiceService = taxInvoiceService;
         this.detailInvoiceClientService = detailInvoiceClientService;
         this.electronicDocumentService = electronicDocumentService;
         this.addressCompanyService = addressCompanyService;
@@ -72,8 +76,9 @@ public class InvoiceClientServiceImpl extends AbstractService implements Invoice
 
         detailInvoiceClientService.build(invoiceClient);
         calculateTotals(invoiceClient);
+        addTaxes(invoiceClient);
         save(invoiceClient);
-
+        taxInvoiceService.saveAll(invoiceClient.getTaxesInvoice());
         detailInvoiceClientService.saveAll(invoiceClient.getDetailsInvoiceClient());
 
         result = invoiceClientMapper.toDto(invoiceClient);
@@ -110,7 +115,32 @@ public class InvoiceClientServiceImpl extends AbstractService implements Invoice
     public void delete(Long id) {
         log.debug("Request to delete InvoiceClient : {}", id);
         detailInvoiceClientService.deleteByInvoiceClient(id);
+        taxInvoiceService.deleteByInvoiceClientId(id);
         invoiceClientRepository.deleteById(id);
+    }
+
+    private void addTaxes(InvoiceClient invoiceClient){
+        Set<TaxInvoice> taxesInvoice = new HashSet<>();
+        List<TaxDetailInvoice> taxesDetailInvoice = invoiceClient.getDetailsInvoiceClient().stream()
+           .map(DetailInvoiceClient::getTaxesDetailInvoice)
+           .flatMap(t->t.stream())
+           .collect(Collectors.toList());
+
+        for (TaxDetailInvoice taxDetailInvoice : taxesDetailInvoice) {
+            TaxInvoice taxInvoiceFounded = taxesInvoice.stream()
+                                    .filter(tI->tI.getPercentageCode().equals(taxDetailInvoice.getPercentageCode()))
+                                    .filter(tI->tI.getCode() == taxDetailInvoice.getCode())
+                                    .filter(tI->tI.getTax().getTaxType() == taxDetailInvoice.getTax().getTaxType())
+                .findFirst().orElse(null);
+
+            if(taxInvoiceFounded == null){
+                taxesInvoice.add(new TaxInvoice(taxDetailInvoice.getTax(),invoiceClient));
+            }else{
+                taxInvoiceFounded.setAmount(taxInvoiceFounded.getAmount().add(taxDetailInvoice.getAmount()));
+            }
+        }
+        invoiceClient.setTaxesInvoice(taxesInvoice);
+
     }
 
     @Override

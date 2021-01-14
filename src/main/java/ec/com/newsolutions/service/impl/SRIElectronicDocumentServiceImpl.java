@@ -60,7 +60,7 @@ public class SRIElectronicDocumentServiceImpl implements SRIElectronicDocumentSe
             for (TaxInvoice taxInvoice : invoiceClient.getTaxesInvoice()){
                 TotalTaxJaxb totalTaxJaxb = new TotalTaxJaxb();
                 totalTaxJaxb.setCode(taxInvoice.getCode());
-                totalTaxJaxb.setPercentageCode(taxInvoice.getPercentageCode());
+               // totalTaxJaxb.setPercentageCode(taxInvoice.getPercentageCode());
                 totalTaxJaxb.setTaxBase(taxInvoice.getTaxBase());
                 totalTaxJaxb.setValue(taxInvoice.getAmount());
                 totalWithTaxesJaxb.getTotalTaxJaxb().add(totalTaxJaxb);

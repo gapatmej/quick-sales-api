@@ -110,9 +110,13 @@ drop table invoice_client;
 alter table tax_detail_invoice alter column rate type real using rate::real;
 
 /*
-    Modifying Invoice Cliente Table
+    Modifying Invoice Client Table
  */
 alter table invoice_client rename column total_tax_free to total_without_tax;
 
+/*
+    Modifying Tax Invoice Table
+ */
+alter table tax_invoice drop column percentage_code;
 
 
