@@ -6,11 +6,18 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "pay_way")
 public class PayWay extends AbstractMainEntity {
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="organization_id", nullable = false)
+    private Organization organization;
 
     @Column(name = "code", length = 20, unique = true, nullable = false)
     private String code;
@@ -23,7 +30,15 @@ public class PayWay extends AbstractMainEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "pay_way_sri", length = 40, nullable = false)
-    private PayWaySRIEnum payWaySRIEnum;
+    private PayWaySRIEnum payWaySRI;
+
+    public Organization getOrganization() {
+        return organization;
+    }
+
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
+    }
 
     public String getCode() {
         return code;
@@ -49,11 +64,11 @@ public class PayWay extends AbstractMainEntity {
         this.description = description;
     }
 
-    public PayWaySRIEnum getPayWaySRIEnum() {
-        return payWaySRIEnum;
+    public PayWaySRIEnum getPayWaySRI() {
+        return payWaySRI;
     }
 
-    public void setPayWaySRIEnum(PayWaySRIEnum payWaySRIEnum) {
-        this.payWaySRIEnum = payWaySRIEnum;
+    public void setPayWaySRI(PayWaySRIEnum payWaySRI) {
+        this.payWaySRI = payWaySRI;
     }
 }

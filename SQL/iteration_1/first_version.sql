@@ -120,3 +120,16 @@ alter table invoice_client rename column total_tax_free to total_without_tax;
 alter table tax_invoice drop column percentage_code;
 
 
+/*
+    Permits To Pay Way
+ */
+
+/*
+    Add Pay Way to permits and rol admin
+ */
+
+INSERT INTO public.jhi_permit (id, organization_id, name, resource, created_by, created_date, last_modified_by, last_modified_date)
+VALUES (13, 1, 'Pay Way', '/base-data/pay-way', 'system', null, 'system', null);
+
+INSERT INTO public.jhi_authority_permit (authority_id, permit_id)
+VALUES (1, 13);

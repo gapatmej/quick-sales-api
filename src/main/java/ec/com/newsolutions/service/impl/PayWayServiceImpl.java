@@ -1,10 +1,12 @@
 package ec.com.newsolutions.service.impl;
 
-import ec.com.newsolutions.service.PayWayService;
 import ec.com.newsolutions.domain.PayWay;
+import ec.com.newsolutions.repository.specification.UtilsSpecification;
+import ec.com.newsolutions.service.PayWayService;
 import ec.com.newsolutions.repository.PayWayRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import ec.com.newsolutions.service.dto.PayWayDTO;
+import ec.com.newsolutions.service.mapper.PayWayMapper;
+import ec.com.newsolutions.utils.GsonUtils;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,64 +15,50 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-/**
- * Service Implementation for managing {@link PayWay}.
- */
+
 @Service
 @Transactional
-public class PayWayServiceImpl implements PayWayService {
-
-    private final Logger log = LoggerFactory.getLogger(PayWayServiceImpl.class);
-
+public class PayWayServiceImpl extends AbstractService implements PayWayService {
     private final PayWayRepository payWayRepository;
+    private final PayWayMapper payWayMapper;
 
-    public PayWayServiceImpl(PayWayRepository payWayRepository) {
+    public PayWayServiceImpl(PayWayRepository payWayRepository, PayWayMapper payWayMapper) {
+        super(PayWayServiceImpl.class);
         this.payWayRepository = payWayRepository;
+        this.payWayMapper = payWayMapper;
     }
 
-    /**
-     * Save a payWay.
-     *
-     * @param payWay the entity to save.
-     * @return the persisted entity.
-     */
+    @Override
+    public PayWayDTO save(PayWayDTO payWayDTO) {
+        log.debug("Request to save PayWay : {}", GsonUtils.entityToJson(payWayDTO));
+        PayWay result = save(payWayMapper.toEntity(payWayDTO));
+        return payWayMapper.toDto(result);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<PayWayDTO> findAll(String search, Pageable pageable) {
+        return payWayRepository.findAll(UtilsSpecification.<PayWay>getSpecificationWithWorkspace(search), pageable).map(payWayMapper::toDto);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<PayWayDTO> findOneDto(Long id) {
+        return findOne(id).map(payWayMapper::toDto);
+    }
+
     @Override
     public PayWay save(PayWay payWay) {
-        log.debug("Request to save PayWay : {}", payWay);
-        return payWayRepository.save(payWay);
+        PayWay result = payWayRepository.save(payWay);
+        return result;
     }
 
-    /**
-     * Get all the payWays.
-     *
-     * @param pageable the pagination information.
-     * @return the list of entities.
-     */
     @Override
-    @Transactional(readOnly = true)
-    public Page<PayWay> findAll(Pageable pageable) {
-        log.debug("Request to get all PayWays");
-        return payWayRepository.findAll(pageable);
-    }
-
-    /**
-     * Get one payWay by id.
-     *
-     * @param id the id of the entity.
-     * @return the entity.
-     */
-    @Override
-    @Transactional(readOnly = true)
     public Optional<PayWay> findOne(Long id) {
         log.debug("Request to get PayWay : {}", id);
         return payWayRepository.findById(id);
     }
 
-    /**
-     * Delete the payWay by id.
-     *
-     * @param id the id of the entity.
-     */
     @Override
     public void delete(Long id) {
         log.debug("Request to delete PayWay : {}", id);
