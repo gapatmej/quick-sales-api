@@ -16,9 +16,10 @@ public class ElectronicDocumentsUtils {
     }
 
     public static String getCertificatePath(ElectronicDocument electronicDocument) {
-        return new StringBuilder(applicationProperties.getElectronicDocuments().getPaths().getCertificate())
+        return new StringBuilder(applicationProperties.getElectronicDocuments().getPaths().getMain())
             .append(Utils.DIRECTORY_SEPARATOR)
             .append(electronicDocument.getOrganization().getId())
+            .append(applicationProperties.getElectronicDocuments().getPaths().getCertificate())
             .append(Utils.DIRECTORY_SEPARATOR)
             .append(electronicDocument.getOrganization().getCertificateName())
             .toString();
@@ -30,17 +31,26 @@ public class ElectronicDocumentsUtils {
         return stringBuilder.toString();
     }
 
+    public static String getSignedPathWithAccessKey(ElectronicDocument electronicDocument) {
+        StringBuilder stringBuilder = new StringBuilder(getSignedPath(electronicDocument))
+            .append(Utils.DIRECTORY_SEPARATOR)
+            .append(electronicDocument.getAccessKey())
+            .append(".xml");
+
+        return stringBuilder.toString();
+    }
+
     public static String getXMlPath(ElectronicDocument electronicDocument) {
-        StringBuilder stringBuilder = ElectronicDocumentsUtils.getPathOrganization(electronicDocument.getOrganization().getId(), electronicDocument.getReceiptType());
-        stringBuilder.append(Utils.DIRECTORY_SEPARATOR)
-            .append(applicationProperties.getElectronicDocuments().getPaths().getSigned());
+        StringBuilder stringBuilder = ElectronicDocumentsUtils.getPathOrganization(electronicDocument.getOrganization().getId(), electronicDocument.getReceiptType())
+            .append(applicationProperties.getElectronicDocuments().getPaths().getXml());
         return stringBuilder.toString();
     }
 
     public static String getXMlPathWithAccessKey(ElectronicDocument electronicDocument) {
         StringBuilder stringBuilder = new StringBuilder(getXMlPath(electronicDocument))
             .append(Utils.DIRECTORY_SEPARATOR)
-            .append(electronicDocument.getAccessKey());
+            .append(electronicDocument.getAccessKey())
+            .append(".xml");
 
         return stringBuilder.toString();
 
@@ -49,8 +59,7 @@ public class ElectronicDocumentsUtils {
     private static StringBuilder getPathOrganization(Long organizationId, ReceiptTypeEnum receiptTypeEnum) {
         StringBuilder stringBuilder = new StringBuilder(applicationProperties.getElectronicDocuments().getPaths().getMain())
             .append(Utils.DIRECTORY_SEPARATOR)
-            .append(String.format("/%d", organizationId))
-            .append(Utils.DIRECTORY_SEPARATOR);
+            .append(String.format("%d", organizationId));
 
         if (ReceiptTypeEnum.INVOICE.equals(receiptTypeEnum)) {
             stringBuilder.append(applicationProperties.getElectronicDocuments().getPaths().getDocuments().getInvoices());

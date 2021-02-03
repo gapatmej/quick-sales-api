@@ -19,7 +19,7 @@ public class Signature {
 
     public Signature(ElectronicDocument electronicDocument) {
         this.certificatePath = ElectronicDocumentsUtils.getCertificatePath(electronicDocument);
-        this.signedPath = ElectronicDocumentsUtils.getSignedPath(electronicDocument);
+        this.signedPath = ElectronicDocumentsUtils.getSignedPathWithAccessKey(electronicDocument);
         this.xmlPath = ElectronicDocumentsUtils.getXMlPathWithAccessKey(electronicDocument);
         this.passwordCertificate = electronicDocument.getOrganization().getCertificatePassword();
     }
