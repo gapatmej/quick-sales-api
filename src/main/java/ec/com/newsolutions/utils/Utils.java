@@ -5,6 +5,8 @@ import java.util.List;
 
 public class Utils {
 
+    public static final String DIRECTORY_SEPARATOR = "/";
+
     public static String escapeCharacters(String string, char... chars){
         for (char c: chars) {
             StringBuilder stringBuilder = new StringBuilder();

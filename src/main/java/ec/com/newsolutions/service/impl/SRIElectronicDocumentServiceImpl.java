@@ -1,11 +1,18 @@
 package ec.com.newsolutions.service.impl;
 
-import ec.com.newsolutions.domain.*;
+import ec.com.newsolutions.domain.AdditionalInformation;
+import ec.com.newsolutions.domain.DetailInvoiceClient;
+import ec.com.newsolutions.domain.InvoiceClient;
+import ec.com.newsolutions.domain.Payment;
+import ec.com.newsolutions.domain.TaxDetailInvoice;
+import ec.com.newsolutions.domain.TaxInvoice;
 import ec.com.newsolutions.service.SRIElectronicDocumentService;
-import ec.com.newsolutions.service.SignatureXAdES_BES;
+import ec.com.newsolutions.service.SignatureXAdES;
+import ec.com.newsolutions.service.errors.ElectronicDocumentException;
+import ec.com.newsolutions.service.errors.enumeration.ProccessElectronicDocument;
+import ec.com.newsolutions.utils.electronicdocuments.ElectronicDocumentsUtils;
+import ec.com.newsolutions.utils.electronicdocuments.Signature;
 import ec.com.newsolutions.xml.jaxb.sri.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,40 +22,40 @@ import java.io.File;
 
 @Service
 @Transactional
-public class SRIElectronicDocumentServiceImpl implements SRIElectronicDocumentService {
+public class SRIElectronicDocumentServiceImpl extends AbstractService implements SRIElectronicDocumentService {
 
-    private final Logger log = LoggerFactory.getLogger(InvoiceClientServiceImpl.class);
+    private final SignatureXAdES signatureXAdES;
 
-    private final SignatureXAdES_BES signatureXAdES_BES;
-
-    public SRIElectronicDocumentServiceImpl(SignatureXAdES_BES signatureXAdES_BES) {
-        this.signatureXAdES_BES = signatureXAdES_BES;
+    public SRIElectronicDocumentServiceImpl(SignatureXAdES signatureXAdES) {
+        super(SRIElectronicDocumentServiceImpl.class);
+        this.signatureXAdES = signatureXAdES;
     }
 
     @Override
-    public void generateXML(InvoiceClient invoiceClient) {
+    public void generateXML(InvoiceClient invoiceClient) throws ElectronicDocumentException {
         try {
+
             InvoiceClientJaxb invoiceClientJaxb = new InvoiceClientJaxb();
 
             TributaryInformationJaxb tributaryInformationJaxb = new TributaryInformationJaxb();
-           /* tributaryInformationJaxb.setEnvironment(invoiceClient.getElectronicDocumentInfo().getSriEnvironment().code());
-            tributaryInformationJaxb.setEmissionType(invoiceClient.getElectronicDocumentInfo().getEmissionType().code());
-            tributaryInformationJaxb.setBusinessName(invoiceClient.getElectronicDocumentInfo().getBusinessName());
-            tributaryInformationJaxb.setTradename(invoiceClient.getElectronicDocumentInfo().getTradename());
-            tributaryInformationJaxb.setIdentification(invoiceClient.getElectronicDocumentInfo().getIdentification());
-            tributaryInformationJaxb.setAccessKey(invoiceClient.getElectronicDocumentInfo().getAccessKey());
+            tributaryInformationJaxb.setEnvironment(invoiceClient.getSriEnvironment().code());
+            tributaryInformationJaxb.setEmissionType(invoiceClient.getEmissionType().code());
+            tributaryInformationJaxb.setBusinessName(invoiceClient.getOrganization().getBusinessName());
+            tributaryInformationJaxb.setTradename(invoiceClient.getOrganization().getTradename());
+            tributaryInformationJaxb.setIdentification(invoiceClient.getOrganization().getIdentification());
+            tributaryInformationJaxb.setAccessKey(invoiceClient.getAccessKey());
             tributaryInformationJaxb.setCodeDocument(invoiceClient.getReceiptType().code());
             tributaryInformationJaxb.setEstablishmentCode(invoiceClient.getEstablishmentCode());
             tributaryInformationJaxb.setEmissionPointCode(invoiceClient.getEmissionPointCode());
-            tributaryInformationJaxb.setSequence(invoiceClient.getSequence());
-            tributaryInformationJaxb.setMatrizAddress(invoiceClient.getElectronicDocumentInfo().getMainAddress());*/
+            tributaryInformationJaxb.setSequence(String.format("%09d", invoiceClient.getSequence()));
+            tributaryInformationJaxb.setMatrizAddress(invoiceClient.getOrganization().getAddress());
             invoiceClientJaxb.setTributaryInformationJaxb(tributaryInformationJaxb);
 
             InvoiceInformationJaxb invoiceInformationJaxb = new InvoiceInformationJaxb();
-           /* invoiceInformationJaxb.setDateIssue(invoiceClient.getDateIssue().toString());
-            invoiceInformationJaxb.setEstablishmentAddress(invoiceClient.getElectronicDocumentInfo().getEstablishmentAddress());
-            invoiceInformationJaxb.setSpecialTaxpayer(invoiceClient.getElectronicDocumentInfo().getSpecialTaxpayerNumber());
-            invoiceInformationJaxb.setObligedAccounting(invoiceClient.getElectronicDocumentInfo().isKeepAccounting()?"SI":"NO");*/
+            invoiceInformationJaxb.setDateIssue(invoiceClient.getDateIssue().toString());
+            invoiceInformationJaxb.setEstablishmentAddress(invoiceClient.getOrganization().getAddress());
+            invoiceInformationJaxb.setSpecialTaxpayer(String.valueOf(invoiceClient.getOrganization().getSpecialTaxpayerNumber()));
+            invoiceInformationJaxb.setObligedAccounting(invoiceClient.getOrganization().getKeepAccounting() ? "SI" : "NO");
             invoiceInformationJaxb.setBuyerIdentificationType(invoiceClient.getIdentificationType().code());
             invoiceInformationJaxb.setBuyerBusinessName(invoiceClient.getBusinessName());
             invoiceInformationJaxb.setBuyerIdentification(invoiceClient.getIdentification());
@@ -57,10 +64,10 @@ public class SRIElectronicDocumentServiceImpl implements SRIElectronicDocumentSe
             invoiceInformationJaxb.setTotalDiscount(invoiceClient.getTotalDiscount());
 
             TotalWithTaxesJaxb totalWithTaxesJaxb = new TotalWithTaxesJaxb();
-            for (TaxInvoice taxInvoice : invoiceClient.getTaxesInvoice()){
+            for (TaxInvoice taxInvoice : invoiceClient.getTaxesInvoice()) {
                 TotalTaxJaxb totalTaxJaxb = new TotalTaxJaxb();
                 totalTaxJaxb.setCode(taxInvoice.getCode());
-               // totalTaxJaxb.setPercentageCode(taxInvoice.getPercentageCode());
+                totalTaxJaxb.setPercentageCode(Integer.valueOf(taxInvoice.getPercentageCode()));
                 totalTaxJaxb.setTaxBase(taxInvoice.getTaxBase());
                 totalTaxJaxb.setValue(taxInvoice.getAmount());
                 totalWithTaxesJaxb.getTotalTaxJaxb().add(totalTaxJaxb);
@@ -71,8 +78,8 @@ public class SRIElectronicDocumentServiceImpl implements SRIElectronicDocumentSe
             invoiceInformationJaxb.setTotal(invoiceClient.getTotal());
             invoiceInformationJaxb.setCurrency(invoiceClient.getCurrency().toString());
 
-            PaymentsJaxb paymentsJaxb= new PaymentsJaxb();
-            for (Payment payment : invoiceClient.getPayments()){
+            PaymentsJaxb paymentsJaxb = new PaymentsJaxb();
+            for (Payment payment : invoiceClient.getPayments()) {
                 PaymentJaxb paymentJaxb = new PaymentJaxb();
                 paymentJaxb.setPayWay(payment.getPayWay().getCode());
                 paymentJaxb.setTotal(payment.getAmount());
@@ -84,8 +91,10 @@ public class SRIElectronicDocumentServiceImpl implements SRIElectronicDocumentSe
 
 
             DetailsJaxb detailsJaxb = new DetailsJaxb();
-            for (DetailInvoiceClient detailInvoice : invoiceClient.getDetailsInvoiceClient()){
+            for (DetailInvoiceClient detailInvoice : invoiceClient.getDetailsInvoiceClient()) {
                 DetailJaxb detailJaxb = new DetailJaxb();
+                detailsJaxb.getDetailJaxb().add(detailJaxb);
+
                 detailJaxb.setMainCode(detailInvoice.getMainCode());
                 detailJaxb.setAuxiliaryCode(detailInvoice.getAuxiliaryCode());
                 detailJaxb.setDescription(detailInvoice.getDescription());
@@ -95,11 +104,11 @@ public class SRIElectronicDocumentServiceImpl implements SRIElectronicDocumentSe
                 detailJaxb.setTotalPriceWithoutTax(detailInvoice.getTotal());
 
                 TaxesJaxb taxesJaxb = new TaxesJaxb();
-                for (TaxDetailInvoice taxDetailInvoice: detailInvoice.getTaxesDetailInvoice()){
+                for (TaxDetailInvoice taxDetailInvoice : detailInvoice.getTaxesDetailInvoice()) {
                     TaxJaxb taxJaxb = new TaxJaxb();
                     taxJaxb.setCode(taxDetailInvoice.getCode());
                     taxJaxb.setPercentagecode(taxDetailInvoice.getPercentageCode());
-                  //  taxJaxb.setRate(taxDetailInvoice.getRate());
+                    taxJaxb.setRate((int) Math.round(taxDetailInvoice.getRate()));
                     taxJaxb.setTaxBase(taxDetailInvoice.getTaxBase());
                     taxJaxb.setValue(taxDetailInvoice.getAmount());
 
@@ -110,27 +119,32 @@ public class SRIElectronicDocumentServiceImpl implements SRIElectronicDocumentSe
             invoiceClientJaxb.setDetailsJaxb(detailsJaxb);
 
             AdditionalsInformationJaxb additionalsInformationJaxb = new AdditionalsInformationJaxb();
-         /*   for (AdditionalInformation additionalInformation: invoiceClient.getAdditionalsInformation()){
+            for (AdditionalInformation additionalInformation : invoiceClient.getAdditionalsInformation()) {
                 additionalsInformationJaxb.getAdditionalInformation().add(additionalInformation.getValue());
-            }*/
+            }
             invoiceClientJaxb.setAdditionalsInformationJaxb(additionalsInformationJaxb);
 
             JAXBContext context = JAXBContext.newInstance(InvoiceClientJaxb.class);
-
             Marshaller m = context.createMarshaller();
-            m.marshal(invoiceClientJaxb, new File("D:\\electronicDocuments\\Invoice\\issued\\pruebas.xml"));
-
-            this.signatureXAdES_BES.execute();
-
+            m.marshal(invoiceClientJaxb, new File(ElectronicDocumentsUtils.getXMlPathWithAccessKey(invoiceClient)));
 
         } catch (Exception e) {
-            log.debug(e.getMessage());
+            log.error(e.getMessage());
+            throw new ElectronicDocumentException(ProccessElectronicDocument.GENERATE_XML,invoiceClient.getAccessKey(),e.getMessage());
         }
+
     }
 
-    public void firmar() {
-     /*   SignatureXAdES_BESImpl xades = new SignatureXAdES_BESImpl(this);
-        xades.execute();*/
+    @Override
+    public void sign(Signature signature) throws ElectronicDocumentException {
+        try {
+            this.signatureXAdES.execute(signature);
+        }catch (Exception e) {
+            log.error(e.getMessage());
+            throw new ElectronicDocumentException(ProccessElectronicDocument.SIGN,signature.getSignedPath(),e.getMessage());
+        }
+
     }
+
 
 }

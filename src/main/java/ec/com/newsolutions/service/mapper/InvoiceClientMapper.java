@@ -13,6 +13,7 @@ import java.util.List;
 public interface InvoiceClientMapper extends EntityMapperIgnoreAuditProps<InvoiceClientDTO, InvoiceClient> {
 
     @Mapping(target = "organizationId", source = "organization.id")
+    @Mapping(target = "branchOfficeId", source = "branchOffice.id")
     @Mapping(target = "documentId", source = "document.id")
     @Mapping(target = "emissionPointId", source = "emissionPoint.id")
     @Mapping(target = "companyId", source = "company.id")
@@ -20,6 +21,7 @@ public interface InvoiceClientMapper extends EntityMapperIgnoreAuditProps<Invoic
     InvoiceClientDTO toDto(InvoiceClient invoiceClient);
 
     @Mapping(target = "organization.id", source = "organizationId")
+    @Mapping(target = "branchOffice.id", source = "branchOfficeId")
     @Mapping(target = "document.id", source = "documentId")
     @Mapping(target = "emissionPoint.id", source = "emissionPointId")
     @Mapping(target = "company.id", source = "companyId")
@@ -28,6 +30,7 @@ public interface InvoiceClientMapper extends EntityMapperIgnoreAuditProps<Invoic
     InvoiceClient toEntity(InvoiceClientDTO invoiceClientDTO);
 
     @Mapping(target = "organizationId", source = "organization.id")
+    @Mapping(target = "branchOfficeId", source = "branchOffice.id")
     @Mapping(target = "documentId", source = "document.id")
     @Mapping(target = "emissionPointId", source = "emissionPoint.id")
     @Mapping(target = "companyId", source = "company.id")

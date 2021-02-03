@@ -118,7 +118,14 @@ jhipster:
     retention-period: 30 # Number of days before audit events are deleted.
 application:
     electronicDocuments:
-      path: D:\electronicDocuments\
+      paths:
+        main: /Users/andresperalta/Documents/electronicDocuments
+        certificate: /certificate
+        documents:
+          invoices: /invoices
+        xml: /xml
+        signed: /signed
+
 
 # ===================================================================
 # Application specific properties

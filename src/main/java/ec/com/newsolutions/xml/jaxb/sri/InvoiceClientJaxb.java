@@ -3,8 +3,10 @@ package ec.com.newsolutions.xml.jaxb.sri;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 @XmlRootElement(name = "factura")
+@XmlType(propOrder = { "tributaryInformationJaxb", "invoiceInformationJaxb", "detailsJaxb", "additionalsInformationJaxb" })
 public class InvoiceClientJaxb {
     private String id = "comprobante";
     private String version = "1.1.0";

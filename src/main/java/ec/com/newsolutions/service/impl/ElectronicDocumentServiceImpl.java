@@ -74,21 +74,21 @@ public class ElectronicDocumentServiceImpl extends AbstractService implements El
             .map(WorkspaceDTO::getEmissionPointId)
             .orElseThrow(() -> new WorkspaceNotFoundException(EmissionPoint.class.getSimpleName()));
 
-        Long branchOfficeId = SecurityUtils.getCurrentWorkspace()
-            .map(WorkspaceDTO::getBranchOfficeId)
-            .orElseThrow(() -> new WorkspaceNotFoundException(BranchOffice.class.getSimpleName()));
-        Organization organization = organizationService.findOne(electronicDocument.getOrganization().getId())
-            .orElseThrow(()-> new EntityNotFoundException(electronicDocument.getOrganization().getId()));
+        electronicDocument.setOrganization(organizationService.findOne(electronicDocument.getOrganization().getId())
+            .orElseThrow(()-> new EntityNotFoundException(electronicDocument.getOrganization().getId())));
 
         EmissionPoint emissionPoint = emissionPointService.findOne(emissionPointId)
             .orElseThrow(()-> new EntityNotFoundException(emissionPointId));
 
+        Long branchOfficeId = SecurityUtils.getCurrentWorkspace()
+            .map(WorkspaceDTO::getBranchOfficeId)
+            .orElseThrow(() -> new WorkspaceNotFoundException(BranchOffice.class.getSimpleName()));
         BranchOffice branchOffice = branchOfficeService.findOne(branchOfficeId)
             .orElseThrow(()-> new EntityNotFoundException(branchOfficeId));
 
-
-        electronicDocument.setSriEnvironment(organization.getSriEnvironment());
-        electronicDocument.setEmissionType(organization.getEmissionType());
+        electronicDocument.setBranchOffice(branchOffice);
+        electronicDocument.setSriEnvironment(electronicDocument.getOrganization().getSriEnvironment());
+        electronicDocument.setEmissionType(electronicDocument.getOrganization().getEmissionType());
         electronicDocument.setEstablishmentCode(branchOffice.getEstablishmentCode());
         electronicDocument.setEmissionPointCode(emissionPoint.getEmissionPointCode());
 
@@ -109,7 +109,7 @@ public class ElectronicDocumentServiceImpl extends AbstractService implements El
         if(electronicDocument instanceof InvoiceClient){
             electronicDocument.setReceiptType(ReceiptTypeEnum.INVOICE);
         }
-        generateAccessKey(organization,electronicDocument);
+        generateAccessKey(electronicDocument.getOrganization(),electronicDocument);
 
     }
 

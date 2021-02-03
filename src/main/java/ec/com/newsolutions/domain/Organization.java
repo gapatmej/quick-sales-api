@@ -61,6 +61,12 @@ public class Organization extends AbstractMainEntity {
     @Column(name = "emission_type", length = 10, nullable = false)
     private EmissionTypeEnum emissionType = EmissionTypeEnum.NORMAL;
 
+    @Column(name = "certificate_name", length = 50, nullable = false)
+    private String certificateName;
+
+    @Column(name = "certificate_password", length = 30, nullable = false)
+    private String certificatePassword;
+
     public IdentificationTypeEnum getIdentificationType() {
         return identificationType;
     }
@@ -171,5 +177,21 @@ public class Organization extends AbstractMainEntity {
 
     public void setEmissionType(EmissionTypeEnum emissionType) {
         this.emissionType = emissionType;
+    }
+
+    public String getCertificateName() {
+        return certificateName;
+    }
+
+    public void setCertificateName(String certificateName) {
+        this.certificateName = certificateName;
+    }
+
+    public String getCertificatePassword() {
+        return certificatePassword;
+    }
+
+    public void setCertificatePassword(String certificatePassword) {
+        this.certificatePassword = certificatePassword;
     }
 }

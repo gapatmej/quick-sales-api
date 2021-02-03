@@ -10,8 +10,6 @@ public class PaymentDTO extends AbstractMainDTO {
 
     private BigDecimal amount;
 
-    private int timeLimit;
-
     private TimeUnitEnum timeUnit;
 
     private String decription;
@@ -34,14 +32,6 @@ public class PaymentDTO extends AbstractMainDTO {
 
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
-    }
-
-    public int getTimeLimit() {
-        return timeLimit;
-    }
-
-    public void setTimeLimit(int timeLimit) {
-        this.timeLimit = timeLimit;
     }
 
     public TimeUnitEnum getTimeUnit() {

@@ -4,20 +4,24 @@ import ec.com.newsolutions.domain.AddressCompany;
 import ec.com.newsolutions.domain.Company;
 import ec.com.newsolutions.domain.DetailInvoiceClient;
 import ec.com.newsolutions.domain.InvoiceClient;
+import ec.com.newsolutions.domain.Payment;
 import ec.com.newsolutions.domain.TaxDetailInvoice;
 import ec.com.newsolutions.domain.TaxInvoice;
+import ec.com.newsolutions.domain.enumeration.ReceiptTypeEnum;
 import ec.com.newsolutions.domain.enumeration.TaxTypeEnum;
 import ec.com.newsolutions.repository.InvoiceClientRepository;
 import ec.com.newsolutions.repository.specification.UtilsSpecification;
-import ec.com.newsolutions.service.AddressCompanyService;
 import ec.com.newsolutions.service.CompanyService;
 import ec.com.newsolutions.service.DetailInvoiceClientService;
 import ec.com.newsolutions.service.ElectronicDocumentService;
 import ec.com.newsolutions.service.InvoiceClientService;
+import ec.com.newsolutions.service.PaymentService;
+import ec.com.newsolutions.service.SRIElectronicDocumentService;
 import ec.com.newsolutions.service.TaxInvoiceService;
 import ec.com.newsolutions.service.dto.InvoiceClientDTO;
 import ec.com.newsolutions.service.mapper.InvoiceClientMapper;
 import ec.com.newsolutions.utils.GsonUtils;
+import ec.com.newsolutions.utils.electronicdocuments.Signature;
 import ec.com.newsolutions.web.rest.errors.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,18 +44,20 @@ public class InvoiceClientServiceImpl extends AbstractService implements Invoice
     private final TaxInvoiceService taxInvoiceService;
     private final DetailInvoiceClientService detailInvoiceClientService;
     private final ElectronicDocumentService electronicDocumentService;
-    private final AddressCompanyService addressCompanyService;
+    private final PaymentService paymentService;
     private final CompanyService companyService;
+    private final SRIElectronicDocumentService sriElectronicDocumentService;
 
-    public InvoiceClientServiceImpl(InvoiceClientMapper invoiceClientMapper, InvoiceClientRepository invoiceClientRepository, TaxInvoiceService taxInvoiceService, DetailInvoiceClientService detailInvoiceClientService, ElectronicDocumentService electronicDocumentService, AddressCompanyService addressCompanyService, CompanyService companyService) {
+    public InvoiceClientServiceImpl(InvoiceClientMapper invoiceClientMapper, InvoiceClientRepository invoiceClientRepository, TaxInvoiceService taxInvoiceService, DetailInvoiceClientService detailInvoiceClientService, ElectronicDocumentService electronicDocumentService, PaymentService paymentService, CompanyService companyService, SRIElectronicDocumentService sriElectronicDocumentService) {
         super(InvoiceClientServiceImpl.class);
         this.invoiceClientMapper = invoiceClientMapper;
         this.invoiceClientRepository = invoiceClientRepository;
         this.taxInvoiceService = taxInvoiceService;
         this.detailInvoiceClientService = detailInvoiceClientService;
         this.electronicDocumentService = electronicDocumentService;
-        this.addressCompanyService = addressCompanyService;
+        this.paymentService = paymentService;
         this.companyService = companyService;
+        this.sriElectronicDocumentService = sriElectronicDocumentService;
     }
 
     @Override
@@ -79,9 +85,19 @@ public class InvoiceClientServiceImpl extends AbstractService implements Invoice
         addTaxes(invoiceClient);
         save(invoiceClient);
         taxInvoiceService.saveAll(invoiceClient.getTaxesInvoice());
+
+        Set<Payment> payments = invoiceClient.getPayments().stream().map(payment -> {
+            payment.setInvoiceClient(invoiceClient);
+            return payment;
+        }).collect(Collectors.toSet());
+        paymentService.saveAll(payments);
+
         detailInvoiceClientService.saveAll(invoiceClient.getDetailsInvoiceClient());
 
         result = invoiceClientMapper.toDto(invoiceClient);
+
+        sriElectronicDocumentService.generateXML(invoiceClient);
+        sriElectronicDocumentService.sign(new Signature(invoiceClient));
 
         return result;
     }

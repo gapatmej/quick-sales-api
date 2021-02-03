@@ -1,6 +1,8 @@
 package ec.com.newsolutions.service.impl;
 
-import ec.com.newsolutions.service.SignatureXAdES_BES;
+import ec.com.newsolutions.service.SignatureXAdES;
+import ec.com.newsolutions.service.impl.PassStoreKS;
+import ec.com.newsolutions.utils.electronicdocuments.Signature;
 import es.mityc.firmaJava.libreria.utilidades.UtilidadTratarNodo;
 import es.mityc.firmaJava.libreria.xades.DataToSign;
 import es.mityc.firmaJava.libreria.xades.EnumFormatoFirma;
@@ -18,67 +20,42 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import java.io.*;
-import java.security.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.Provider;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class SignatureXAdES_BESImpl implements SignatureXAdES_BES {
+public class SignatureXAdESImpl implements SignatureXAdES {
 
-    // Almac�n PKCS12 con el que se desea realizar la firma
-    protected String PKCS12_RESOURCE = "D:\\electronicDocuments\\william_javier_zambrano_valencia.p12";
-    // Constrase�a de acceso a la clave privada del usuario
-    protected String PKCS12_PASSWORD = "K0rea4k1978";
-    // Path del archivo a firmar
-    protected String pathArchivoEmitido = "D:\\electronicDocuments\\Invoice\\issued\\pruebas.xml";
-    // Path del archivo firmado
-    protected String pathArchivoFirmado = "D:\\electronicDocuments\\Invoice\\signed\\pruebas.xml";
-
-    public DataToSign createDataToSign() {
-
-        DataToSign dataToSign = new DataToSign();
-        dataToSign.setXadesFormat(EnumFormatoFirma.XAdES_BES);
-        dataToSign.setEsquema(XAdESSchemas.XAdES_132);
-        dataToSign.setXMLEncoding("UTF-8");
-        dataToSign.setEnveloped(true);
-
-        dataToSign.addObject(new ObjectToSign(new InternObjectToSign("comprobante"), "contenido comprobante", null, "text/xml", null));
-
-        Document docToSign = getDocument(pathArchivoEmitido);
-        dataToSign.setDocument(docToSign);
-
-        return dataToSign;
-    }
+    private Signature signature;
 
     @Override
-    public void execute() {
+    public void execute(Signature signature) {
 
-        // Obtencion del gestor de claves
+        this.signature = signature;
         IPKStoreManager storeManager = getPKStoreManager();
         if (storeManager == null) {
             System.err.println("El gestor de claves no se ha obtenido correctamente.");
             return;
         }
 
-        // Obtencion del certificado para firmar. Utilizaremos el primer
-        // certificado del almacen.
         X509Certificate certificate = getFirstCertificate(storeManager);
         if (certificate == null) {
             System.err.println("No existe ning�n certificado para firmar.");
             return;
         }
 
-        // Obtención de la clave privada asociada al certificado
         PrivateKey privateKey;
         try {
             privateKey = storeManager.getPrivateKey(certificate);
@@ -87,20 +64,11 @@ public class SignatureXAdES_BESImpl implements SignatureXAdES_BES {
             return;
         }
 
-        // Obtención del provider encargado de las labores criptogr�ficas
         Provider provider = storeManager.getProvider(certificate);
-
-        /*
-         * Creación del objeto que contiene tanto los datos a firmar como la configuración del tipo de firma
-         */
         DataToSign dataToSign = createDataToSign();
-
-        /*
-         * Creación del objeto encargado de realizar la firma
-         */
         FirmaXML firma = new FirmaXML();
 
-        // Firmamos el documento
+
         Document docSigned = null;
         try {
             Object[] res = firma.signFile(certificate, dataToSign, privateKey, provider);
@@ -111,8 +79,23 @@ public class SignatureXAdES_BESImpl implements SignatureXAdES_BES {
             return;
         }
 
-        // Guardamos la firma a un fichero en el home del usuario
-        saveDocumentToFile(docSigned, pathArchivoFirmado);
+        saveDocumentToFile(docSigned, signature.getSignedPath());
+    }
+
+    private DataToSign createDataToSign() {
+
+        DataToSign dataToSign = new DataToSign();
+        dataToSign.setXadesFormat(EnumFormatoFirma.XAdES_BES);
+        dataToSign.setEsquema(XAdESSchemas.XAdES_132);
+        dataToSign.setXMLEncoding("UTF-8");
+        dataToSign.setEnveloped(true);
+
+        dataToSign.addObject(new ObjectToSign(new InternObjectToSign("comprobante"), "contenido comprobante", null, "text/xml", null));
+
+        Document docToSign = getDocument(signature.getXmlPath());
+        dataToSign.setDocument(docToSign);
+
+        return dataToSign;
     }
 
     private void saveDocumentToFile(Document document, String pathfile) {
@@ -126,22 +109,7 @@ public class SignatureXAdES_BESImpl implements SignatureXAdES_BES {
         }
     }
 
-    @SuppressWarnings("unused")
-    private void saveDocumentToFileUnsafeMode(Document document, String pathfile) {
-        TransformerFactory tfactory = TransformerFactory.newInstance();
-        Transformer serializer;
-        try {
-            serializer = tfactory.newTransformer();
-
-            serializer.transform(new DOMSource(document), new StreamResult(new File(pathfile)));
-        } catch (TransformerException e) {
-            System.err.println("Error al salvar el documento");
-            e.printStackTrace();
-            System.exit(-1);
-        }
-    }
-
-    protected Document getDocument(String resource) {
+    private Document getDocument(String resource) {
         Document doc = null;
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setNamespaceAware(true);
@@ -167,45 +135,24 @@ public class SignatureXAdES_BESImpl implements SignatureXAdES_BES {
         return doc;
     }
 
-    protected String getDocumentAsString(String resource) {
-        Document doc = getDocument(resource);
-        TransformerFactory tfactory = TransformerFactory.newInstance();
-        Transformer serializer;
-        StringWriter stringWriter = new StringWriter();
-        try {
-            serializer = tfactory.newTransformer();
-            serializer.transform(new DOMSource(doc), new StreamResult(stringWriter));
-        } catch (TransformerException e) {
-            System.err.println("Error al imprimir el documento");
-            e.printStackTrace();
-            System.exit(-1);
-        }
-
-        return stringWriter.toString();
-    }
-
     private IPKStoreManager getPKStoreManager() {
         IPKStoreManager storeManager = null;
         try {
             KeyStore ks = KeyStore.getInstance("PKCS12");
-            ks.load(new FileInputStream(PKCS12_RESOURCE), PKCS12_PASSWORD.toCharArray());
-            storeManager = new KSStore(ks, new PassStoreKS(PKCS12_PASSWORD));
+            ks.load(new FileInputStream(signature.getCertificatePath()), signature.getPasswordCertificate().toCharArray());
+            storeManager = new KSStore(ks, new PassStoreKS(signature.getPasswordCertificate()));
         } catch (KeyStoreException ex) {
             System.err.println("No se puede generar KeyStore PKCS12");
             ex.printStackTrace();
-            //System.exit(-1);
         } catch (NoSuchAlgorithmException ex) {
             System.err.println("No se puede generar KeyStore PKCS12");
             ex.printStackTrace();
-            //System.exit(-1);
         } catch (CertificateException ex) {
             System.err.println("No se puede generar KeyStore PKCS12");
             ex.printStackTrace();
-            //System.exit(-1);
         } catch (IOException ex) {
             System.err.println("No se puede generar KeyStore PKCS12");
             ex.printStackTrace();
-            //System.exit(-1);
         }
         return storeManager;
     }
@@ -227,7 +174,6 @@ public class SignatureXAdES_BESImpl implements SignatureXAdES_BES {
 
         for (X509Certificate x509Certificate : certs) {
             try {
-             //   x509Certificate.checkValidity(new Date());
                 certificate = x509Certificate;
                 return certificate;
             } catch (Exception e) {

@@ -25,9 +25,6 @@ public class Payment extends AbstractMainEntity {
     @Column(name = "amount", precision = 21, scale = 2, nullable = false)
     private BigDecimal amount;
 
-    @Column(name = "time_limit")
-    private int timeLimit;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "time_unit", length = 20)
     private TimeUnitEnum timeUnit;
@@ -57,14 +54,6 @@ public class Payment extends AbstractMainEntity {
 
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
-    }
-
-    public int getTimeLimit() {
-        return timeLimit;
-    }
-
-    public void setTimeLimit(int timeLimit) {
-        this.timeLimit = timeLimit;
     }
 
     public TimeUnitEnum getTimeUnit() {

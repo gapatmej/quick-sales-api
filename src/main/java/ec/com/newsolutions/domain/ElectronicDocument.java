@@ -21,6 +21,10 @@ public class ElectronicDocument extends AbstractMainEntity {
     private Organization organization;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="branch_office_id", nullable = false)
+    private BranchOffice branchOffice;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="document_id", nullable = false)
     private Document document;
 
@@ -57,6 +61,14 @@ public class ElectronicDocument extends AbstractMainEntity {
 
     public Organization getOrganization() {
         return organization;
+    }
+
+    public BranchOffice getBranchOffice() {
+        return branchOffice;
+    }
+
+    public void setBranchOffice(BranchOffice branchOffice) {
+        this.branchOffice = branchOffice;
     }
 
     public void setOrganization(Organization organization) {

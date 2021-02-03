@@ -2,6 +2,7 @@ package ec.com.newsolutions;
 
 import ec.com.newsolutions.config.ApplicationProperties;
 
+import ec.com.newsolutions.utils.electronicdocuments.ElectronicDocumentsUtils;
 import io.github.jhipster.config.DefaultProfileUtil;
 import io.github.jhipster.config.JHipsterConstants;
 
@@ -28,8 +29,11 @@ public class QuickSalesApiApp {
 
     private final Environment env;
 
-    public QuickSalesApiApp(Environment env) {
+    private final ApplicationProperties applicationProperties ;
+
+    public QuickSalesApiApp(Environment env, ApplicationProperties applicationProperties) {
         this.env = env;
+        this.applicationProperties = applicationProperties;
     }
 
     /**
@@ -50,6 +54,7 @@ public class QuickSalesApiApp {
             log.error("You have misconfigured your application! It should not " +
                 "run with both the 'dev' and 'cloud' profiles at the same time.");
         }
+        ElectronicDocumentsUtils.setApplicationProperties(applicationProperties);
     }
 
     /**

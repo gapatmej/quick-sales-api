@@ -10,6 +10,8 @@ public class ElectronicDocumentDTO extends AbstractMainDTO{
 
     private Long organizationId;
 
+    private Long branchOfficeId;
+
     private SRIEnvironmentEnum sriEnvironment;
 
     private EmissionTypeEnum emissionType ;
@@ -32,6 +34,14 @@ public class ElectronicDocumentDTO extends AbstractMainDTO{
 
     public void setOrganizationId(Long organizationId) {
         this.organizationId = organizationId;
+    }
+
+    public Long getBranchOfficeId() {
+        return branchOfficeId;
+    }
+
+    public void setBranchOfficeId(Long branchOfficeId) {
+        this.branchOfficeId = branchOfficeId;
     }
 
     public SRIEnvironmentEnum getSriEnvironment() {
