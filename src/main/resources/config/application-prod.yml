@@ -128,7 +128,18 @@ jhipster:
       queue-size: 512
   audit-events:
     retention-period: 30 # Number of days before audit events are deleted.
-
+application:
+  electronicDocuments:
+    paths:
+      main: /Users/andresperalta/Documents/electronicDocuments
+      certificate: /certificate
+      documents:
+        invoices: /invoices
+      xml: /xml
+      signed: /signed
+    urls:
+      reception: https://cel.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl
+      authorization: https://cel.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class

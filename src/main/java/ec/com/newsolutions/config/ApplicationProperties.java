@@ -15,6 +15,7 @@ public class ApplicationProperties {
 
     public class ElectronicDocuments {
         private Paths paths = new Paths();
+        private Urls urls = new Urls();
 
         public Paths getPaths() {
             return paths;
@@ -22,6 +23,14 @@ public class ApplicationProperties {
 
         public void setPaths(Paths paths) {
             this.paths = paths;
+        }
+
+        public Urls getUrls() {
+            return urls;
+        }
+
+        public void setUrls(Urls urls) {
+            this.urls = urls;
         }
 
         public class Paths {
@@ -80,6 +89,27 @@ public class ApplicationProperties {
                 public void setInvoices(String invoices) {
                     this.invoices = invoices;
                 }
+            }
+        }
+
+        public class Urls {
+            private String reception;
+            private String authorization;
+
+            public String getReception() {
+                return reception;
+            }
+
+            public void setReception(String reception) {
+                this.reception = reception;
+            }
+
+            public String getAuthorization() {
+                return authorization;
+            }
+
+            public void setAuthorization(String authorization) {
+                this.authorization = authorization;
             }
         }
     }

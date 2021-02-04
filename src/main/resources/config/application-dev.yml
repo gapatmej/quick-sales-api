@@ -125,6 +125,10 @@ application:
           invoices: /invoices
         xml: /xml
         signed: /signed
+      urls:
+        reception: https://celcer.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl
+        authorization: https://celcer.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl
+
 
 
 # ===================================================================
