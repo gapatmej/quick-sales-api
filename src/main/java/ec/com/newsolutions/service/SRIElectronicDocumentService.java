@@ -13,6 +13,5 @@ public interface SRIElectronicDocumentService {
     void generateXML(InvoiceClient electronicDocument) throws ElectronicDocumentException;
     void sign(Signature signature) throws ElectronicDocumentException;
     void reception() throws ElectronicDocumentException;
-    RespuestaSolicitud sendDocument(ElectronicDocument electronicDocument);
 
 }

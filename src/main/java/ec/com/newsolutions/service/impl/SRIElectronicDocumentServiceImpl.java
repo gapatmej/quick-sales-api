@@ -3,7 +3,6 @@ package ec.com.newsolutions.service.impl;
 import ec.com.newsolutions.config.ApplicationProperties;
 import ec.com.newsolutions.domain.AdditionalInformation;
 import ec.com.newsolutions.domain.DetailInvoiceClient;
-import ec.com.newsolutions.domain.ElectronicDocument;
 import ec.com.newsolutions.domain.InvoiceClient;
 import ec.com.newsolutions.domain.Payment;
 import ec.com.newsolutions.domain.TaxDetailInvoice;
@@ -12,21 +11,15 @@ import ec.com.newsolutions.service.SRIElectronicDocumentService;
 import ec.com.newsolutions.service.SignatureXAdES;
 import ec.com.newsolutions.service.errors.ElectronicDocumentException;
 import ec.com.newsolutions.service.errors.enumeration.ProccessElectronicDocument;
-import ec.com.newsolutions.utils.Utils;
 import ec.com.newsolutions.utils.electronicdocuments.ElectronicDocumentsUtils;
 import ec.com.newsolutions.utils.electronicdocuments.Signature;
-import ec.com.newsolutions.web.wsdl.receptionSRI.RecepcionComprobantesOffline;
-import ec.com.newsolutions.web.wsdl.receptionSRI.RecepcionComprobantesOfflineServiceLocator;
-import ec.com.newsolutions.web.wsdl.receptionSRI.RespuestaSolicitud;
 import ec.com.newsolutions.xml.jaxb.sri.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
-import javax.xml.namespace.QName;
 import java.io.File;
-import java.net.URL;
 
 @Service
 @Transactional
@@ -34,7 +27,6 @@ public class SRIElectronicDocumentServiceImpl extends AbstractService implements
 
     private final SignatureXAdES signatureXAdES;
     private final ApplicationProperties applicationProperties;
-    private static RecepcionComprobantesOfflineServiceLocator servicioRecepcion;
 
     public SRIElectronicDocumentServiceImpl(SignatureXAdES signatureXAdES, ApplicationProperties applicationProperties) {
         super(SRIElectronicDocumentServiceImpl.class);
@@ -155,26 +147,6 @@ public class SRIElectronicDocumentServiceImpl extends AbstractService implements
             throw new ElectronicDocumentException(ProccessElectronicDocument.SIGN,signature.getSignedPath(),e.getMessage());
         }
 
-    }
-    @Override
-    public RespuestaSolicitud  sendDocument(ElectronicDocument electronicDocument) throws ElectronicDocumentException {
-        RespuestaSolicitud response = null;
-        try {
-            String endPoint = this.applicationProperties.getElectronicDocuments().getUrls().getReception();
-            servicioRecepcion = new RecepcionComprobantesOfflineServiceLocator(endPoint, new QName("http://ec.gob.sri.ws.recepcion",
-                "RecepcionComprobantesOfflineService"));
-            RecepcionComprobantesOffline port = servicioRecepcion.getRecepcionComprobantesOfflinePort(new URL(endPoint));
-            File xmlFile = new File(ElectronicDocumentsUtils.getSignedPathWithAccessKey(electronicDocument));
-            response = port.validarComprobante(Utils.fileToByte(xmlFile));
-        } catch (Exception e) {
-            if (e instanceof javax.xml.rpc.ServiceException) {
-                throw new ElectronicDocumentException(ProccessElectronicDocument.RECEPTION,"", e.getMessage());
-            } else {
-                throw new ElectronicDocumentException(ProccessElectronicDocument.RECEPTION,"",e.getMessage());
-            }
-        }
-
-        return response;
     }
 
     @Override
