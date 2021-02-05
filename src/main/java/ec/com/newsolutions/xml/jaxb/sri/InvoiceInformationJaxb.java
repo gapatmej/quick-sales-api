@@ -2,9 +2,14 @@ package ec.com.newsolutions.xml.jaxb.sri;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 import java.math.BigDecimal;
 
 @XmlRootElement(name = "infoFactura")
+@XmlType(propOrder = { "dateIssue", "establishmentAddress", "specialTaxpayer", "obligedAccounting",
+    "buyerIdentificationType", "referralGuide", "buyerBusinessName", "buyerIdentification",
+    "buyerAddress", "totalWithoutTaxes", "totalDiscount", "totalWithTaxesJaxb",
+    "tip", "total", "currency", "paymentsJaxb"})
 public class InvoiceInformationJaxb {
 
     private String dateIssue;

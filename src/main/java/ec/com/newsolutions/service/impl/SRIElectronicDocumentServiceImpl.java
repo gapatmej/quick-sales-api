@@ -20,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -84,7 +86,7 @@ public class SRIElectronicDocumentServiceImpl extends AbstractService implements
             PaymentsJaxb paymentsJaxb = new PaymentsJaxb();
             for (Payment payment : invoiceClient.getPayments()) {
                 PaymentJaxb paymentJaxb = new PaymentJaxb();
-                paymentJaxb.setPayWay(payment.getPayWay().getCode());
+                paymentJaxb.setPayWay("18");
                 paymentJaxb.setTotal(payment.getAmount());
                 paymentJaxb.setTimeUnit(payment.getTimeUnit().value());
                 paymentsJaxb.getPayment().add(paymentJaxb);
@@ -120,6 +122,13 @@ public class SRIElectronicDocumentServiceImpl extends AbstractService implements
                 detailJaxb.setTaxesJaxb(taxesJaxb);
             }
             invoiceClientJaxb.setDetailsJaxb(detailsJaxb);
+
+            AdditionalInformation ad = new AdditionalInformation();
+            ad.setAdditionalField("aaa");
+            ad.setValue("aaa");
+            Set<AdditionalInformation> lis = new HashSet<>();
+            lis.add(ad);
+            invoiceClient.setAdditionalsInformation(lis);
 
             AdditionalsInformationJaxb additionalsInformationJaxb = new AdditionalsInformationJaxb();
             for (AdditionalInformation additionalInformation : invoiceClient.getAdditionalsInformation()) {

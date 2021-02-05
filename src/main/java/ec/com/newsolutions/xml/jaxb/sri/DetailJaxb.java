@@ -2,9 +2,12 @@ package ec.com.newsolutions.xml.jaxb.sri;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 import java.math.BigDecimal;
 
 @XmlRootElement(name = "detalle")
+@XmlType(propOrder = { "mainCode", "auxiliaryCode", "description", "quantity",
+    "unitPrice", "discount", "totalPriceWithoutTax", "taxesJaxb"})
 public class DetailJaxb {
     private String mainCode;
     private String auxiliaryCode;

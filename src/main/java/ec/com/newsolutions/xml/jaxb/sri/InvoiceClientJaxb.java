@@ -9,7 +9,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(propOrder = { "tributaryInformationJaxb", "invoiceInformationJaxb", "detailsJaxb", "additionalsInformationJaxb" })
 public class InvoiceClientJaxb {
     private String id = "comprobante";
-    private String version = "1.1.0";
+    private String version = "1.0";
     private TributaryInformationJaxb tributaryInformationJaxb;
     private InvoiceInformationJaxb invoiceInformationJaxb;
     private DetailsJaxb detailsJaxb;

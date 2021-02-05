@@ -2,22 +2,34 @@ package ec.com.newsolutions.xml.jaxb.sri;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name = "infoTributaria")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TributaryInformationJaxb {
 
+    @XmlElement(name = "ambiente")
     private Integer environment;
+    @XmlElement(name = "tipoEmision")
     private Integer emissionType;
+    @XmlElement(name = "razonSocial")
     private String businessName;
+    @XmlElement(name = "nombreComercial")
     private String tradename;
+    @XmlElement(name = "ruc")
     private String identification;
+    @XmlElement(name = "claveAcceso")
     private String accessKey;
+    @XmlElement(name = "codDoc")
     private String codeDocument;
+    @XmlElement(name = "estab")
     private String establishmentCode;
+    @XmlElement(name = "ptoEmi")
     private String emissionPointCode;
+    @XmlElement(name = "secuencial")
     private String sequence;
+    @XmlElement(name = "dirMatriz")
     private String matrizAddress;
 
     public Integer getEnvironment() {

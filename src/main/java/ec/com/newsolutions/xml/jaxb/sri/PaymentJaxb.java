@@ -2,9 +2,12 @@ package ec.com.newsolutions.xml.jaxb.sri;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 import java.math.BigDecimal;
 
 @XmlRootElement(name = "pago")
+
+@XmlType(propOrder = { "payWay", "total", "timeLimit", "timeUnit" })
 public class PaymentJaxb {
 
     private String payWay;

@@ -98,7 +98,6 @@ public class InvoiceClientServiceImpl extends AbstractService implements Invoice
 
         sriElectronicDocumentService.generateXML(invoiceClient);
         sriElectronicDocumentService.sign(new Signature(invoiceClient));
-        sriElectronicDocumentService.sendDocument(invoiceClient);
 
         return result;
     }
