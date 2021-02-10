@@ -11,6 +11,7 @@ import ec.com.newsolutions.service.SRIElectronicDocumentService;
 import ec.com.newsolutions.service.SignatureXAdES;
 import ec.com.newsolutions.service.errors.ElectronicDocumentException;
 import ec.com.newsolutions.service.errors.enumeration.ProccessElectronicDocument;
+import ec.com.newsolutions.utils.Utils;
 import ec.com.newsolutions.utils.electronicdocuments.ElectronicDocumentsUtils;
 import ec.com.newsolutions.utils.electronicdocuments.Signature;
 import ec.com.newsolutions.xml.jaxb.sri.*;
@@ -57,7 +58,7 @@ public class SRIElectronicDocumentServiceImpl extends AbstractService implements
             invoiceClientJaxb.setTributaryInformationJaxb(tributaryInformationJaxb);
 
             InvoiceInformationJaxb invoiceInformationJaxb = new InvoiceInformationJaxb();
-            invoiceInformationJaxb.setDateIssue(invoiceClient.getDateIssue().toString());
+            invoiceInformationJaxb.setDateIssue(Utils.instantToString1(invoiceClient.getDateIssue()));
             invoiceInformationJaxb.setEstablishmentAddress(invoiceClient.getOrganization().getAddress());
             invoiceInformationJaxb.setSpecialTaxpayer(String.valueOf(invoiceClient.getOrganization().getSpecialTaxpayerNumber()));
             invoiceInformationJaxb.setObligedAccounting(invoiceClient.getOrganization().getKeepAccounting() ? "SI" : "NO");
@@ -74,7 +75,7 @@ public class SRIElectronicDocumentServiceImpl extends AbstractService implements
                 totalTaxJaxb.setCode(taxInvoice.getCode());
                 totalTaxJaxb.setPercentageCode(Integer.valueOf(taxInvoice.getPercentageCode()));
                 totalTaxJaxb.setTaxBase(taxInvoice.getTaxBase());
-                totalTaxJaxb.setValue(taxInvoice.getAmount());
+                totalTaxJaxb.setValue(Utils.roundTwoDecimals(taxInvoice.getAmount()));
                 totalWithTaxesJaxb.getTotalTaxJaxb().add(totalTaxJaxb);
             }
             invoiceInformationJaxb.setTotalWithTaxesJaxb(totalWithTaxesJaxb);
@@ -115,7 +116,7 @@ public class SRIElectronicDocumentServiceImpl extends AbstractService implements
                     taxJaxb.setPercentagecode(taxDetailInvoice.getPercentageCode());
                     taxJaxb.setRate((int) Math.round(taxDetailInvoice.getRate()));
                     taxJaxb.setTaxBase(taxDetailInvoice.getTaxBase());
-                    taxJaxb.setValue(taxDetailInvoice.getAmount());
+                    taxJaxb.setValue(Utils.roundTwoDecimals(taxDetailInvoice.getAmount()));
 
                     taxesJaxb.getTaxJaxb().add(taxJaxb);
                 }
@@ -124,7 +125,7 @@ public class SRIElectronicDocumentServiceImpl extends AbstractService implements
             invoiceClientJaxb.setDetailsJaxb(detailsJaxb);
 
             AdditionalInformation ad = new AdditionalInformation();
-            ad.setAdditionalField("aaa");
+            ad.setAdditionalField("nombre");
             ad.setValue("aaa");
             Set<AdditionalInformation> lis = new HashSet<>();
             lis.add(ad);
@@ -132,7 +133,10 @@ public class SRIElectronicDocumentServiceImpl extends AbstractService implements
 
             AdditionalsInformationJaxb additionalsInformationJaxb = new AdditionalsInformationJaxb();
             for (AdditionalInformation additionalInformation : invoiceClient.getAdditionalsInformation()) {
-                additionalsInformationJaxb.getAdditionalInformation().add(additionalInformation.getValue());
+                AdditionalFieldJaxb additionalFieldJaxb = new AdditionalFieldJaxb();
+                additionalFieldJaxb.setName(additionalInformation.getAdditionalField());
+                additionalFieldJaxb.setValue(additionalInformation.getValue());
+                additionalsInformationJaxb.getAdditionalFieldJaxbs().add(additionalFieldJaxb);
             }
             invoiceClientJaxb.setAdditionalsInformationJaxb(additionalsInformationJaxb);
 

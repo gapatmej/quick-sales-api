@@ -2,6 +2,8 @@ package ec.com.newsolutions.config;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Application constants.
@@ -17,6 +19,7 @@ public final class Constants {
     public static final String ANONYMOUS_USER = "anonymoususer";
     public static final SimpleDateFormat accessKeyFormatDate = new SimpleDateFormat("ddMMyyyy");
     public static final String numericCode = "01234567";
+    public static final DateTimeFormatter DATE_TIME_FORMATTER_1 = DateTimeFormatter.ofPattern("dd/MM/yyyy").withZone(ZoneId.systemDefault());
 
     public static final BigDecimal ONE_HUNDRED = new BigDecimal("100");
 

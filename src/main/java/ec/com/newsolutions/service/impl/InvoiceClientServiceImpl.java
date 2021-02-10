@@ -7,7 +7,6 @@ import ec.com.newsolutions.domain.InvoiceClient;
 import ec.com.newsolutions.domain.Payment;
 import ec.com.newsolutions.domain.TaxDetailInvoice;
 import ec.com.newsolutions.domain.TaxInvoice;
-import ec.com.newsolutions.domain.enumeration.ReceiptTypeEnum;
 import ec.com.newsolutions.domain.enumeration.TaxTypeEnum;
 import ec.com.newsolutions.repository.InvoiceClientRepository;
 import ec.com.newsolutions.repository.specification.UtilsSpecification;
@@ -21,13 +20,25 @@ import ec.com.newsolutions.service.TaxInvoiceService;
 import ec.com.newsolutions.service.dto.InvoiceClientDTO;
 import ec.com.newsolutions.service.mapper.InvoiceClientMapper;
 import ec.com.newsolutions.utils.GsonUtils;
+import ec.com.newsolutions.utils.Utils;
 import ec.com.newsolutions.utils.electronicdocuments.Signature;
 import ec.com.newsolutions.web.rest.errors.EntityNotFoundException;
+import ec.com.newsolutions.web.wsdl.sri.authorization.AuthorizationClient;
+import ec.com.newsolutions.web.wsdl.sri.authorization.AutorizacionComprobante;
+import ec.com.newsolutions.web.wsdl.sri.authorization.AutorizacionComprobanteResponse;
+import ec.com.newsolutions.web.wsdl.sri.authorization.RespuestaComprobante;
+import ec.com.newsolutions.web.wsdl.sri.reception.ObjectFactory;
+import ec.com.newsolutions.web.wsdl.sri.reception.ReceptionClient;
+import ec.com.newsolutions.web.wsdl.sri.reception.RespuestaSolicitud;
+import ec.com.newsolutions.web.wsdl.sri.reception.ValidarComprobante;
+import ec.com.newsolutions.web.wsdl.sri.reception.ValidarComprobanteResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.List;
@@ -47,8 +58,10 @@ public class InvoiceClientServiceImpl extends AbstractService implements Invoice
     private final PaymentService paymentService;
     private final CompanyService companyService;
     private final SRIElectronicDocumentService sriElectronicDocumentService;
+    private final ReceptionClient receptionClient;
+    private final AuthorizationClient authorizationClient;
 
-    public InvoiceClientServiceImpl(InvoiceClientMapper invoiceClientMapper, InvoiceClientRepository invoiceClientRepository, TaxInvoiceService taxInvoiceService, DetailInvoiceClientService detailInvoiceClientService, ElectronicDocumentService electronicDocumentService, PaymentService paymentService, CompanyService companyService, SRIElectronicDocumentService sriElectronicDocumentService) {
+    public InvoiceClientServiceImpl(InvoiceClientMapper invoiceClientMapper, InvoiceClientRepository invoiceClientRepository, TaxInvoiceService taxInvoiceService, DetailInvoiceClientService detailInvoiceClientService, ElectronicDocumentService electronicDocumentService, PaymentService paymentService, CompanyService companyService, SRIElectronicDocumentService sriElectronicDocumentService, ReceptionClient receptionClient, AuthorizationClient authorizationClient) {
         super(InvoiceClientServiceImpl.class);
         this.invoiceClientMapper = invoiceClientMapper;
         this.invoiceClientRepository = invoiceClientRepository;
@@ -58,6 +71,8 @@ public class InvoiceClientServiceImpl extends AbstractService implements Invoice
         this.paymentService = paymentService;
         this.companyService = companyService;
         this.sriElectronicDocumentService = sriElectronicDocumentService;
+        this.receptionClient = receptionClient;
+        this.authorizationClient = authorizationClient;
     }
 
     @Override
@@ -97,7 +112,40 @@ public class InvoiceClientServiceImpl extends AbstractService implements Invoice
         result = invoiceClientMapper.toDto(invoiceClient);
 
         sriElectronicDocumentService.generateXML(invoiceClient);
-        sriElectronicDocumentService.sign(new Signature(invoiceClient));
+        Signature signature = new Signature(invoiceClient);
+        sriElectronicDocumentService.sign(signature);
+
+        ObjectFactory objectFactory = new ObjectFactory();
+        ValidarComprobante type = new ValidarComprobante();
+        File file = new File(signature.getSignedPath());
+
+        try {
+            type.setXml(Utils.fileToByte(file));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        ValidarComprobanteResponse response = receptionClient.getReceptionResponse(objectFactory.createValidarComprobante (type));
+        String estado = response.getRespuestaRecepcionComprobante().getEstado();
+        RespuestaSolicitud.Comprobantes comprobantes = response.getRespuestaRecepcionComprobante().getComprobantes();
+
+       /* Comprobante comprobante = comprobantes.getComprobante().get(0);
+        Comprobante.Mensajes mensajes = comprobante.getMensajes();
+        Mensaje mensaje = mensajes.getMensaje().get(0);
+        System.out.println(comprobantes.getComprobante() != null);*/
+
+
+        ec.com.newsolutions.web.wsdl.sri.authorization.ObjectFactory objectFactoryAuthorization = new ec.com.newsolutions.web.wsdl.sri.authorization.ObjectFactory();
+        AutorizacionComprobante typeAuthorization = new AutorizacionComprobante();
+        typeAuthorization.setClaveAccesoComprobante(invoiceClient.getAccessKey());
+
+        AutorizacionComprobanteResponse responseAuthorization = authorizationClient.getAuthorizationResponse(objectFactoryAuthorization.createAutorizacionComprobante(typeAuthorization));
+        String claveAccesoConsultada = responseAuthorization.getRespuestaAutorizacionComprobante().getClaveAccesoConsultada();
+        String numeroComprobantes = responseAuthorization.getRespuestaAutorizacionComprobante().getNumeroComprobantes();
+        RespuestaComprobante.Autorizaciones autorizaciones = responseAuthorization.getRespuestaAutorizacionComprobante().getAutorizaciones();
+
+        System.out.println(claveAccesoConsultada);
+
 
         return result;
     }

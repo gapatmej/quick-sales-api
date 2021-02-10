@@ -1,9 +1,16 @@
 package ec.com.newsolutions.utils;
 
+import ec.com.newsolutions.config.Constants;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,5 +57,12 @@ public class Utils {
         return buffer;
     }
 
+    public static String instantToString1(Instant instant){
+        return Constants.DATE_TIME_FORMATTER_1.format(instant);
+    }
+
+    public static BigDecimal roundTwoDecimals(BigDecimal value){
+        return value.setScale(2, RoundingMode.HALF_UP);
+    }
 
 }
