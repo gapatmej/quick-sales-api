@@ -8,6 +8,7 @@ import ec.com.newsolutions.domain.EmissionPoint;
 import ec.com.newsolutions.domain.InvoiceClient;
 import ec.com.newsolutions.domain.Organization;
 import ec.com.newsolutions.domain.enumeration.ReceiptTypeEnum;
+import ec.com.newsolutions.domain.enumeration.SRIDocumentStateEnum;
 import ec.com.newsolutions.security.SecurityUtils;
 import ec.com.newsolutions.service.BranchOfficeService;
 import ec.com.newsolutions.service.DocumentAuthorizationService;
@@ -109,6 +110,7 @@ public class ElectronicDocumentServiceImpl extends AbstractService implements El
         if(electronicDocument instanceof InvoiceClient){
             electronicDocument.setReceiptType(ReceiptTypeEnum.INVOICE);
         }
+        electronicDocument.setSriDocumentState(SRIDocumentStateEnum.EMITTED);
         generateAccessKey(electronicDocument.getOrganization(),electronicDocument);
 
     }

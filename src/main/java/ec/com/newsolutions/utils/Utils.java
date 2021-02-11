@@ -9,8 +9,6 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Instant;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,10 +48,8 @@ public class Utils {
                     ios.close();
             } catch (IOException e) {
                 throw e;
-                // Logger.getLogger(ArchivoUtils.class.getName()).log(Level.SEVERE, null, e);
             }
         }
-
         return buffer;
     }
 

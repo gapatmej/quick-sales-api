@@ -2,6 +2,7 @@ package ec.com.newsolutions.domain;
 
 import ec.com.newsolutions.domain.enumeration.EmissionTypeEnum;
 import ec.com.newsolutions.domain.enumeration.ReceiptTypeEnum;
+import ec.com.newsolutions.domain.enumeration.SRIDocumentStateEnum;
 import ec.com.newsolutions.domain.enumeration.SRIEnvironmentEnum;
 
 import javax.persistence.Column;
@@ -11,7 +12,10 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.OneToMany;
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 @MappedSuperclass
 public class ElectronicDocument extends AbstractMainEntity {
@@ -58,6 +62,10 @@ public class ElectronicDocument extends AbstractMainEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "receipt_type",length = 20, nullable = false)
     private ReceiptTypeEnum receiptType;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "sri_document_state", length = 20, nullable = false)
+    private SRIDocumentStateEnum sriDocumentState;
 
     public Organization getOrganization() {
         return organization;
@@ -153,5 +161,13 @@ public class ElectronicDocument extends AbstractMainEntity {
 
     public void setReceiptType(ReceiptTypeEnum receiptType) {
         this.receiptType = receiptType;
+    }
+
+    public SRIDocumentStateEnum getSriDocumentState() {
+        return sriDocumentState;
+    }
+
+    public void setSriDocumentState(SRIDocumentStateEnum sriDocumentState) {
+        this.sriDocumentState = sriDocumentState;
     }
 }

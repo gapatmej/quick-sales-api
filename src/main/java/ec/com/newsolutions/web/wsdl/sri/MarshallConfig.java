@@ -19,7 +19,8 @@ public class MarshallConfig {
     @Bean
     public Jaxb2Marshaller marshaller()  {
         Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
-        marshaller.setContextPaths("ec.com.newsolutions.web.wsdl.sri.reception","ec.com.newsolutions.web.wsdl.sri.authorization");
+        marshaller.setContextPaths(ec.com.newsolutions.web.wsdl.sri.reception.ObjectFactory.class.getPackage().getName(),
+            ec.com.newsolutions.web.wsdl.sri.authorization.ObjectFactory.class.getPackage().getName());
         return marshaller;
     }
     @Bean

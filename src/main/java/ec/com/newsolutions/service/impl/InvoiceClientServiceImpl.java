@@ -26,8 +26,8 @@ import ec.com.newsolutions.web.rest.errors.EntityNotFoundException;
 import ec.com.newsolutions.web.wsdl.sri.authorization.AuthorizationClient;
 import ec.com.newsolutions.web.wsdl.sri.authorization.AutorizacionComprobante;
 import ec.com.newsolutions.web.wsdl.sri.authorization.AutorizacionComprobanteResponse;
+import ec.com.newsolutions.web.wsdl.sri.authorization.ObjectFactory;
 import ec.com.newsolutions.web.wsdl.sri.authorization.RespuestaComprobante;
-import ec.com.newsolutions.web.wsdl.sri.reception.ObjectFactory;
 import ec.com.newsolutions.web.wsdl.sri.reception.ReceptionClient;
 import ec.com.newsolutions.web.wsdl.sri.reception.RespuestaSolicitud;
 import ec.com.newsolutions.web.wsdl.sri.reception.ValidarComprobante;
@@ -115,7 +115,7 @@ public class InvoiceClientServiceImpl extends AbstractService implements Invoice
         Signature signature = new Signature(invoiceClient);
         sriElectronicDocumentService.sign(signature);
 
-        ObjectFactory objectFactory = new ObjectFactory();
+        ec.com.newsolutions.web.wsdl.sri.reception.ObjectFactory objectFactoryReception = new ec.com.newsolutions.web.wsdl.sri.reception.ObjectFactory();
         ValidarComprobante type = new ValidarComprobante();
         File file = new File(signature.getSignedPath());
 
@@ -125,7 +125,7 @@ public class InvoiceClientServiceImpl extends AbstractService implements Invoice
             e.printStackTrace();
         }
 
-        ValidarComprobanteResponse response = receptionClient.getReceptionResponse(objectFactory.createValidarComprobante (type));
+        ValidarComprobanteResponse response = receptionClient.getReceptionResponse(objectFactoryReception.createValidarComprobante (type));
         String estado = response.getRespuestaRecepcionComprobante().getEstado();
         RespuestaSolicitud.Comprobantes comprobantes = response.getRespuestaRecepcionComprobante().getComprobantes();
 
@@ -135,7 +135,7 @@ public class InvoiceClientServiceImpl extends AbstractService implements Invoice
         System.out.println(comprobantes.getComprobante() != null);*/
 
 
-        ec.com.newsolutions.web.wsdl.sri.authorization.ObjectFactory objectFactoryAuthorization = new ec.com.newsolutions.web.wsdl.sri.authorization.ObjectFactory();
+        ObjectFactory objectFactoryAuthorization = new ObjectFactory();
         AutorizacionComprobante typeAuthorization = new AutorizacionComprobante();
         typeAuthorization.setClaveAccesoComprobante(invoiceClient.getAccessKey());
 

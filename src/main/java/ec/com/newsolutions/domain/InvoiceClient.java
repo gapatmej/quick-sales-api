@@ -88,6 +88,9 @@ public class InvoiceClient extends ElectronicDocument{
     @OneToMany(mappedBy = "invoiceClient", fetch = FetchType.LAZY)
     private Set<AdditionalInformation> additionalsInformation = new HashSet<>();
 
+    @OneToMany(mappedBy = "invoiceClient", fetch = FetchType.LAZY)
+    private Set<SriMessage> sriMessages = new HashSet<>();
+
     public Company getCompany() {
         return company;
     }
@@ -254,5 +257,13 @@ public class InvoiceClient extends ElectronicDocument{
 
     public void setAdditionalsInformation(Set<AdditionalInformation> additionalsInformation) {
         this.additionalsInformation = additionalsInformation;
+    }
+
+    public Set<SriMessage> getSriMessages() {
+        return sriMessages;
+    }
+
+    public void setSriMessages(Set<SriMessage> sriMessages) {
+        this.sriMessages = sriMessages;
     }
 }
