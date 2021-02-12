@@ -67,6 +67,9 @@ public class ElectronicDocument extends AbstractMainEntity {
     @Column(name = "sri_document_state", length = 20, nullable = false)
     private SRIDocumentStateEnum sriDocumentState;
 
+    @Column(name = "authorization_date", nullable = false)
+    private Instant authorizationDate;
+
     public Organization getOrganization() {
         return organization;
     }
@@ -169,5 +172,13 @@ public class ElectronicDocument extends AbstractMainEntity {
 
     public void setSriDocumentState(SRIDocumentStateEnum sriDocumentState) {
         this.sriDocumentState = sriDocumentState;
+    }
+
+    public Instant getAuthorizationDate() {
+        return authorizationDate;
+    }
+
+    public void setAuthorizationDate(Instant authorizationDate) {
+        this.authorizationDate = authorizationDate;
     }
 }

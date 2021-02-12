@@ -5,15 +5,29 @@ import ec.com.newsolutions.domain.AdditionalInformation;
 import ec.com.newsolutions.domain.DetailInvoiceClient;
 import ec.com.newsolutions.domain.InvoiceClient;
 import ec.com.newsolutions.domain.Payment;
+import ec.com.newsolutions.domain.SriMessage;
 import ec.com.newsolutions.domain.TaxDetailInvoice;
 import ec.com.newsolutions.domain.TaxInvoice;
+import ec.com.newsolutions.domain.enumeration.SRIDocumentStateEnum;
+import ec.com.newsolutions.service.InvoiceClientService;
 import ec.com.newsolutions.service.SRIElectronicDocumentService;
 import ec.com.newsolutions.service.SignatureXAdES;
+import ec.com.newsolutions.service.SriMessageService;
 import ec.com.newsolutions.service.errors.ElectronicDocumentException;
 import ec.com.newsolutions.service.errors.enumeration.ProccessElectronicDocument;
 import ec.com.newsolutions.utils.Utils;
 import ec.com.newsolutions.utils.electronicdocuments.ElectronicDocumentsUtils;
 import ec.com.newsolutions.utils.electronicdocuments.Signature;
+import ec.com.newsolutions.web.wsdl.sri.authorization.AuthorizationClient;
+import ec.com.newsolutions.web.wsdl.sri.authorization.Autorizacion;
+import ec.com.newsolutions.web.wsdl.sri.authorization.AutorizacionComprobante;
+import ec.com.newsolutions.web.wsdl.sri.authorization.AutorizacionComprobanteResponse;
+import ec.com.newsolutions.web.wsdl.sri.authorization.RespuestaComprobante;
+import ec.com.newsolutions.web.wsdl.sri.reception.Comprobante;
+import ec.com.newsolutions.web.wsdl.sri.reception.ReceptionClient;
+import ec.com.newsolutions.web.wsdl.sri.reception.RespuestaSolicitud;
+import ec.com.newsolutions.web.wsdl.sri.reception.ValidarComprobante;
+import ec.com.newsolutions.web.wsdl.sri.reception.ValidarComprobanteResponse;
 import ec.com.newsolutions.xml.jaxb.sri.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,11 +44,19 @@ public class SRIElectronicDocumentServiceImpl extends AbstractService implements
 
     private final SignatureXAdES signatureXAdES;
     private final ApplicationProperties applicationProperties;
+    private final ReceptionClient receptionClient;
+    private final SriMessageService sriMessageService;
+    private final InvoiceClientService invoiceClientService;
+    private final AuthorizationClient authorizationClient;
 
-    public SRIElectronicDocumentServiceImpl(SignatureXAdES signatureXAdES, ApplicationProperties applicationProperties) {
+    public SRIElectronicDocumentServiceImpl(SignatureXAdES signatureXAdES, ApplicationProperties applicationProperties, ReceptionClient receptionClient, SriMessageService sriMessageService, InvoiceClientService invoiceClientService, AuthorizationClient authorizationClient) {
         super(SRIElectronicDocumentServiceImpl.class);
         this.signatureXAdES = signatureXAdES;
         this.applicationProperties = applicationProperties;
+        this.receptionClient = receptionClient;
+        this.sriMessageService = sriMessageService;
+        this.invoiceClientService = invoiceClientService;
+        this.authorizationClient = authorizationClient;
     }
 
     @Override
@@ -146,7 +168,7 @@ public class SRIElectronicDocumentServiceImpl extends AbstractService implements
 
         } catch (Exception e) {
             log.error(e.getMessage());
-            throw new ElectronicDocumentException(ProccessElectronicDocument.GENERATE_XML,invoiceClient.getAccessKey(),e.getMessage());
+            throw new ElectronicDocumentException(ProccessElectronicDocument.GENERATE_XML, invoiceClient.getAccessKey(), e.getMessage());
         }
 
     }
@@ -155,21 +177,88 @@ public class SRIElectronicDocumentServiceImpl extends AbstractService implements
     public void sign(Signature signature) throws ElectronicDocumentException {
         try {
             this.signatureXAdES.execute(signature);
-        }catch (Exception e) {
+        } catch (Exception e) {
             log.error(e.getMessage());
-            throw new ElectronicDocumentException(ProccessElectronicDocument.SIGN,signature.getSignedPath(),e.getMessage());
+            throw new ElectronicDocumentException(ProccessElectronicDocument.SIGN, signature.getSignedPath(), e.getMessage());
         }
 
     }
 
     @Override
-    public void reception() throws ElectronicDocumentException {
+    public void receive(InvoiceClient invoiceClient) throws ElectronicDocumentException {
         try {
-            //
-        }catch (Exception e) {
+            ec.com.newsolutions.web.wsdl.sri.reception.ObjectFactory objectFactoryReception = new ec.com.newsolutions.web.wsdl.sri.reception.ObjectFactory();
+            ValidarComprobante validarComprobante = new ValidarComprobante();
+            File file = new File(ElectronicDocumentsUtils.getSignedPathWithAccessKey(invoiceClient));
+            validarComprobante.setXml(Utils.fileToByte(file));
+
+            ValidarComprobanteResponse response = receptionClient.getReceptionResponse(objectFactoryReception.createValidarComprobante(validarComprobante));
+            String state = response.getRespuestaRecepcionComprobante().getEstado();
+            RespuestaSolicitud.Comprobantes documents = response.getRespuestaRecepcionComprobante().getComprobantes();
+            String errorMessage = "";
+            if (documents != null && documents.getComprobante().size() > 0) {
+                Comprobante document = documents.getComprobante().get(0);
+                if (document != null && document.getMensajes() != null) {
+                    for (ec.com.newsolutions.web.wsdl.sri.reception.Mensaje mensaje : document.getMensajes().getMensaje()) {
+                        SriMessage sriMessage = new SriMessage();
+                        sriMessage.setIdentificator(Integer.parseInt(mensaje.getIdentificador()));
+                        sriMessage.setAdditionalInformation(sriMessage.getAdditionalInformation());
+                        sriMessage.setMessage(sriMessage.getMessage());
+                        sriMessage.setType(sriMessage.getType());
+                        sriMessage.setInvoiceClient(invoiceClient);
+                        sriMessageService.save(sriMessage);
+                        errorMessage = sriMessage.getMessage();
+                    }
+                }
+            }
+
+            invoiceClientService.updateSriDocumentState(SRIDocumentStateEnum.valueOf(state), invoiceClient);
+
+            if(!SRIDocumentStateEnum.RECEIVED.state().equals(state)){
+                throw new ElectronicDocumentException(ProccessElectronicDocument.RECEPTION, invoiceClient.getAccessKey(),errorMessage);
+            }
+
+        } catch (Exception e) {
             log.error(e.getMessage());
-            throw new ElectronicDocumentException(ProccessElectronicDocument.RECEPTION,"",e.getMessage());
+            throw new ElectronicDocumentException(ProccessElectronicDocument.RECEPTION, invoiceClient.getAccessKey(), e.getMessage());
         }
+    }
+
+    @Override
+    public void authorize(InvoiceClient invoiceClient) throws ElectronicDocumentException {
+
+        ec.com.newsolutions.web.wsdl.sri.authorization.ObjectFactory objectFactory = new ec.com.newsolutions.web.wsdl.sri.authorization.ObjectFactory();
+        AutorizacionComprobante autorizacionComprobante = new AutorizacionComprobante();
+        autorizacionComprobante.setClaveAccesoComprobante(invoiceClient.getAccessKey());
+
+        AutorizacionComprobanteResponse response = authorizationClient.getAuthorizationResponse(objectFactory.createAutorizacionComprobante(autorizacionComprobante));
+        RespuestaComprobante.Autorizaciones authorizations = response.getRespuestaAutorizacionComprobante().getAutorizaciones();
+
+        if (authorizations != null && authorizations.getAutorizacion().size() > 0) {
+            Autorizacion authorization = authorizations.getAutorizacion().get(0);
+            String errorMessage = "";
+            if (authorization != null && authorization.getMensajes() != null) {
+                for (ec.com.newsolutions.web.wsdl.sri.authorization.Mensaje mensaje : authorization.getMensajes().getMensaje()) {
+                    SriMessage sriMessage = new SriMessage();
+                    sriMessage.setIdentificator(Integer.parseInt(mensaje.getIdentificador()));
+                    sriMessage.setAdditionalInformation(sriMessage.getAdditionalInformation());
+                    sriMessage.setMessage(sriMessage.getMessage());
+                    sriMessage.setType(sriMessage.getType());
+                    sriMessage.setInvoiceClient(invoiceClient);
+                    sriMessageService.save(sriMessage);
+                    errorMessage = sriMessage.getMessage();
+                }
+            }
+            if(SRIDocumentStateEnum.AUTHORIZED.state().equals(authorization.getEstado())){
+                //invoiceClientService.updateSriDocumentState(SRIDocumentStateEnum.valueOf(state), invoiceClient);
+            }else{
+                throw new ElectronicDocumentException(ProccessElectronicDocument.AUTHORIZATION, invoiceClient.getAccessKey(),errorMessage);
+
+            }
+
+        }
+
+
     }
 
 

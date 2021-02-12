@@ -6,8 +6,8 @@ import ec.com.newsolutions.utils.electronicdocuments.Signature;
 
 public interface SRIElectronicDocumentService {
 
-    void generateXML(InvoiceClient electronicDocument) throws ElectronicDocumentException;
+    void generateXML(InvoiceClient invoiceClient) throws ElectronicDocumentException;
     void sign(Signature signature) throws ElectronicDocumentException;
-    void reception() throws ElectronicDocumentException;
-
+    void receive(InvoiceClient invoiceClient) throws ElectronicDocumentException;
+    void authorize(InvoiceClient invoiceClient) throws ElectronicDocumentException;
 }
