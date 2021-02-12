@@ -6,6 +6,7 @@ import ec.com.newsolutions.domain.enumeration.SRIDocumentStateEnum;
 import ec.com.newsolutions.domain.enumeration.SRIEnvironmentEnum;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
@@ -13,28 +14,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
-@MappedSuperclass
+@Entity
+@Table(name = "electronic_document")
 public class ElectronicDocument extends AbstractMainEntity {
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="organization_id", nullable = false)
-    private Organization organization;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="branch_office_id", nullable = false)
-    private BranchOffice branchOffice;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="document_id", nullable = false)
-    private Document document;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="emission_point_id", nullable = false)
-    private EmissionPoint emissionPoint;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "sri_environment", length = 20, nullable = false)
@@ -43,18 +30,6 @@ public class ElectronicDocument extends AbstractMainEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "emission_type",length = 20, nullable = false)
     private EmissionTypeEnum emissionType ;
-
-    @Column(name = "establishment_code", length = 3, nullable = false)
-    private String establishmentCode;
-
-    @Column(name = "emission_point_code", length = 3, nullable = false)
-    private String emissionPointCode;
-
-    @Column(name = "sequence", nullable = false)
-    private int sequence;
-
-    @Column(name = "date_issue", nullable = false)
-    private Instant dateIssue;
 
     @Column(name = "accessKey", nullable = false, unique = true)
     private String accessKey;
@@ -67,40 +42,11 @@ public class ElectronicDocument extends AbstractMainEntity {
     @Column(name = "sri_document_state", length = 20, nullable = false)
     private SRIDocumentStateEnum sriDocumentState;
 
-    @Column(name = "authorization_date", nullable = false)
+    @Column(name = "authorization_date")
     private Instant authorizationDate;
 
-    public Organization getOrganization() {
-        return organization;
-    }
-
-    public BranchOffice getBranchOffice() {
-        return branchOffice;
-    }
-
-    public void setBranchOffice(BranchOffice branchOffice) {
-        this.branchOffice = branchOffice;
-    }
-
-    public void setOrganization(Organization organization) {
-        this.organization = organization;
-    }
-
-    public Document getDocument() {
-        return document;
-    }
-
-    public void setDocument(Document document) {
-        this.document = document;
-    }
-
-    public EmissionPoint getEmissionPoint() {
-        return emissionPoint;
-    }
-
-    public void setEmissionPoint(EmissionPoint emissionPoint) {
-        this.emissionPoint = emissionPoint;
-    }
+    @OneToMany(mappedBy = "electronicDocument", fetch = FetchType.LAZY)
+    private Set<SriMessage> sriMessages = new HashSet<>();
 
     public SRIEnvironmentEnum getSriEnvironment() {
         return sriEnvironment;
@@ -116,38 +62,6 @@ public class ElectronicDocument extends AbstractMainEntity {
 
     public void setEmissionType(EmissionTypeEnum emissionType) {
         this.emissionType = emissionType;
-    }
-
-    public String getEstablishmentCode() {
-        return establishmentCode;
-    }
-
-    public void setEstablishmentCode(String establishmentCode) {
-        this.establishmentCode = establishmentCode;
-    }
-
-    public String getEmissionPointCode() {
-        return emissionPointCode;
-    }
-
-    public void setEmissionPointCode(String emissionPointCode) {
-        this.emissionPointCode = emissionPointCode;
-    }
-
-    public int getSequence() {
-        return sequence;
-    }
-
-    public void setSequence(int sequence) {
-        this.sequence = sequence;
-    }
-
-    public Instant getDateIssue() {
-        return dateIssue;
-    }
-
-    public void setDateIssue(Instant dateIssue) {
-        this.dateIssue = dateIssue;
     }
 
     public String getAccessKey() {
@@ -180,5 +94,13 @@ public class ElectronicDocument extends AbstractMainEntity {
 
     public void setAuthorizationDate(Instant authorizationDate) {
         this.authorizationDate = authorizationDate;
+    }
+
+    public Set<SriMessage> getSriMessages() {
+        return sriMessages;
+    }
+
+    public void setSriMessages(Set<SriMessage> sriMessages) {
+        this.sriMessages = sriMessages;
     }
 }

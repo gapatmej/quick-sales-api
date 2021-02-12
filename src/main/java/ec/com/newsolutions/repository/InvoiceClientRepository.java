@@ -10,7 +10,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface InvoiceClientRepository extends JpaRepositoryCustom<InvoiceClient, Long> {
 
-    @Modifying
-    @Query("update InvoiceClient iC set iC.sriDocumentState = :sriDocumentStateEnum where iC.id = :invoiceClientId")
-    void updateSriDocumentState(@Param("sriDocumentStateEnum") SRIDocumentStateEnum sriDocumentStateEnum, @Param("invoiceClientId")  Long invoiceClientId);
 }

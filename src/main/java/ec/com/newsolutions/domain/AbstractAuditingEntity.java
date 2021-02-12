@@ -1,5 +1,4 @@
 package ec.com.newsolutions.domain;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.envers.Audited;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -9,7 +8,6 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.io.Serializable;
 import java.time.Instant;
 import javax.persistence.Column;
 import javax.persistence.EntityListeners;
@@ -19,12 +17,10 @@ import javax.persistence.MappedSuperclass;
  * Base abstract class for entities which will hold definitions for created, last modified by and created,
  * last modified by date.
  */
-@MappedSuperclass
-@Audited
+@MappedSuperclass()
+@Audited()
 @EntityListeners(AuditingEntityListener.class)
-public abstract class AbstractAuditingEntity implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public abstract class AbstractAuditingEntity {
 
     @CreatedBy
     @Column(name = "created_by",  length = 50, updatable = false)

@@ -2,47 +2,28 @@ package ec.com.newsolutions.service.dto;
 
 import ec.com.newsolutions.domain.enumeration.EmissionTypeEnum;
 import ec.com.newsolutions.domain.enumeration.ReceiptTypeEnum;
+import ec.com.newsolutions.domain.enumeration.SRIDocumentStateEnum;
 import ec.com.newsolutions.domain.enumeration.SRIEnvironmentEnum;
 
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ElectronicDocumentDTO extends AbstractMainDTO{
-
-    private Long organizationId;
-
-    private Long branchOfficeId;
 
     private SRIEnvironmentEnum sriEnvironment;
 
     private EmissionTypeEnum emissionType ;
 
-    private String establishmentCode;
-
-    private String emissionPointCode;
-
-    private int sequence;
-
-    private Instant dateIssue;
-
     private String accessKey;
 
     private ReceiptTypeEnum receiptType;
 
-    public Long getOrganizationId() {
-        return organizationId;
-    }
+    private SRIDocumentStateEnum sriDocumentState;
 
-    public void setOrganizationId(Long organizationId) {
-        this.organizationId = organizationId;
-    }
+    private Instant authorizationDate;
 
-    public Long getBranchOfficeId() {
-        return branchOfficeId;
-    }
-
-    public void setBranchOfficeId(Long branchOfficeId) {
-        this.branchOfficeId = branchOfficeId;
-    }
+    private Set<SriMessageDTO> sriMessages = new HashSet<>();
 
     public SRIEnvironmentEnum getSriEnvironment() {
         return sriEnvironment;
@@ -60,38 +41,6 @@ public class ElectronicDocumentDTO extends AbstractMainDTO{
         this.emissionType = emissionType;
     }
 
-    public String getEstablishmentCode() {
-        return establishmentCode;
-    }
-
-    public void setEstablishmentCode(String establishmentCode) {
-        this.establishmentCode = establishmentCode;
-    }
-
-    public String getEmissionPointCode() {
-        return emissionPointCode;
-    }
-
-    public void setEmissionPointCode(String emissionPointCode) {
-        this.emissionPointCode = emissionPointCode;
-    }
-
-    public int getSequence() {
-        return sequence;
-    }
-
-    public void setSequence(int sequence) {
-        this.sequence = sequence;
-    }
-
-    public Instant getDateIssue() {
-        return dateIssue;
-    }
-
-    public void setDateIssue(Instant dateIssue) {
-        this.dateIssue = dateIssue;
-    }
-
     public String getAccessKey() {
         return accessKey;
     }
@@ -106,5 +55,29 @@ public class ElectronicDocumentDTO extends AbstractMainDTO{
 
     public void setReceiptType(ReceiptTypeEnum receiptType) {
         this.receiptType = receiptType;
+    }
+
+    public SRIDocumentStateEnum getSriDocumentState() {
+        return sriDocumentState;
+    }
+
+    public void setSriDocumentState(SRIDocumentStateEnum sriDocumentState) {
+        this.sriDocumentState = sriDocumentState;
+    }
+
+    public Instant getAuthorizationDate() {
+        return authorizationDate;
+    }
+
+    public void setAuthorizationDate(Instant authorizationDate) {
+        this.authorizationDate = authorizationDate;
+    }
+
+    public Set<SriMessageDTO> getSriMessages() {
+        return sriMessages;
+    }
+
+    public void setSriMessages(Set<SriMessageDTO> sriMessages) {
+        this.sriMessages = sriMessages;
     }
 }

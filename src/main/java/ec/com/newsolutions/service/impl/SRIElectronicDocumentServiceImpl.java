@@ -8,8 +8,9 @@ import ec.com.newsolutions.domain.Payment;
 import ec.com.newsolutions.domain.SriMessage;
 import ec.com.newsolutions.domain.TaxDetailInvoice;
 import ec.com.newsolutions.domain.TaxInvoice;
+import ec.com.newsolutions.domain.TributaryDocument;
 import ec.com.newsolutions.domain.enumeration.SRIDocumentStateEnum;
-import ec.com.newsolutions.service.InvoiceClientService;
+import ec.com.newsolutions.service.ElectronicDocumentService;
 import ec.com.newsolutions.service.SRIElectronicDocumentService;
 import ec.com.newsolutions.service.SignatureXAdES;
 import ec.com.newsolutions.service.SriMessageService;
@@ -46,33 +47,49 @@ public class SRIElectronicDocumentServiceImpl extends AbstractService implements
     private final ApplicationProperties applicationProperties;
     private final ReceptionClient receptionClient;
     private final SriMessageService sriMessageService;
-    private final InvoiceClientService invoiceClientService;
+    private final ElectronicDocumentService electronicDocumentService;
     private final AuthorizationClient authorizationClient;
 
-    public SRIElectronicDocumentServiceImpl(SignatureXAdES signatureXAdES, ApplicationProperties applicationProperties, ReceptionClient receptionClient, SriMessageService sriMessageService, InvoiceClientService invoiceClientService, AuthorizationClient authorizationClient) {
+    public SRIElectronicDocumentServiceImpl(SignatureXAdES signatureXAdES, ApplicationProperties applicationProperties, ReceptionClient receptionClient,
+                                            SriMessageService sriMessageService, ElectronicDocumentService electronicDocumentService, AuthorizationClient authorizationClient) {
         super(SRIElectronicDocumentServiceImpl.class);
         this.signatureXAdES = signatureXAdES;
         this.applicationProperties = applicationProperties;
         this.receptionClient = receptionClient;
         this.sriMessageService = sriMessageService;
-        this.invoiceClientService = invoiceClientService;
+        this.electronicDocumentService = electronicDocumentService;
         this.authorizationClient = authorizationClient;
     }
 
     @Override
-    public void generateXML(InvoiceClient invoiceClient) throws ElectronicDocumentException {
+    public void sendInvoiceToSRI(InvoiceClient invoiceClient) {
+        try{
+            generateInvoiceClientXML(invoiceClient);
+            sendToSRI(invoiceClient);
+        }catch(ElectronicDocumentException electronicDocumentException){
+            log.error(electronicDocumentException.getMessage());
+        }
+    }
+
+    private void sendToSRI(TributaryDocument tributaryDocument){
+        Signature signature = new Signature(tributaryDocument);
+        sign(signature);
+        receive(tributaryDocument);
+        authorize(tributaryDocument);
+    }
+
+    @Override
+    public void generateInvoiceClientXML(InvoiceClient invoiceClient) throws ElectronicDocumentException {
         try {
-
             InvoiceClientJaxb invoiceClientJaxb = new InvoiceClientJaxb();
-
             TributaryInformationJaxb tributaryInformationJaxb = new TributaryInformationJaxb();
-            tributaryInformationJaxb.setEnvironment(invoiceClient.getSriEnvironment().code());
-            tributaryInformationJaxb.setEmissionType(invoiceClient.getEmissionType().code());
+            tributaryInformationJaxb.setEnvironment(invoiceClient.getElectronicDocument().getSriEnvironment().code());
+            tributaryInformationJaxb.setEmissionType(invoiceClient.getElectronicDocument().getEmissionType().code());
             tributaryInformationJaxb.setBusinessName(invoiceClient.getOrganization().getBusinessName());
             tributaryInformationJaxb.setTradename(invoiceClient.getOrganization().getTradename());
             tributaryInformationJaxb.setIdentification(invoiceClient.getOrganization().getIdentification());
-            tributaryInformationJaxb.setAccessKey(invoiceClient.getAccessKey());
-            tributaryInformationJaxb.setCodeDocument(invoiceClient.getReceiptType().code());
+            tributaryInformationJaxb.setAccessKey(invoiceClient.getElectronicDocument().getAccessKey());
+            tributaryInformationJaxb.setCodeDocument(invoiceClient.getElectronicDocument().getReceiptType().code());
             tributaryInformationJaxb.setEstablishmentCode(invoiceClient.getEstablishmentCode());
             tributaryInformationJaxb.setEmissionPointCode(invoiceClient.getEmissionPointCode());
             tributaryInformationJaxb.setSequence(String.format("%09d", invoiceClient.getSequence()));
@@ -168,7 +185,7 @@ public class SRIElectronicDocumentServiceImpl extends AbstractService implements
 
         } catch (Exception e) {
             log.error(e.getMessage());
-            throw new ElectronicDocumentException(ProccessElectronicDocument.GENERATE_XML, invoiceClient.getAccessKey(), e.getMessage());
+            throw new ElectronicDocumentException(ProccessElectronicDocument.GENERATE_XML, invoiceClient.getElectronicDocument().getAccessKey(), e.getMessage());
         }
 
     }
@@ -185,11 +202,11 @@ public class SRIElectronicDocumentServiceImpl extends AbstractService implements
     }
 
     @Override
-    public void receive(InvoiceClient invoiceClient) throws ElectronicDocumentException {
+    public void receive(TributaryDocument tributaryDocument) throws ElectronicDocumentException {
         try {
             ec.com.newsolutions.web.wsdl.sri.reception.ObjectFactory objectFactoryReception = new ec.com.newsolutions.web.wsdl.sri.reception.ObjectFactory();
             ValidarComprobante validarComprobante = new ValidarComprobante();
-            File file = new File(ElectronicDocumentsUtils.getSignedPathWithAccessKey(invoiceClient));
+            File file = new File(ElectronicDocumentsUtils.getSignedPathWithAccessKey(tributaryDocument));
             validarComprobante.setXml(Utils.fileToByte(file));
 
             ValidarComprobanteResponse response = receptionClient.getReceptionResponse(objectFactoryReception.createValidarComprobante(validarComprobante));
@@ -205,31 +222,31 @@ public class SRIElectronicDocumentServiceImpl extends AbstractService implements
                         sriMessage.setAdditionalInformation(sriMessage.getAdditionalInformation());
                         sriMessage.setMessage(sriMessage.getMessage());
                         sriMessage.setType(sriMessage.getType());
-                        sriMessage.setInvoiceClient(invoiceClient);
+                        sriMessage.setElectronicDocument(tributaryDocument.getElectronicDocument());
                         sriMessageService.save(sriMessage);
                         errorMessage = sriMessage.getMessage();
                     }
                 }
             }
 
-            invoiceClientService.updateSriDocumentState(SRIDocumentStateEnum.valueOf(state), invoiceClient);
+            electronicDocumentService.updateSriDocumentState(SRIDocumentStateEnum.valueOf(state), tributaryDocument.getElectronicDocument());
 
             if(!SRIDocumentStateEnum.RECEIVED.state().equals(state)){
-                throw new ElectronicDocumentException(ProccessElectronicDocument.RECEPTION, invoiceClient.getAccessKey(),errorMessage);
+                throw new ElectronicDocumentException(ProccessElectronicDocument.RECEPTION, tributaryDocument.getElectronicDocument().getAccessKey(),errorMessage);
             }
 
         } catch (Exception e) {
             log.error(e.getMessage());
-            throw new ElectronicDocumentException(ProccessElectronicDocument.RECEPTION, invoiceClient.getAccessKey(), e.getMessage());
+            throw new ElectronicDocumentException(ProccessElectronicDocument.RECEPTION, tributaryDocument.getElectronicDocument().getAccessKey(), e.getMessage());
         }
     }
 
     @Override
-    public void authorize(InvoiceClient invoiceClient) throws ElectronicDocumentException {
+    public void authorize(TributaryDocument tributaryDocument) throws ElectronicDocumentException {
 
         ec.com.newsolutions.web.wsdl.sri.authorization.ObjectFactory objectFactory = new ec.com.newsolutions.web.wsdl.sri.authorization.ObjectFactory();
         AutorizacionComprobante autorizacionComprobante = new AutorizacionComprobante();
-        autorizacionComprobante.setClaveAccesoComprobante(invoiceClient.getAccessKey());
+        autorizacionComprobante.setClaveAccesoComprobante(tributaryDocument.getElectronicDocument().getAccessKey());
 
         AutorizacionComprobanteResponse response = authorizationClient.getAuthorizationResponse(objectFactory.createAutorizacionComprobante(autorizacionComprobante));
         RespuestaComprobante.Autorizaciones authorizations = response.getRespuestaAutorizacionComprobante().getAutorizaciones();
@@ -244,7 +261,7 @@ public class SRIElectronicDocumentServiceImpl extends AbstractService implements
                     sriMessage.setAdditionalInformation(sriMessage.getAdditionalInformation());
                     sriMessage.setMessage(sriMessage.getMessage());
                     sriMessage.setType(sriMessage.getType());
-                    sriMessage.setInvoiceClient(invoiceClient);
+                    sriMessage.setElectronicDocument(tributaryDocument.getElectronicDocument());
                     sriMessageService.save(sriMessage);
                     errorMessage = sriMessage.getMessage();
                 }
@@ -252,12 +269,10 @@ public class SRIElectronicDocumentServiceImpl extends AbstractService implements
             if(SRIDocumentStateEnum.AUTHORIZED.state().equals(authorization.getEstado())){
                 //invoiceClientService.updateSriDocumentState(SRIDocumentStateEnum.valueOf(state), invoiceClient);
             }else{
-                throw new ElectronicDocumentException(ProccessElectronicDocument.AUTHORIZATION, invoiceClient.getAccessKey(),errorMessage);
+                throw new ElectronicDocumentException(ProccessElectronicDocument.AUTHORIZATION, tributaryDocument.getElectronicDocument().getAccessKey(),errorMessage);
 
             }
-
         }
-
 
     }
 

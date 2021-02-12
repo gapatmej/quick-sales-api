@@ -24,8 +24,8 @@ public class SriMessage extends AbstractMainEntity  {
     private String type;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="invoice_client_id")
-    private InvoiceClient invoiceClient;
+    @JoinColumn(name="electronic_document_id")
+    private ElectronicDocument electronicDocument;
 
     public Integer getIdentificator() {
         return identificator;
@@ -59,11 +59,11 @@ public class SriMessage extends AbstractMainEntity  {
         this.type = type;
     }
 
-    public InvoiceClient getInvoiceClient() {
-        return invoiceClient;
+    public ElectronicDocument getElectronicDocument() {
+        return electronicDocument;
     }
 
-    public void setInvoiceClient(InvoiceClient invoiceClient) {
-        this.invoiceClient = invoiceClient;
+    public void setElectronicDocument(ElectronicDocument electronicDocument) {
+        this.electronicDocument = electronicDocument;
     }
 }

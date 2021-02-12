@@ -7,27 +7,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InvoiceClientDTO extends ElectronicDocumentDTO {
-
-    private Long documentId;
-
-    private Long emissionPointId;
-
-    private Long companyId;
-
-    private String businessName;
-
-    private IdentificationTypeEnum identificationType;
-
-    private String identification;
-
-    private Long addressCompanyId;
-
-    private String address;
-
-    private String phone;
-
-    private String email;
+public class InvoiceClientDTO extends TributaryDocumentDTO {
 
     private BigDecimal totalWithoutTax;
 
@@ -52,86 +32,6 @@ public class InvoiceClientDTO extends ElectronicDocumentDTO {
     private List<DetailInvoiceClientDTO> detailsInvoiceClient = new ArrayList<>();
 
     private List<AdditionalInformationDTO> additionalsInformation = new ArrayList<>();
-
-    public Long getDocumentId() {
-        return documentId;
-    }
-
-    public void setDocumentId(Long documentId) {
-        this.documentId = documentId;
-    }
-
-    public Long getEmissionPointId() {
-        return emissionPointId;
-    }
-
-    public void setEmissionPointId(Long emissionPointId) {
-        this.emissionPointId = emissionPointId;
-    }
-
-    public Long getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(Long companyId) {
-        this.companyId = companyId;
-    }
-
-    public String getBusinessName() {
-        return businessName;
-    }
-
-    public void setBusinessName(String businessName) {
-        this.businessName = businessName;
-    }
-
-    public IdentificationTypeEnum getIdentificationType() {
-        return identificationType;
-    }
-
-    public void setIdentificationType(IdentificationTypeEnum identificationType) {
-        this.identificationType = identificationType;
-    }
-
-    public String getIdentification() {
-        return identification;
-    }
-
-    public void setIdentification(String identification) {
-        this.identification = identification;
-    }
-
-    public Long getAddressCompanyId() {
-        return addressCompanyId;
-    }
-
-    public void setAddressCompanyId(Long addressCompanyId) {
-        this.addressCompanyId = addressCompanyId;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     public BigDecimal getTotalWithoutTax() {
         return totalWithoutTax;

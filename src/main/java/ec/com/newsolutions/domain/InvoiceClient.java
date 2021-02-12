@@ -4,6 +4,7 @@ import ec.com.newsolutions.domain.enumeration.CurrencyEnum;
 import ec.com.newsolutions.domain.enumeration.IdentificationTypeEnum;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,38 +16,12 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "invoice_client")
-public class InvoiceClient extends ElectronicDocument{
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="company_id", nullable = false)
-    private Company company;
-
-    @Column(name = "business_name", length = 200, nullable = false)
-    private String businessName;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "identification_type", length = 20, nullable = false)
-    private IdentificationTypeEnum identificationType;
-
-    @Column(name = "identification", length = 13, nullable = false)
-    private String identification;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="address_company_id", nullable = false)
-    private AddressCompany addressCompany;
-
-    @Column(name = "address", length = 200, nullable = false)
-    private String address;
-
-    @Column(name = "phone", length = 13)
-    private String phone;
-
-    @Column(name = "email", length = 200, nullable = false)
-    private String email;
+public class InvoiceClient extends TributaryDocument {
 
     @Column(name = "total_without_tax", precision = 21, scale = 2, nullable = false)
     private BigDecimal totalWithoutTax;
@@ -87,73 +62,6 @@ public class InvoiceClient extends ElectronicDocument{
 
     @OneToMany(mappedBy = "invoiceClient", fetch = FetchType.LAZY)
     private Set<AdditionalInformation> additionalsInformation = new HashSet<>();
-
-    @OneToMany(mappedBy = "invoiceClient", fetch = FetchType.LAZY)
-    private Set<SriMessage> sriMessages = new HashSet<>();
-
-    public Company getCompany() {
-        return company;
-    }
-
-    public void setCompany(Company company) {
-        this.company = company;
-    }
-
-    public String getBusinessName() {
-        return businessName;
-    }
-
-    public void setBusinessName(String businessName) {
-        this.businessName = businessName;
-    }
-
-    public IdentificationTypeEnum getIdentificationType() {
-        return identificationType;
-    }
-
-    public void setIdentificationType(IdentificationTypeEnum identificationType) {
-        this.identificationType = identificationType;
-    }
-
-    public String getIdentification() {
-        return identification;
-    }
-
-    public void setIdentification(String identification) {
-        this.identification = identification;
-    }
-
-    public AddressCompany getAddressCompany() {
-        return addressCompany;
-    }
-
-    public void setAddressCompany(AddressCompany addressCompany) {
-        this.addressCompany = addressCompany;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     public BigDecimal getTotalWithoutTax() {
         return totalWithoutTax;
@@ -259,11 +167,4 @@ public class InvoiceClient extends ElectronicDocument{
         this.additionalsInformation = additionalsInformation;
     }
 
-    public Set<SriMessage> getSriMessages() {
-        return sriMessages;
-    }
-
-    public void setSriMessages(Set<SriMessage> sriMessages) {
-        this.sriMessages = sriMessages;
-    }
 }

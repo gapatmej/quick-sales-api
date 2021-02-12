@@ -23,7 +23,6 @@ import ec.com.newsolutions.service.mapper.InvoiceClientMapper;
 import ec.com.newsolutions.utils.GsonUtils;
 import ec.com.newsolutions.utils.electronicdocuments.Signature;
 import ec.com.newsolutions.web.rest.errors.EntityNotFoundException;
-import ec.com.newsolutions.web.wsdl.sri.authorization.AuthorizationClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -74,6 +73,7 @@ public class InvoiceClientServiceImpl extends AbstractService implements Invoice
         InvoiceClientDTO result;
         InvoiceClient invoiceClient = invoiceClientMapper.toEntity(invoiceClientDTO);
         electronicDocumentService.build(invoiceClient);
+        electronicDocumentService.save(invoiceClient.getElectronicDocument());
         invoiceClient.setBusinessName(company.getBusinessName());
         invoiceClient.setIdentificationType(company.getIdentificationType());
         invoiceClient.setIdentification(company.getIdentification());
@@ -97,11 +97,8 @@ public class InvoiceClientServiceImpl extends AbstractService implements Invoice
 
         result = invoiceClientMapper.toDto(invoiceClient);
 
-        sriElectronicDocumentService.generateXML(invoiceClient);
-        Signature signature = new Signature(invoiceClient);
-        sriElectronicDocumentService.sign(signature);
-        sriElectronicDocumentService.receive(invoiceClient);
-        sriElectronicDocumentService.authorize(invoiceClient);
+        sriElectronicDocumentService.sendInvoiceToSRI(invoiceClient);
+
         return result;
     }
 
@@ -198,8 +195,4 @@ public class InvoiceClientServiceImpl extends AbstractService implements Invoice
         invoiceClient.setTotal(total);
     }
 
-    @Override
-    public void updateSriDocumentState(SRIDocumentStateEnum sriDocumentStateEnum, InvoiceClient invoiceClient) {
-        invoiceClientRepository.updateSriDocumentState(sriDocumentStateEnum,invoiceClient.getId());
-    }
 }

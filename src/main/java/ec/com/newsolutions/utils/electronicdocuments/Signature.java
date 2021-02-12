@@ -1,7 +1,9 @@
 package ec.com.newsolutions.utils.electronicdocuments;
 
+import ec.com.newsolutions.domain.AbstractMainEntity;
 import ec.com.newsolutions.domain.ElectronicDocument;
 import ec.com.newsolutions.domain.Organization;
+import ec.com.newsolutions.domain.TributaryDocument;
 import ec.com.newsolutions.domain.enumeration.ReceiptTypeEnum;
 
 public class Signature {
@@ -17,11 +19,11 @@ public class Signature {
         this.passwordCertificate = passwordCertificate;
     }
 
-    public Signature(ElectronicDocument electronicDocument) {
-        this.certificatePath = ElectronicDocumentsUtils.getCertificatePath(electronicDocument);
-        this.signedPath = ElectronicDocumentsUtils.getSignedPathWithAccessKey(electronicDocument);
-        this.xmlPath = ElectronicDocumentsUtils.getXMlPathWithAccessKey(electronicDocument);
-        this.passwordCertificate = electronicDocument.getOrganization().getCertificatePassword();
+    public Signature(TributaryDocument tributaryDocument) {
+        this.certificatePath = ElectronicDocumentsUtils.getCertificatePath(tributaryDocument);
+        this.signedPath = ElectronicDocumentsUtils.getSignedPathWithAccessKey(tributaryDocument);
+        this.xmlPath = ElectronicDocumentsUtils.getXMlPathWithAccessKey(tributaryDocument);
+        this.passwordCertificate = tributaryDocument.getOrganization().getCertificatePassword();
     }
 
     public String getSignedPath() {

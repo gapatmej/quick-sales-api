@@ -125,6 +125,6 @@ public class DetailInvoiceClientServiceImpl extends AbstractService implements D
 
     @Override
     public Optional<DetailInvoiceClient> findOne(Long id) {
-        return Optional.empty();
+        throw new UnsupportedOperationException();
     }
 }
