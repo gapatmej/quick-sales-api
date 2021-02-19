@@ -61,7 +61,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: quicksalesec@gmail.com
-    password: usrQuicksales@1
+    password: gftnzdbroxkmcgco
     protocol: smtp
     tls: true
     from: quicksalesec@gmail.com
@@ -69,7 +69,7 @@ spring:
       auth: true
       starttls.enable: true
       ssl.trust: smtp.gmail.com
-    usernameNotification :  quicksalesec@gmail.com
+    usernameNotification: quicksalesec@gmail.com
   messages:
     cache-duration: PT1S # 1 second, see the ISO 8601 standard
   thymeleaf:
@@ -117,17 +117,25 @@ jhipster:
   audit-events:
     retention-period: 30 # Number of days before audit events are deleted.
 application:
+  urls:
+    reception: https://celcer.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl
+    authorization: https://celcer.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl
+  paths:
+    main: /Users/andresperalta/Documents/quicksales
     electronicDocuments:
-      paths:
-        main: /Users/andresperalta/Documents/electronicDocuments
-        certificate: /certificate
-        documents:
-          invoices: /invoices
-        xml: /xml
-        signed: /signed
-      urls:
-        reception: https://celcer.sri.gob.ec/comprobantes-electronicos-ws/RecepcionComprobantesOffline?wsdl
-        authorization: https://celcer.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantesOffline?wsdl
+      main: /electronicDocuments
+      documents:
+        invoices: /invoices
+      xml: /xml
+      signed: /signed
+      authorized: /authorized
+      authorizedPdf: /authorizedPdf
+    certificate:
+      main: /certificate
+    reports:
+      main: /reports
+    resources:
+      main: /resources
 
 
 

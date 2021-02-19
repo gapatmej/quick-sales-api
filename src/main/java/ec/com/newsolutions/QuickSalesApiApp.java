@@ -3,6 +3,7 @@ package ec.com.newsolutions;
 import ec.com.newsolutions.config.ApplicationProperties;
 
 import ec.com.newsolutions.utils.electronicdocuments.ElectronicDocumentsUtils;
+import ec.com.newsolutions.utils.PathsUtils;
 import io.github.jhipster.config.DefaultProfileUtil;
 import io.github.jhipster.config.JHipsterConstants;
 
@@ -55,6 +56,7 @@ public class QuickSalesApiApp {
                 "run with both the 'dev' and 'cloud' profiles at the same time.");
         }
         ElectronicDocumentsUtils.setApplicationProperties(applicationProperties);
+        PathsUtils.setApplicationProperties(applicationProperties);
     }
 
     /**

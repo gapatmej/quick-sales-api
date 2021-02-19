@@ -11,34 +11,100 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "application", ignoreUnknownFields = false)
 public class ApplicationProperties {
 
-    private ElectronicDocuments electronicDocuments = new ElectronicDocuments();
+    private Urls urls = new Urls();
+    private Paths paths = new Paths();
 
-    public class ElectronicDocuments {
-        private Paths paths = new Paths();
-        private Urls urls = new Urls();
+    public Urls getUrls() {
+        return urls;
+    }
 
-        public Paths getPaths() {
-            return paths;
+    public void setUrls(Urls urls) {
+        this.urls = urls;
+    }
+
+    public Paths getPaths() {
+        return paths;
+    }
+
+    public void setPaths(Paths paths) {
+        this.paths = paths;
+    }
+
+    public class Urls {
+        private String reception;
+        private String authorization;
+
+        public String getReception() {
+            return reception;
         }
 
-        public void setPaths(Paths paths) {
-            this.paths = paths;
+        public void setReception(String reception) {
+            this.reception = reception;
         }
 
-        public Urls getUrls() {
-            return urls;
+        public String getAuthorization() {
+            return authorization;
         }
 
-        public void setUrls(Urls urls) {
-            this.urls = urls;
+        public void setAuthorization(String authorization) {
+            this.authorization = authorization;
+        }
+    }
+
+    public class Paths {
+        private String main;
+        private ElectronicDocuments electronicDocuments = new ElectronicDocuments();
+        private Certificate certificate = new Certificate();
+        private Reports reports = new Reports();
+        private Resources resources = new Resources();
+
+        public String getMain() {
+            return main;
         }
 
-        public class Paths {
+        public void setMain(String main) {
+            this.main = main;
+        }
+
+        public Resources getResources() {
+            return resources;
+        }
+
+        public void setResources(Resources resources) {
+            this.resources = resources;
+        }
+
+        public ElectronicDocuments getElectronicDocuments() {
+            return electronicDocuments;
+        }
+
+        public void setElectronicDocuments(ElectronicDocuments electronicDocuments) {
+            this.electronicDocuments = electronicDocuments;
+        }
+
+        public Certificate getCertificate() {
+            return certificate;
+        }
+
+        public void setCertificate(Certificate certificate) {
+            this.certificate = certificate;
+        }
+
+        public Reports getReports() {
+            return reports;
+        }
+
+        public void setReports(Reports reports) {
+            this.reports = reports;
+        }
+
+        public class ElectronicDocuments {
             private String main;
-            private String certificate;
             private Documents documents = new Documents();
             private String xml;
             private String signed;
+            private String authorized;
+            private String authorizedPdf;
 
             public String getMain() {
                 return main;
@@ -46,14 +112,6 @@ public class ApplicationProperties {
 
             public void setMain(String main) {
                 this.main = main;
-            }
-
-            public String getCertificate() {
-                return certificate;
-            }
-
-            public void setCertificate(String certificate) {
-                this.certificate = certificate;
             }
 
             public Documents getDocuments() {
@@ -80,46 +138,76 @@ public class ApplicationProperties {
                 this.signed = signed;
             }
 
+            public String getAuthorized() {
+                return authorized;
+            }
+
+            public void setAuthorized(String authorized) {
+                this.authorized = authorized;
+            }
+
+            public String getAuthorizedPdf() {
+                return authorizedPdf;
+            }
+
+            public void setAuthorizedPdf(String authorizedPdf) {
+                this.authorizedPdf = authorizedPdf;
+            }
+
             public class Documents {
                 private String invoices;
 
                 public String getInvoices() {
                     return invoices;
                 }
+
                 public void setInvoices(String invoices) {
                     this.invoices = invoices;
                 }
             }
+
+
         }
 
-        public class Urls {
-            private String reception;
-            private String authorization;
+        public class Certificate {
+            private String main;
 
-            public String getReception() {
-                return reception;
+            public String getMain() {
+                return main;
             }
 
-            public void setReception(String reception) {
-                this.reception = reception;
+            public void setMain(String main) {
+                this.main = main;
             }
 
-            public String getAuthorization() {
-                return authorization;
+        }
+
+        public class Reports {
+            private String main;
+
+            public String getMain() {
+                return main;
             }
 
-            public void setAuthorization(String authorization) {
-                this.authorization = authorization;
+            public void setMain(String main) {
+                this.main = main;
             }
+
+        }
+
+        public class Resources {
+            private String main;
+
+            public String getMain() {
+                return main;
+            }
+
+            public void setMain(String main) {
+                this.main = main;
+            }
+
         }
     }
 
 
-    public ElectronicDocuments getElectronicDocuments() {
-        return electronicDocuments;
-    }
-
-    public void setElectronicDocuments(ElectronicDocuments electronicDocuments) {
-        this.electronicDocuments = electronicDocuments;
-    }
 }

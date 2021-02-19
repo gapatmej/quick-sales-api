@@ -2,6 +2,7 @@ package ec.com.newsolutions.utils;
 
 import ec.com.newsolutions.config.Constants;
 
+import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -59,6 +60,12 @@ public class Utils {
 
     public static BigDecimal roundTwoDecimals(BigDecimal value){
         return value.setScale(2, RoundingMode.HALF_UP);
+    }
+
+    public static Instant xmlGregorianCalendarToInstant(XMLGregorianCalendar xmlGregorianCalendar ){
+        return xmlGregorianCalendar.toGregorianCalendar()
+            .toZonedDateTime()
+            .toInstant();
     }
 
 }

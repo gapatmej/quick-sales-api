@@ -1,28 +1,22 @@
 package ec.com.newsolutions.web.rest;
 
-import ec.com.newsolutions.config.Constants;
 import ec.com.newsolutions.domain.User;
 import ec.com.newsolutions.repository.UserRepository;
-import ec.com.newsolutions.security.AuthoritiesConstants;
-import ec.com.newsolutions.service.MailService;
 import ec.com.newsolutions.service.UserService;
 import ec.com.newsolutions.service.dto.UserDTO;
 import ec.com.newsolutions.utils.GsonUtils;
 import ec.com.newsolutions.web.rest.errors.EmailAlreadyUsedException;
 import ec.com.newsolutions.web.rest.errors.IdExistException;
-import ec.com.newsolutions.web.rest.errors.LoginAlreadyUsedException;
 
 import ec.com.newsolutions.web.rest.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 

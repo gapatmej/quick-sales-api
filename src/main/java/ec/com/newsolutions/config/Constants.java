@@ -17,7 +17,8 @@ public final class Constants {
     public static final String SYSTEM_ACCOUNT = "system";
     public static final String DEFAULT_LANGUAGE = "es";
     public static final String ANONYMOUS_USER = "anonymoususer";
-    public static final SimpleDateFormat accessKeyFormatDate = new SimpleDateFormat("ddMMyyyy");
+    public static final SimpleDateFormat SIMPLE_DATE_FORMAT_1 = new SimpleDateFormat("ddMMyyyy");
+    public static final SimpleDateFormat SIMPLE_DATE_FORMAT_2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
     public static final String numericCode = "01234567";
     public static final DateTimeFormatter DATE_TIME_FORMATTER_1 = DateTimeFormatter.ofPattern("dd/MM/yyyy").withZone(ZoneId.systemDefault());
 

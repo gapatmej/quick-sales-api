@@ -26,7 +26,7 @@ public class MarshallConfig {
     @Bean
     public ReceptionClient receptionConnector(Jaxb2Marshaller marshaller) {
         ReceptionClient client = new ReceptionClient(applicationProperties);
-        client.setDefaultUri(applicationProperties.getElectronicDocuments().getUrls().getReception());
+        client.setDefaultUri(applicationProperties.getUrls().getReception());
         client.setMarshaller(marshaller);
         client.setUnmarshaller(marshaller);
         return client;
@@ -35,7 +35,7 @@ public class MarshallConfig {
     @Bean
     public AuthorizationClient authorizationConnector(Jaxb2Marshaller marshaller) {
         AuthorizationClient client = new AuthorizationClient(applicationProperties);
-        client.setDefaultUri(applicationProperties.getElectronicDocuments().getUrls().getAuthorization());
+        client.setDefaultUri(applicationProperties.getUrls().getAuthorization());
         client.setMarshaller(marshaller);
         client.setUnmarshaller(marshaller);
         return client;

@@ -1,7 +1,6 @@
 package ec.com.newsolutions.service.dto;
 
 import ec.com.newsolutions.domain.enumeration.CurrencyEnum;
-import ec.com.newsolutions.domain.enumeration.IdentificationTypeEnum;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;

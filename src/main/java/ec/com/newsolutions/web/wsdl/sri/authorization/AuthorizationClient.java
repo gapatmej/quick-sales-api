@@ -13,7 +13,7 @@ public class AuthorizationClient extends WebServiceGatewaySupport {
         this.applicationProperties = applicationProperties;
     }
     public AutorizacionComprobanteResponse getAuthorizationResponse(Object request) {
-        JAXBElement res = (JAXBElement) getWebServiceTemplate().marshalSendAndReceive(applicationProperties.getElectronicDocuments().getUrls().getAuthorization(), request);
+        JAXBElement res = (JAXBElement) getWebServiceTemplate().marshalSendAndReceive(applicationProperties.getUrls().getAuthorization(), request);
         return (AutorizacionComprobanteResponse) res.getValue();
 
     }

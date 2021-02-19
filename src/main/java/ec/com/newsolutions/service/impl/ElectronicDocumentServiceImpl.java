@@ -14,17 +14,12 @@ import ec.com.newsolutions.repository.ElectronicDocumentRepository;
 import ec.com.newsolutions.security.SecurityUtils;
 import ec.com.newsolutions.service.BranchOfficeService;
 import ec.com.newsolutions.service.DocumentAuthorizationService;
-import ec.com.newsolutions.service.DocumentService;
 import ec.com.newsolutions.service.ElectronicDocumentService;
 import ec.com.newsolutions.service.EmissionPointService;
 import ec.com.newsolutions.service.InvoiceClientService;
 import ec.com.newsolutions.service.OrganizationService;
 import ec.com.newsolutions.service.dto.WorkspaceDTO;
-import ec.com.newsolutions.service.mapper.BranchOfficeMapper;
 import ec.com.newsolutions.service.mapper.DocumentAuthorizationMapper;
-import ec.com.newsolutions.service.mapper.DocumentMapper;
-import ec.com.newsolutions.service.mapper.EmissionPointMapper;
-import ec.com.newsolutions.service.mapper.OrganizationMapper;
 import ec.com.newsolutions.utils.electronicdocuments.ElectronicDocumentsUtils;
 import ec.com.newsolutions.web.rest.errors.EntityNotFoundException;
 import ec.com.newsolutions.web.rest.errors.WorkspaceNotFoundException;
@@ -33,6 +28,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.Optional;
 
@@ -115,6 +111,11 @@ public class ElectronicDocumentServiceImpl extends AbstractService implements El
     }
 
     @Override
+    public void updateSriAuthorizedFields(ElectronicDocument electronicDocument, SRIDocumentStateEnum sriDocumentStateEnum, Instant authorizationDate) {
+        this.electronicDocumentRepository.updateSriAuthorizedFields(electronicDocument.getId(), sriDocumentStateEnum, authorizationDate);
+    }
+
+    @Override
     public ElectronicDocument save(ElectronicDocument electronicDocument) {
         return electronicDocumentRepository.save(electronicDocument);
     }
@@ -127,7 +128,7 @@ public class ElectronicDocumentServiceImpl extends AbstractService implements El
     private void generateAccessKey(Organization organization, TributaryDocument tributaryDocument){
 
         StringBuilder accessKey = new StringBuilder();
-        accessKey.append(Constants.accessKeyFormatDate.format(Date.from(tributaryDocument.getDateIssue())));
+        accessKey.append(Constants.SIMPLE_DATE_FORMAT_1.format(Date.from(tributaryDocument.getDateIssue())));
         accessKey.append(tributaryDocument.getElectronicDocument().getReceiptType().code());
         accessKey.append(organization.getIdentification());
         accessKey.append(organization.getSriEnvironment().code());

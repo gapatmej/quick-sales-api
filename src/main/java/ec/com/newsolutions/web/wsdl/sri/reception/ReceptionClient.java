@@ -14,7 +14,7 @@ public class ReceptionClient extends WebServiceGatewaySupport  {
     }
 
     public ValidarComprobanteResponse getReceptionResponse( Object request) {
-        JAXBElement res = (JAXBElement) getWebServiceTemplate().marshalSendAndReceive(applicationProperties.getElectronicDocuments().getUrls().getReception(), request);
+        JAXBElement res = (JAXBElement) getWebServiceTemplate().marshalSendAndReceive(applicationProperties.getUrls().getReception(), request);
         return (ValidarComprobanteResponse) res.getValue();
     }
 }
