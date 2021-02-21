@@ -8,7 +8,7 @@ public class AddressCompanyDTO extends AbstractMainDTO {
 
     private String phone;
 
-    private String alternativePhone;
+    private String mobilePhone;
 
     private String postalCode;
 
@@ -17,8 +17,6 @@ public class AddressCompanyDTO extends AbstractMainDTO {
     private Long cantonId;
 
     private Long parishId;
-
-    private Boolean deleted;
 
     public Long getCompanyId() {
         return companyId;
@@ -44,12 +42,12 @@ public class AddressCompanyDTO extends AbstractMainDTO {
         this.phone = phone;
     }
 
-    public String getAlternativePhone() {
-        return alternativePhone;
+    public String getMobilePhone() {
+        return mobilePhone;
     }
 
-    public void setAlternativePhone(String alternativePhone) {
-        this.alternativePhone = alternativePhone;
+    public void setMobilePhone(String mobilePhone) {
+        this.mobilePhone = mobilePhone;
     }
 
     public String getPostalCode() {
@@ -84,11 +82,4 @@ public class AddressCompanyDTO extends AbstractMainDTO {
         this.parishId = parishId;
     }
 
-    public Boolean getDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(Boolean deleted) {
-        this.deleted = deleted;
-    }
 }

@@ -1,6 +1,12 @@
 package ec.com.newsolutions.domain;
 
-import javax.persistence.*;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "address_company")
@@ -13,11 +19,11 @@ public class AddressCompany extends AbstractMainEntity {
     @Column(name = "address", length = 200, nullable = false)
     private String address;
 
-    @Column(name = "phone", length = 13)
+    @Column(name = "phone", length = 13, nullable = false)
     private String phone;
 
-    @Column(name = "movil_phone", length = 13)
-    private String alternativePhone;
+    @Column(name = "mobile_phone", length = 13)
+    private String mobilePhone;
 
     @Column(name = "postal_code", length = 6)
     private String postalCode;
@@ -58,12 +64,12 @@ public class AddressCompany extends AbstractMainEntity {
         this.phone = phone;
     }
 
-    public String getAlternativePhone() {
-        return alternativePhone;
+    public String getMobilePhone() {
+        return mobilePhone;
     }
 
-    public void setAlternativePhone(String alternativePhone) {
-        this.alternativePhone = alternativePhone;
+    public void setMobilePhone(String mobilePhone) {
+        this.mobilePhone = mobilePhone;
     }
 
     public String getPostalCode() {

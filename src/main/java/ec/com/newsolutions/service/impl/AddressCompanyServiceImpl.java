@@ -60,11 +60,11 @@ public class AddressCompanyServiceImpl extends AbstractService implements Addres
         log.debug("Request to save Address Company : {}", addressCompanyDTOS);
             List<AddressCompanyDTO> result = new ArrayList<>();
         addressCompanyDTOS.forEach(aC->{
-            if(BooleanUtils.isTrue(aC.getDeleted())){
+           /* if(BooleanUtils.isTrue(aC.getDeleted())){
                 delete(aC.getId());
             }else{
                 result.add(save(aC));
-            }
+            }*/
         });
 
         return result;

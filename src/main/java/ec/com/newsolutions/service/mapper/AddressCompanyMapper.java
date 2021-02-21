@@ -12,7 +12,6 @@ public interface AddressCompanyMapper {
     @Mapping(source = "province.id", target = "provinceId")
     @Mapping(source = "canton.id", target = "cantonId")
     @Mapping(source = "parish.id", target = "parishId")
-    @Mapping(expression = "java(false)", target = "deleted")
     AddressCompanyDTO toDto(AddressCompany addressCompany);
 
     @Mapping(source = "companyId", target = "company.id")

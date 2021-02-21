@@ -19,7 +19,7 @@ public class OrganizationDTO extends  AbstractMainDTO{
 
     private String phone;
 
-    private String movilPhone;
+    private String mobilePhone;
 
     private Integer specialTaxpayerNumber;
 
@@ -87,12 +87,12 @@ public class OrganizationDTO extends  AbstractMainDTO{
         this.phone = phone;
     }
 
-    public String getMovilPhone() {
-        return movilPhone;
+    public String getMobilePhone() {
+        return mobilePhone;
     }
 
-    public void setMovilPhone(String movilPhone) {
-        this.movilPhone = movilPhone;
+    public void setMobilePhone(String mobilePhone) {
+        this.mobilePhone = mobilePhone;
     }
 
     public Integer getSpecialTaxpayerNumber() {

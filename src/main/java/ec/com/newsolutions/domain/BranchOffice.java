@@ -20,8 +20,8 @@ public class BranchOffice extends AbstractMainEntity {
     @Column(name = "phone", length = 13)
     private String phone;
 
-    @Column(name = "movil_phone", length = 13 )
-    private String movilPhone;
+    @Column(name = "mobile_phone", length = 13 )
+    private String mobilePhone;
 
     @Column(name = "establishment_code", unique = true, length = 3, nullable = false)
     private String establishmentCode;
@@ -64,12 +64,12 @@ public class BranchOffice extends AbstractMainEntity {
         this.phone = phone;
     }
 
-    public String getMovilPhone() {
-        return movilPhone;
+    public String getMobilePhone() {
+        return mobilePhone;
     }
 
-    public void setMovilPhone(String movilPhone) {
-        this.movilPhone = movilPhone;
+    public void setMobilePhone(String mobilePhone) {
+        this.mobilePhone = mobilePhone;
     }
 
     public String getEstablishmentCode() {
