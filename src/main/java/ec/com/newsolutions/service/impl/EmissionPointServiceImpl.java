@@ -3,6 +3,7 @@ package ec.com.newsolutions.service.impl;
 import ec.com.newsolutions.domain.EmissionPoint;
 import ec.com.newsolutions.repository.EmissionPointRepository;
 import ec.com.newsolutions.service.EmissionPointService;
+import ec.com.newsolutions.service.dto.BranchOfficeDTO;
 import ec.com.newsolutions.service.dto.EmissionPointDTO;
 import ec.com.newsolutions.service.mapper.EmissionPointMapper;
 import org.apache.commons.lang3.BooleanUtils;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -35,21 +37,6 @@ public class EmissionPointServiceImpl extends AbstractService implements Emissio
         log.debug("Request to save Emission Point : {}", emissionPointDTO);
         EmissionPoint emissionPoint = save(emissionPointMapper.toEntity(emissionPointDTO));
         return emissionPointMapper.toDto(emissionPoint);
-    }
-
-    @Override
-    public List<EmissionPointDTO> saveAll(List<EmissionPointDTO> emissionPointDTOS) {
-        log.debug("Request to save Emission Points : {}", emissionPointDTOS);
-        List<EmissionPointDTO> result = new ArrayList<>();
-        emissionPointDTOS.forEach(ep->{
-            if(BooleanUtils.isTrue(ep.getDeleted())){
-                delete(ep.getId());
-            }else{
-                result.add(save(ep));
-            }
-        });
-
-        return result;
     }
 
     @Override
@@ -85,5 +72,26 @@ public class EmissionPointServiceImpl extends AbstractService implements Emissio
     @Override
     public void deleteByBranchOffice(Long idBranchOffice) {
         emissionPointRepository.deleteByBranchOfficeId(idBranchOffice);
+    }
+
+    @Override
+    public List<EmissionPointDTO> updateByBranchOffice(BranchOfficeDTO branchOfficeDTO) {
+        log.debug("Request to save Emission Points : {}", branchOfficeDTO.getEmissionPoints());
+
+        List<EmissionPoint> emissionPoints = emissionPointRepository.findByBranchOfficeId(branchOfficeDTO.getId());
+
+        List<Long> newsId = branchOfficeDTO.getEmissionPoints().stream().filter(eP->eP.getId()!= null).map(EmissionPointDTO::getId).collect(Collectors.toList());
+        List<Long> oldsIdToDeleted = emissionPoints.stream().map(EmissionPoint::getId).collect(Collectors.toList());
+        oldsIdToDeleted.removeAll(newsId);
+
+        emissionPointRepository.deleteInBatch(emissionPoints.stream().filter(eP->oldsIdToDeleted.contains(eP.getId())).collect(Collectors.toList()));
+
+        List<EmissionPointDTO> result = new ArrayList<>();
+        branchOfficeDTO.getEmissionPoints().forEach(ep->{
+            result.add(save(ep));
+        });
+
+        return result;
+
     }
 }

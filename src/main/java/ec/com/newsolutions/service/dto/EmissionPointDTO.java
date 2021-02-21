@@ -8,10 +8,6 @@ public class EmissionPointDTO extends AbstractMainDTO{
 
     private Long branchOfficeId;
 
-    private Boolean active;
-
-    private Boolean deleted;
-
     public String getName() {
         return name;
     }
@@ -36,19 +32,4 @@ public class EmissionPointDTO extends AbstractMainDTO{
         this.branchOfficeId = branchOfficeId;
     }
 
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
-
-    public Boolean getDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(Boolean deleted) {
-        this.deleted = deleted;
-    }
 }

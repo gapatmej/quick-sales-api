@@ -42,7 +42,7 @@ public class BranchOfficeServiceImpl extends AbstractService implements BranchOf
         BranchOfficeDTO result = branchOfficeMapper.toDto(branchOffice);
 
         branchOfficeDTO.getEmissionPoints().forEach(eP -> eP.setBranchOfficeId(branchOffice.getId()));
-        result.setEmissionPoints(emissionPointService.saveAll(branchOfficeDTO.getEmissionPoints()));
+        result.setEmissionPoints(emissionPointService.updateByBranchOffice(branchOfficeDTO));
 
         return result;
     }

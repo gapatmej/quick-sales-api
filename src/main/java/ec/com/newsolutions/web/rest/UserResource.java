@@ -23,7 +23,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/api")
@@ -75,14 +77,6 @@ public class UserResource extends AbstractResource {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
-/*
-    @GetMapping("/users/authorities")
-    @PreAuthorize("hasRole(\"" + AuthoritiesConstants.ADMIN + "\")")
-    public List<String> getAuthorities() {
-        return userService.getAuthorities();
-    }
-
-    */
 
     @GetMapping("/users/{id}")
     public ResponseEntity<UserDTO> getUser(@PathVariable Long id) {

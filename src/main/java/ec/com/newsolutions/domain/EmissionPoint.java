@@ -1,6 +1,13 @@
 package ec.com.newsolutions.domain;
 
-import javax.persistence.*;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity
 @Table(name = "emission_point", uniqueConstraints =  @UniqueConstraint(columnNames = {"branch_office_id", "emission_point_code"}))
@@ -15,9 +22,6 @@ public class EmissionPoint extends AbstractMainEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="branch_office_id", nullable = false)
     private BranchOffice branchOffice;
-
-    @Column(name = "active", nullable = false)
-    private Boolean active;
 
     public String getName() {
         return name;
@@ -43,11 +47,4 @@ public class EmissionPoint extends AbstractMainEntity {
         this.branchOffice = branchOffice;
     }
 
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
 }
