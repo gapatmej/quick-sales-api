@@ -38,7 +38,7 @@ public class CompanyServiceImpl extends AbstractService implements CompanyServic
         CompanyDTO result = companyMapper.toDto(company);
 
         companyDTO.getAddressCompanies().forEach(aC -> aC.setCompanyId(company.getId()));
-        result.setAddressCompanies(addressCompanyService.saveAll(companyDTO.getAddressCompanies()));
+        result.setAddressCompanies(addressCompanyService.updateByCompany(companyDTO));
 
         return result;
     }
