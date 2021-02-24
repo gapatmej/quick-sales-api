@@ -12,7 +12,8 @@ public enum QueryOperationEnum {
     NOT_IN("![]"),
     NOT_DATA("<>"),
     IN_SEPARATOR(";"),
-    KEY_SEPARATOR("\\.");
+    KEY_SEPARATOR("\\."),
+    OR("*");
 
     private String value;
 

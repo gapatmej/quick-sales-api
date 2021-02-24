@@ -133,3 +133,12 @@ VALUES (13, 1, 'Pay Way', '/base-data/pay-way', 'system', null, 'system', null);
 
 INSERT INTO public.jhi_authority_permit (authority_id, permit_id)
 VALUES (1, 13);
+
+/*
+    Add Invoice Client to permits and rol admin
+ */
+INSERT INTO public.jhi_permit (id, organization_id, name, resource, created_by, created_date, last_modified_by, last_modified_date)
+VALUES (14, 1, 'Factura Cliente', '/sales/invoice-client', 'system', null, 'system', null);
+
+INSERT INTO public.jhi_authority_permit (authority_id, permit_id)
+VALUES (1, 14);

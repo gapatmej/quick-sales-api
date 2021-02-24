@@ -23,6 +23,7 @@ public class UtilsSpecification {
     public static <T> Specification<T> getSpecification(String search, Boolean validateSearch){
         SpecificationsBuilder builder = new SpecificationsBuilder();
         StringBuilder regex = new StringBuilder();
+        regex.append("(\\"+QueryOperationEnum.OR.value()+")?");
         regex.append("([\\w\\.]+?)(");
         regex.append(QueryOperationEnum.LIKE.value()).append("|");
         regex.append(QueryOperationEnum.EQUAL.value()).append("|");
@@ -39,11 +40,11 @@ public class UtilsSpecification {
         Pattern pattern = Pattern.compile(regex.toString());
         Matcher matcher = pattern.matcher(search + ",");
         while (matcher.find()) {
-            builder.with(matcher.group(1), matcher.group(2), matcher.group(3));
+            builder.with(matcher.group(1),matcher.group(2), matcher.group(3), matcher.group(4));
         }
 
         if(validateSearch && builder.size() == 0){
-            builder.with("1",QueryOperationEnum.NOT_DATA.value(), "1");
+            builder.with(null,"1",QueryOperationEnum.NOT_DATA.value(), "1");
         }
 
         return builder.build();

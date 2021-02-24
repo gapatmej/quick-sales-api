@@ -147,7 +147,7 @@ public class UserMapper {
             }
         }else if(mapper instanceof BranchOfficeMapper){
             for ( Object entity : set ) {
-                list.add( branchOfficeMapper.toDtoLight((BranchOffice) entity) );
+                list.add( branchOfficeMapper.toDto((BranchOffice) entity) );
             }
         }
     }

@@ -2,14 +2,24 @@ package ec.com.newsolutions.repository.specification;
 
 public class SearchCriteria {
 
+    private String type;
     private String key;
     private String operation;
     private Object value;
 
-    public SearchCriteria(String key, String operation, Object value) {
+    public SearchCriteria(String type, String key, String operation, Object value) {
+        this.type = type;
         this.key = key;
         this.operation = operation;
         this.value = value;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getKey() {
