@@ -18,6 +18,8 @@ import ec.com.newsolutions.service.ElectronicDocumentService;
 import ec.com.newsolutions.service.EmissionPointService;
 import ec.com.newsolutions.service.InvoiceClientService;
 import ec.com.newsolutions.service.OrganizationService;
+import ec.com.newsolutions.service.dto.BranchOfficeDTO;
+import ec.com.newsolutions.service.dto.EmissionPointDTO;
 import ec.com.newsolutions.service.dto.WorkspaceDTO;
 import ec.com.newsolutions.service.mapper.DocumentAuthorizationMapper;
 import ec.com.newsolutions.utils.electronicdocuments.ElectronicDocumentsUtils;
@@ -62,7 +64,8 @@ public class ElectronicDocumentServiceImpl extends AbstractService implements El
     @Override
     public void build(TributaryDocument tributaryDocument) {
         Long emissionPointId = SecurityUtils.getCurrentWorkspace()
-            .map(WorkspaceDTO::getEmissionPointId)
+            .map(WorkspaceDTO::getEmissionPoint)
+            .map(EmissionPointDTO::getId)
             .orElseThrow(() -> new WorkspaceNotFoundException(EmissionPoint.class.getSimpleName()));
 
         tributaryDocument.setOrganization(organizationService.findOne(tributaryDocument.getOrganization().getId())
@@ -72,7 +75,8 @@ public class ElectronicDocumentServiceImpl extends AbstractService implements El
             .orElseThrow(()-> new EntityNotFoundException(emissionPointId));
 
         Long branchOfficeId = SecurityUtils.getCurrentWorkspace()
-            .map(WorkspaceDTO::getBranchOfficeId)
+            .map(WorkspaceDTO::getBranchOffice)
+            .map(BranchOfficeDTO::getId)
             .orElseThrow(() -> new WorkspaceNotFoundException(BranchOffice.class.getSimpleName()));
         BranchOffice branchOffice = branchOfficeService.findOne(branchOfficeId)
             .orElseThrow(()-> new EntityNotFoundException(branchOfficeId));

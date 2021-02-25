@@ -4,34 +4,33 @@ import java.io.Serializable;
 
 public class WorkspaceDTO implements Serializable {
 
-    private Long organizationId;
+    private OrganizationDTO organization;
 
-    private Long branchOfficeId;
+    private BranchOfficeDTO branchOffice;
 
-    private Long emissionPointId;
+    private EmissionPointDTO emissionPoint;
 
-
-    public Long getOrganizationId() {
-        return organizationId;
+    public OrganizationDTO getOrganization() {
+        return organization;
     }
 
-    public void setOrganizationId(Long organizationId) {
-        this.organizationId = organizationId;
+    public void setOrganization(OrganizationDTO organization) {
+        this.organization = organization;
     }
 
-    public Long getBranchOfficeId() {
-        return branchOfficeId;
+    public BranchOfficeDTO getBranchOffice() {
+        return branchOffice;
     }
 
-    public void setBranchOfficeId(Long branchOfficeId) {
-        this.branchOfficeId = branchOfficeId;
+    public void setBranchOffice(BranchOfficeDTO branchOffice) {
+        this.branchOffice = branchOffice;
     }
 
-    public Long getEmissionPointId() {
-        return emissionPointId;
+    public EmissionPointDTO getEmissionPoint() {
+        return emissionPoint;
     }
 
-    public void setEmissionPointId(Long emissionPointId) {
-        this.emissionPointId = emissionPointId;
+    public void setEmissionPoint(EmissionPointDTO emissionPoint) {
+        this.emissionPoint = emissionPoint;
     }
 }

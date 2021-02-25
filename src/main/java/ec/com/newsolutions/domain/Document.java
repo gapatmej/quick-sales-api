@@ -1,7 +1,12 @@
 package ec.com.newsolutions.domain;
 
+import ec.com.newsolutions.domain.enumeration.BaseDocumentEnum;
+import ec.com.newsolutions.domain.enumeration.CurrencyEnum;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -17,6 +22,10 @@ public class Document extends AbstractMainEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="organization_id", nullable = false)
     private Organization organization;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "base_document", length = 50, nullable = false)
+    private BaseDocumentEnum baseDocument;
 
     @Column(name = "code", length = 20, unique = true, nullable = false)
     private String code;
@@ -56,6 +65,14 @@ public class Document extends AbstractMainEntity{
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public BaseDocumentEnum getBaseDocument() {
+        return baseDocument;
+    }
+
+    public void setBaseDocument(BaseDocumentEnum baseDocument) {
+        this.baseDocument = baseDocument;
     }
 
     public String getName() {

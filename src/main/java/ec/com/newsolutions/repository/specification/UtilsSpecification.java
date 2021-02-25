@@ -3,6 +3,7 @@ import ec.com.newsolutions.domain.Organization;
 import ec.com.newsolutions.repository.enumeration.QueryOperationEnum;
 import ec.com.newsolutions.security.SecurityUtils;
 import ec.com.newsolutions.security.jwt.TokenProvider;
+import ec.com.newsolutions.service.dto.OrganizationDTO;
 import ec.com.newsolutions.service.dto.WorkspaceDTO;
 import ec.com.newsolutions.utils.Utils;
 import org.springframework.data.jpa.domain.Specification;
@@ -51,7 +52,7 @@ public class UtilsSpecification {
     }
 
     public static <T> Specification<T> getSpecificationWithWorkspace(String search){
-        Optional<Long> organizationId =  SecurityUtils.getCurrentWorkspace().map(WorkspaceDTO::getOrganizationId);
+        Optional<Long> organizationId =  SecurityUtils.getCurrentWorkspace().map(WorkspaceDTO::getOrganization).map(OrganizationDTO::getId);
         if(StringUtils.isEmpty(search) ){
             search = "search=organization.id="+organizationId.get();
         }else{

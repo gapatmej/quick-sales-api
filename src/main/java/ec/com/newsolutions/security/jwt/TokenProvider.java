@@ -123,7 +123,7 @@ public class TokenProvider {
 
     public String getClaimnById(String token, String id) {
         try{
-            return this.getClaimns(token).get(id).toString();
+            return GsonUtils.entityToJson(this.getClaimns(token).get(id));
         }catch(Exception ex){
             log.info("Invalid ID searched in the claim.");
             return null;

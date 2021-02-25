@@ -1,5 +1,6 @@
 package ec.com.newsolutions.security.jwt;
 
+import ec.com.newsolutions.service.dto.OrganizationDTO;
 import org.apache.commons.io.IOUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -45,14 +46,13 @@ public class JWTFilter extends GenericFilterBean {
             Authentication authentication = this.tokenProvider.getAuthentication(jwt);
             SecurityContextHolder.getContext().setAuthentication(authentication);
             if(validateRequestURIForOrganizationFilter(httpServletRequest)){
-                Object claimWorkspace = this.tokenProvider.getClaimnWorkspaceById(jwt,"organizationId");
-                if(!StringUtils.isEmpty(claimWorkspace)){
-                    Long organizationId = Long.parseLong(claimWorkspace.toString());
+                OrganizationDTO organizationDTO = (OrganizationDTO) this.tokenProvider.getClaimnWorkspaceById(jwt,"organization");
+                if(!StringUtils.isEmpty(organizationDTO)){
                     XSSRequestWrapper wrappedRequest = new XSSRequestWrapper(
                         (HttpServletRequest) servletRequest);
 
                     String body = IOUtils.toString(wrappedRequest.getReader());
-                    body = body.replaceAll(PATTERN_ORGANIZATION_REPLACE,"\"organizationId\": "+organizationId.toString());
+                    body = body.replaceAll(PATTERN_ORGANIZATION_REPLACE,"\"organizationId\": "+organizationDTO.getId().toString());
                     wrappedRequest.resetInputStream(body.getBytes());
                     servletRequest = wrappedRequest;
                 }
