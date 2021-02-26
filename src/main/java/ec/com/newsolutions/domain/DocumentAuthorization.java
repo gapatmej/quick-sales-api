@@ -6,9 +6,10 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "document_authorization")
+@Table(name = "document_authorization", uniqueConstraints=@UniqueConstraint(columnNames={"document_id", "emission_point_id"}))
 public class DocumentAuthorization extends AbstractMainEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)

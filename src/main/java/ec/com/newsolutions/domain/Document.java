@@ -1,7 +1,6 @@
 package ec.com.newsolutions.domain;
 
 import ec.com.newsolutions.domain.enumeration.BaseDocumentEnum;
-import ec.com.newsolutions.domain.enumeration.CurrencyEnum;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

@@ -1,6 +1,7 @@
 package ec.com.newsolutions.service;
 
 import ec.com.newsolutions.domain.DocumentAuthorization;
+import ec.com.newsolutions.domain.enumeration.BaseDocumentEnum;
 import ec.com.newsolutions.service.dto.DocumentAuthorizationDTO;
 
 import java.util.List;
@@ -10,5 +11,6 @@ public interface DocumentAuthorizationService extends AbstractServiceRest<Docume
 
     List<DocumentAuthorizationDTO> saveAll(List<DocumentAuthorizationDTO> documentAuthorizationDTOS);
     Optional<DocumentAuthorization>  findByDocumentIdAndEmissionPointId(Long documentId, Long emissionPointId);
+    Optional<DocumentAuthorizationDTO>  findByBaseDocumentAndEmissionPoint(BaseDocumentEnum baseDocumentEnum, Long emissionPointId);
     void deleteByDocument(Long branchOfficeId);
 }

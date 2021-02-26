@@ -36,7 +36,7 @@ public class BankResource extends AbstractResource{
     private final BankService bankService;
 
     public BankResource(BankService bankService) {
-        super(BankService.class, "bank");
+        super(BankResource.class, "bank");
         this.bankService = bankService;
     }
 

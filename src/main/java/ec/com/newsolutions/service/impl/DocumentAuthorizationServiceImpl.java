@@ -1,6 +1,7 @@
 package ec.com.newsolutions.service.impl;
 
 import ec.com.newsolutions.domain.DocumentAuthorization;
+import ec.com.newsolutions.domain.enumeration.BaseDocumentEnum;
 import ec.com.newsolutions.repository.DocumentAuthorizationRepository;
 import ec.com.newsolutions.service.DocumentAuthorizationService;
 import ec.com.newsolutions.service.dto.DocumentAuthorizationDTO;
@@ -75,6 +76,12 @@ public class DocumentAuthorizationServiceImpl extends AbstractService implements
     public Optional<DocumentAuthorization> findByDocumentIdAndEmissionPointId(Long documentId, Long emissionPointId) {
         log.debug("Request to get Document Authorization by documentId :{}, emissionPointId : {}", documentId, emissionPointId);
         return documentAuthorizationRepository.findByDocumentIdAndEmissionPointId(documentId,emissionPointId);
+    }
+
+    @Override
+    public Optional<DocumentAuthorizationDTO> findByBaseDocumentAndEmissionPoint(BaseDocumentEnum baseDocumentEnum, Long emissionPointId) {
+        log.debug("Request to get Document Authorization by baseDocument :{}, emissionPointId : {}", baseDocumentEnum, emissionPointId);
+        return documentAuthorizationRepository.findByDocumentBaseDocumentAndEmissionPointId(baseDocumentEnum,emissionPointId).map(documentAuthorizationMapper::toDto);
     }
 
     @Override
