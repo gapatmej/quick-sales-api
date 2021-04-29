@@ -35,7 +35,7 @@ public class OrganizationDTO extends  AbstractMainDTO{
 
     private EmissionTypeEnum emissionType = EmissionTypeEnum.NORMAL;
 
-    private String certificateName;
+    private String certificateFileName;
 
     private String certificatePassword;
 
@@ -151,12 +151,12 @@ public class OrganizationDTO extends  AbstractMainDTO{
         this.emissionType = emissionType;
     }
 
-    public String getCertificateName() {
-        return certificateName;
+    public String getCertificateFileName() {
+        return certificateFileName;
     }
 
-    public void setCertificateName(String certificateName) {
-        this.certificateName = certificateName;
+    public void setCertificateFileName(String certificateFileName) {
+        this.certificateFileName = certificateFileName;
     }
 
     public String getCertificatePassword() {

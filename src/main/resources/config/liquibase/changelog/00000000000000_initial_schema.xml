@@ -53,6 +53,12 @@
             <column name="emission_type" type="varchar(10)">
                 <constraints nullable="false" />
             </column>
+            <column name="certificate_file_name" type="varchar(50)">
+                <constraints nullable="false" />
+            </column>
+            <column name="certificate_password" type="varchar(30)">
+                <constraints nullable="false" />
+            </column>
             <column name="created_by" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>

@@ -33,7 +33,7 @@ public class ElectronicDocumentsUtils {
             .append(tributaryDocument.getOrganization().getId())
             .append(applicationProperties.getPaths().getCertificate().getMain())
             .append(Utils.DIRECTORY_SEPARATOR)
-            .append(tributaryDocument.getOrganization().getCertificateName())
+            .append(tributaryDocument.getOrganization().getCertificateFileName())
             .toString();
     }
 
