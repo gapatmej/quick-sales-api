@@ -2,11 +2,11 @@ package ec.com.newsolutions.service.impl;
 
 import ec.com.newsolutions.domain.AddressCompany;
 import ec.com.newsolutions.repository.AddressCompanyRepository;
+import ec.com.newsolutions.repository.specification.UtilsSpecification;
 import ec.com.newsolutions.service.AddressCompanyService;
 import ec.com.newsolutions.service.dto.AddressCompanyDTO;
 import ec.com.newsolutions.service.dto.CompanyDTO;
 import ec.com.newsolutions.service.mapper.AddressCompanyMapper;
-import net.logstash.logback.encoder.org.apache.commons.lang3.BooleanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -38,8 +38,9 @@ public class AddressCompanyServiceImpl extends AbstractService implements Addres
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<AddressCompanyDTO> findAll(String search, Pageable pageable) {
-        throw new UnsupportedOperationException();
+        return addressCompanyRepository.findAll( UtilsSpecification.<AddressCompany>getSpecificationWithWorkspace(search), pageable).map(addressCompanyMapper::toDto);
     }
 
     @Override

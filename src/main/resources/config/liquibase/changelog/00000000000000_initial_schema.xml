@@ -102,6 +102,35 @@
                                  referencedColumnNames="id"
                                  referencedTableName="organization"/>
 
+        <createTable tableName="emission_point">
+            <column name="id" type="bigint" >
+                <constraints primaryKey="true" nullable="false" unique="true"/>
+            </column>
+            <column name="branch_office_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="emission_point_code" type="varchar(3)">
+                <constraints nullable="false" />
+            </column>
+            <column name="name" type="varchar(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="varchar(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp"/>
+            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="last_modified_date" type="timestamp"/>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="branch_office_id"
+                                 baseTableName="emission_point"
+                                 constraintName="fk_branch_office_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="branch_office"/>
+
+        <addUniqueConstraint tableName="emission_point" columnNames="branch_office_id, emission_point_code"/>
+
         <createTable tableName="jhi_user">
             <column name="id" type="bigint" >
                 <constraints primaryKey="true" nullable="false" unique="true"/>
@@ -304,6 +333,16 @@
             <column name="organization_id" type="numeric"/>
             <column name="active" type="boolean"/>
             <column name="created_date" type="timestamp"/>
+        </loadData>
+
+        <loadData
+            file="config/liquibase/data/emission_point.csv"
+            separator=";"
+            tableName="emission_point">
+            <column name="id" type="numeric"/>
+            <column name="branch_office_id" type="numeric"/>
+            <column name="created_date" type="timestamp"/>
+            <column name="last_modified_date" type="timestamp"/>
         </loadData>
 
         <loadData
