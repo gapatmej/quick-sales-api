@@ -30,7 +30,7 @@ public class DocumentAuthorizationResource extends AbstractResource {
         this.documentAuthorizationService = documentAuthorizationService;
     }
 
-    @GetMapping("/document-authorization/find-by-base-document-and-emission-point")
+    @GetMapping("/document-authorizations/find-by-base-document-and-emission-point")
     public ResponseEntity<DocumentAuthorizationDTO> findByBaseDocumentAndEmissionPoint(BaseDocumentEnum baseDocumentEnum,
                                                                                        Long emissionPointId) {
         log.debug("REST request to get a page of Document Authorization ");
