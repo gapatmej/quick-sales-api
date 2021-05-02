@@ -8,7 +8,7 @@ public class TaxDTO extends AbstractMainDTO {
 
     private TaxTypeEnum taxType;
 
-    private String code;
+    private Integer code;
 
     private String name;
 
@@ -34,11 +34,11 @@ public class TaxDTO extends AbstractMainDTO {
         this.taxType = taxType;
     }
 
-    public String getCode() {
+    public Integer getCode() {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(Integer code) {
         this.code = code;
     }
 

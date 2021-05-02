@@ -6,4 +6,5 @@ import ec.com.newsolutions.service.dto.InvoiceClientDTO;
 
 public interface InvoiceClientService extends AbstractServiceRest<InvoiceClientDTO>, AbstractService<InvoiceClient> {
     void calculateTotals(InvoiceClient invoiceClient);
+    InvoiceClientDTO calculateTotals(InvoiceClientDTO invoiceClient);
 }

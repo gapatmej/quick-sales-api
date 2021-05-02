@@ -21,7 +21,7 @@ public class Tax extends AbstractMainEntity {
     private TaxTypeEnum taxType;
 
     @Column(name = "code", length = 20, nullable = false, unique = true)
-    private String code;
+    private Integer code;
 
     @Column(name = "name", length = 200, nullable = false)
     private String name;
@@ -51,11 +51,11 @@ public class Tax extends AbstractMainEntity {
         this.taxType = taxType;
     }
 
-    public String getCode() {
+    public Integer getCode() {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(Integer code) {
         this.code = code;
     }
 

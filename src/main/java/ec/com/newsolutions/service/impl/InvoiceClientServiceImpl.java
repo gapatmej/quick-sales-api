@@ -195,4 +195,12 @@ public class InvoiceClientServiceImpl extends AbstractService implements Invoice
         invoiceClient.setTotal(total);
     }
 
+    @Override
+    public InvoiceClientDTO calculateTotals(InvoiceClientDTO invoiceClient) {
+        InvoiceClient result = invoiceClientMapper.toEntity(invoiceClient);
+        detailInvoiceClientService.build(result);
+        calculateTotals(result);
+        return invoiceClientMapper.toDto(result);
+    }
+
 }

@@ -51,7 +51,16 @@ public class InvoiceClientResource extends AbstractResource {
 
         InvoiceClientDTO result = invoiceClientService.save(invoiceClientDTO);
         return ResponseEntity.ok()
-            .headers(ec.com.newsolutions.web.rest.util.HeaderUtil.createEntityUpdateAlert(true, entityName, result.getId().toString()))
+            .headers(HeaderUtil.createEntityCreationAlert(true, entityName, result.getId().toString()))
+            .body(result);
+    }
+
+    @PutMapping("/invoices-client/calculate-totals")
+    public ResponseEntity<InvoiceClientDTO> calculateTotals(@Valid @RequestBody InvoiceClientDTO invoiceClientDTO) throws URISyntaxException {
+        log.debug("REST request to calculate totals InvoiceClientDTO : {}", GsonUtils.entityToJson(invoiceClientDTO));
+
+        InvoiceClientDTO result = invoiceClientService.calculateTotals(invoiceClientDTO);
+        return ResponseEntity.ok()
             .body(result);
     }
 

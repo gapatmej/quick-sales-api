@@ -17,4 +17,13 @@ public enum SRIDocumentStateEnum {
     public String state() {
         return state;
     }
+
+    public static SRIDocumentStateEnum getByState(String state) {
+        for (SRIDocumentStateEnum i : values()) {
+            if (i.state.equals(state)) {
+                return i;
+            }
+        }
+        throw new IllegalArgumentException(String.valueOf(state));
+    }
 }

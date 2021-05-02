@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 public class TaxJaxb {
 
     private int code;
-    private String percentagecode;
+    private Integer percentagecode;
     private Integer rate;
     private BigDecimal taxBase;
     private BigDecimal value;
@@ -23,11 +23,11 @@ public class TaxJaxb {
     }
 
     @XmlElement(name = "codigoPorcentaje")
-    public String getPercentagecode() {
+    public Integer getPercentagecode() {
         return percentagecode;
     }
 
-    public void setPercentagecode(String percentagecode) {
+    public void setPercentagecode(Integer percentagecode) {
         this.percentagecode = percentagecode;
     }
 

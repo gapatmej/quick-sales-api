@@ -1,6 +1,7 @@
 package ec.com.newsolutions.domain;
 
 import ec.com.newsolutions.config.Constants;
+import es.mityc.firmaJava.libreria.xades.elementos.xades.Int;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,7 +23,7 @@ public class TaxInvoice extends AbstractMainEntity {
     private int code;
 
     @Column(name = "percentage_code", length = 20, nullable = false)
-    private String percentageCode;
+    private Integer percentageCode;
 
     @Column(name = "rate", nullable = false)
     private Float rate;
@@ -65,11 +66,11 @@ public class TaxInvoice extends AbstractMainEntity {
         this.code = code;
     }
 
-    public String getPercentageCode() {
+    public Integer getPercentageCode() {
         return percentageCode;
     }
 
-    public void setPercentageCode(String percentageCode) {
+    public void setPercentageCode(Integer percentageCode) {
         this.percentageCode = percentageCode;
     }
 
