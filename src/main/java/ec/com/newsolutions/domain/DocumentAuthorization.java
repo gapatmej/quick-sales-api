@@ -21,13 +21,13 @@ public class DocumentAuthorization extends AbstractMainEntity {
     private EmissionPoint emissionPoint;
 
     @Column(name = "since")
-    private int since;
+    private Integer since;
 
     @Column(name = "until")
-    private int until;
+    private Integer until;
 
     @Column(name = "sequence")
-    private int sequence;
+    private Integer sequence;
 
     public Document getDocument() {
         return document;
@@ -45,27 +45,27 @@ public class DocumentAuthorization extends AbstractMainEntity {
         this.emissionPoint = emissionPoint;
     }
 
-    public int getSince() {
+    public Integer getSince() {
         return since;
     }
 
-    public void setSince(int since) {
+    public void setSince(Integer since) {
         this.since = since;
     }
 
-    public int getUntil() {
+    public Integer getUntil() {
         return until;
     }
 
-    public void setUntil(int until) {
+    public void setUntil(Integer until) {
         this.until = until;
     }
 
-    public int getSequence() {
+    public Integer getSequence() {
         return sequence;
     }
 
-    public void setSequence(int sequence) {
+    public void setSequence(Integer sequence) {
         this.sequence = sequence;
     }
 }

@@ -1,5 +1,7 @@
 package ec.com.newsolutions.service.dto;
 
+import ec.com.newsolutions.domain.enumeration.BaseDocumentEnum;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,17 +9,19 @@ public class DocumentDTO extends AbstractMainDTO{
 
     private Long organizationId;
 
+    private BaseDocumentEnum baseDocument;
+
     private String code;
 
     private String name;
 
     private String prefix;
 
-    private int since;
+    private Integer since;
 
-    private int until;
+    private Integer until;
 
-    private int sequence;
+    private Integer sequence;
 
     private String description;
 
@@ -29,6 +33,14 @@ public class DocumentDTO extends AbstractMainDTO{
 
     public void setOrganizationId(Long organizationId) {
         this.organizationId = organizationId;
+    }
+
+    public BaseDocumentEnum getBaseDocument() {
+        return baseDocument;
+    }
+
+    public void setBaseDocument(BaseDocumentEnum baseDocument) {
+        this.baseDocument = baseDocument;
     }
 
     public String getCode() {
@@ -55,27 +67,27 @@ public class DocumentDTO extends AbstractMainDTO{
         this.prefix = prefix;
     }
 
-    public int getSince() {
+    public Integer getSince() {
         return since;
     }
 
-    public void setSince(int since) {
+    public void setSince(Integer since) {
         this.since = since;
     }
 
-    public int getUntil() {
+    public Integer getUntil() {
         return until;
     }
 
-    public void setUntil(int until) {
+    public void setUntil(Integer until) {
         this.until = until;
     }
 
-    public int getSequence() {
+    public Integer getSequence() {
         return sequence;
     }
 
-    public void setSequence(int sequence) {
+    public void setSequence(Integer sequence) {
         this.sequence = sequence;
     }
 

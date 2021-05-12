@@ -4,15 +4,17 @@ public class DocumentAuthorizationDTO extends AbstractMainDTO {
 
     private Long documentId;
 
-    private Long emissionPointId;
+    private EmissionPointDTO emissionPoint;
 
-    private int since;
+    private Integer since;
 
-    private int until;
+    private Integer until;
 
-    private int sequence;
+    private Integer sequence;
 
     private boolean deleted;
+
+    private BranchOfficeDTO branchOffice;
 
     public Long getDocumentId() {
         return documentId;
@@ -22,35 +24,35 @@ public class DocumentAuthorizationDTO extends AbstractMainDTO {
         this.documentId = documentId;
     }
 
-    public Long getEmissionPointId() {
-        return emissionPointId;
+    public EmissionPointDTO getEmissionPoint() {
+        return emissionPoint;
     }
 
-    public void setEmissionPointId(Long emissionPointId) {
-        this.emissionPointId = emissionPointId;
+    public void setEmissionPoint(EmissionPointDTO emissionPoint) {
+        this.emissionPoint = emissionPoint;
     }
 
-    public int getSince() {
+    public Integer getSince() {
         return since;
     }
 
-    public void setSince(int since) {
+    public void setSince(Integer since) {
         this.since = since;
     }
 
-    public int getUntil() {
+    public Integer getUntil() {
         return until;
     }
 
-    public void setUntil(int until) {
+    public void setUntil(Integer until) {
         this.until = until;
     }
 
-    public int getSequence() {
+    public Integer getSequence() {
         return sequence;
     }
 
-    public void setSequence(int sequence) {
+    public void setSequence(Integer sequence) {
         this.sequence = sequence;
     }
 
@@ -61,4 +63,13 @@ public class DocumentAuthorizationDTO extends AbstractMainDTO {
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
     }
+
+    public BranchOfficeDTO getBranchOffice() {
+        return branchOffice;
+    }
+
+    public void setBranchOffice(BranchOfficeDTO branchOffice) {
+        this.branchOffice = branchOffice;
+    }
+
 }

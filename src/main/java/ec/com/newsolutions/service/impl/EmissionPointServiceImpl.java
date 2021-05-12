@@ -2,6 +2,7 @@ package ec.com.newsolutions.service.impl;
 
 import ec.com.newsolutions.domain.EmissionPoint;
 import ec.com.newsolutions.repository.EmissionPointRepository;
+import ec.com.newsolutions.repository.specification.UtilsSpecification;
 import ec.com.newsolutions.service.EmissionPointService;
 import ec.com.newsolutions.service.dto.BranchOfficeDTO;
 import ec.com.newsolutions.service.dto.EmissionPointDTO;
@@ -42,7 +43,8 @@ public class EmissionPointServiceImpl extends AbstractService implements Emissio
     @Override
     @Transactional(readOnly = true)
     public Page<EmissionPointDTO> findAll(String search, Pageable pageable) {
-        throw new UnsupportedOperationException();
+        log.debug("Request to get all Emission Points");
+        return emissionPointRepository.findAll( UtilsSpecification.<EmissionPoint>getSpecificationWithWorkspace(search), pageable).map(emissionPointMapper::toDto);
     }
 
     @Override

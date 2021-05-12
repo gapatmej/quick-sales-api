@@ -261,38 +261,42 @@ public class SRIElectronicDocumentServiceImpl extends AbstractService implements
 
     @Override
     public Autorizacion authorize(TributaryDocument tributaryDocument) throws ElectronicDocumentException {
-        Autorizacion autorizacion = null;
-        ec.com.newsolutions.web.wsdl.sri.authorization.ObjectFactory objectFactory = new ec.com.newsolutions.web.wsdl.sri.authorization.ObjectFactory();
-        AutorizacionComprobante autorizacionComprobante = new AutorizacionComprobante();
-        autorizacionComprobante.setClaveAccesoComprobante(tributaryDocument.getElectronicDocument().getAccessKey());
-        AutorizacionComprobanteResponse response = authorizationClient.getAuthorizationResponse(objectFactory.createAutorizacionComprobante(autorizacionComprobante));
-        RespuestaComprobante.Autorizaciones authorizations = response.getRespuestaAutorizacionComprobante().getAutorizaciones();
+        try {
+            Autorizacion autorizacion = null;
+            ec.com.newsolutions.web.wsdl.sri.authorization.ObjectFactory objectFactory = new ec.com.newsolutions.web.wsdl.sri.authorization.ObjectFactory();
+            AutorizacionComprobante autorizacionComprobante = new AutorizacionComprobante();
+            autorizacionComprobante.setClaveAccesoComprobante(tributaryDocument.getElectronicDocument().getAccessKey());
+            AutorizacionComprobanteResponse response = authorizationClient.getAuthorizationResponse(objectFactory.createAutorizacionComprobante(autorizacionComprobante));
+            RespuestaComprobante.Autorizaciones authorizations = response.getRespuestaAutorizacionComprobante().getAutorizaciones();
 
-        if (authorizations != null && authorizations.getAutorizacion().size() > 0) {
-            autorizacion = authorizations.getAutorizacion().get(0);
-            String errorMessage = "";
-            if (autorizacion != null && autorizacion.getMensajes() != null) {
-                for (ec.com.newsolutions.web.wsdl.sri.authorization.Mensaje mensaje : autorizacion.getMensajes().getMensaje()) {
-                    SriMessage sriMessage = new SriMessage();
-                    sriMessage.setIdentificator(Integer.parseInt(mensaje.getIdentificador()));
-                    sriMessage.setAdditionalInformation(sriMessage.getAdditionalInformation());
-                    sriMessage.setMessage(sriMessage.getMessage());
-                    sriMessage.setType(sriMessage.getType());
-                    sriMessage.setElectronicDocument(tributaryDocument.getElectronicDocument());
-                    sriMessageService.save(sriMessage);
-                    errorMessage = sriMessage.getMessage();
+            if (authorizations != null && authorizations.getAutorizacion().size() > 0) {
+                autorizacion = authorizations.getAutorizacion().get(0);
+                String errorMessage = "";
+                if (autorizacion != null && autorizacion.getMensajes() != null) {
+                    for (ec.com.newsolutions.web.wsdl.sri.authorization.Mensaje mensaje : autorizacion.getMensajes().getMensaje()) {
+                        SriMessage sriMessage = new SriMessage();
+                        sriMessage.setIdentificator(Integer.parseInt(mensaje.getIdentificador()));
+                        sriMessage.setAdditionalInformation(mensaje.getInformacionAdicional());
+                        sriMessage.setMessage(mensaje.getMensaje());
+                        sriMessage.setType(mensaje.getTipo());
+                        sriMessage.setElectronicDocument(tributaryDocument.getElectronicDocument());
+                        sriMessageService.save(sriMessage);
+                        errorMessage = sriMessage.getMessage();
+                    }
+                }
+                if (SRIDocumentStateEnum.AUTHORIZED.state().equals(autorizacion.getEstado())) {
+                    electronicDocumentService.updateSriAuthorizedFields(tributaryDocument.getElectronicDocument(),
+                        SRIDocumentStateEnum.AUTHORIZED, Utils.xmlGregorianCalendarToInstant(autorizacion.getFechaAutorizacion()));
+                } else {
+                    throw new ElectronicDocumentException(ProccessElectronicDocument.AUTHORIZATION, tributaryDocument.getElectronicDocument().getAccessKey(), errorMessage);
+
                 }
             }
-            if (SRIDocumentStateEnum.AUTHORIZED.state().equals(autorizacion.getEstado())) {
-                electronicDocumentService.updateSriAuthorizedFields(tributaryDocument.getElectronicDocument(),
-                    SRIDocumentStateEnum.AUTHORIZED, Utils.xmlGregorianCalendarToInstant(autorizacion.getFechaAutorizacion()));
-            } else {
-                throw new ElectronicDocumentException(ProccessElectronicDocument.AUTHORIZATION, tributaryDocument.getElectronicDocument().getAccessKey(), errorMessage);
-
-            }
+            return autorizacion;
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            throw new ElectronicDocumentException(ProccessElectronicDocument.AUTHORIZATION, tributaryDocument.getElectronicDocument().getAccessKey(), e.getMessage());
         }
-        return autorizacion;
-
     }
 
 //    @Override

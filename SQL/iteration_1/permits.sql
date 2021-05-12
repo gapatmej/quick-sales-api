@@ -29,25 +29,6 @@ values (1,3),
  */
 
 /*
-    Add Pay Way to permits and rol admin
- */
-
-INSERT INTO jhi_permit (id, organization_id, name, resource, created_by, created_date, last_modified_by, last_modified_date)
-VALUES (13, 1, 'Pay Way', '/base-data/pay-way', 'system', null, 'system', null);
-
-INSERT INTO jhi_authority_permit (authority_id, permit_id)
-VALUES (1, 13);
-
-/*
-    Add Invoice Client to permits and rol admin
- */
-INSERT INTO jhi_permit (id, organization_id, name, resource, created_by, created_date, last_modified_by, last_modified_date)
-VALUES (14, 1, 'Factura Cliente', '/sales/invoice-client', 'system', null, 'system', null);
-
-INSERT INTO jhi_authority_permit (authority_id, permit_id)
-VALUES (1, 14);
-
-/*
     Add Company Category to permits and rol admin
  */
 INSERT INTO jhi_permit (id, organization_id, name, resource, created_by, created_date, last_modified_by, last_modified_date)
@@ -70,4 +51,33 @@ VALUES (12, 1, 'Banco', '/configuration/bank', 'system', null, 'system', null);
 
 INSERT INTO jhi_authority_permit (authority_id, permit_id)
 VALUES (1, 12);
+
+/*
+    Add Pay Way to permits and rol admin
+ */
+
+INSERT INTO jhi_permit (id, organization_id, name, resource, created_by, created_date, last_modified_by, last_modified_date)
+VALUES (13, 1, 'Pay Way', '/base-data/pay-way', 'system', null, 'system', null);
+
+INSERT INTO jhi_authority_permit (authority_id, permit_id)
+VALUES (1, 13);
+
+/*
+    Add Invoice Client to permits and rol admin
+ */
+INSERT INTO jhi_permit (id, organization_id, name, resource, created_by, created_date, last_modified_by, last_modified_date)
+VALUES (14, 1, 'Factura Cliente', '/sales/invoice-client', 'system', null, 'system', null);
+
+INSERT INTO jhi_authority_permit (authority_id, permit_id)
+VALUES (1, 14);
+
+/*
+    Add Document to permits and rol admin
+ */
+INSERT INTO jhi_permit (id, organization_id, name, resource, created_by, created_date, last_modified_by, last_modified_date)
+VALUES (15, 1, 'Documento', '/base-data/document', 'system', null, 'system', null);
+
+INSERT INTO jhi_authority_permit (authority_id, permit_id)
+VALUES (1, 15);
+
 
