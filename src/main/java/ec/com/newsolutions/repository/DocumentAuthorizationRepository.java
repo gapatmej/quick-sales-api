@@ -4,6 +4,7 @@ import ec.com.newsolutions.domain.DocumentAuthorization;
 import ec.com.newsolutions.domain.enumeration.BaseDocumentEnum;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -15,4 +16,5 @@ public interface DocumentAuthorizationRepository extends JpaRepositoryCustom<Doc
 
     Optional<DocumentAuthorization> findByDocumentBaseDocumentAndEmissionPointId(BaseDocumentEnum baseDocumentEnum, Long emissionPointId);
 
+    List<DocumentAuthorization> findByDocumentId(Long documentId);
 }

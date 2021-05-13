@@ -5,6 +5,7 @@ import ec.com.newsolutions.domain.enumeration.BaseDocumentEnum;
 import ec.com.newsolutions.repository.DocumentAuthorizationRepository;
 import ec.com.newsolutions.service.DocumentAuthorizationService;
 import ec.com.newsolutions.service.dto.DocumentAuthorizationDTO;
+import ec.com.newsolutions.service.dto.DocumentDTO;
 import ec.com.newsolutions.service.mapper.DocumentAuthorizationMapper;
 import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.data.domain.Page;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -34,21 +36,6 @@ public class DocumentAuthorizationServiceImpl extends AbstractService implements
         log.debug("Request to save Document Authorization : {}", documentAuthorizationDTO);
         DocumentAuthorization documentAuthorization = save(documentAuthorizationMapper.toEntity(documentAuthorizationDTO));
         return documentAuthorizationMapper.toDto(documentAuthorization);
-    }
-
-    @Override
-    public List<DocumentAuthorizationDTO> saveAll(List<DocumentAuthorizationDTO> documentAuthorizationDTOS) {
-        log.debug("Request to save Document Authorizations : {}", documentAuthorizationDTOS);
-        List<DocumentAuthorizationDTO> result = new ArrayList<>();
-        documentAuthorizationDTOS.forEach(dA->{
-            if(BooleanUtils.isTrue(dA.isDeleted())){
-                delete(dA.getId());
-            }else{
-                result.add(save(dA));
-            }
-        });
-
-        return result;
     }
 
     @Override
@@ -93,5 +80,25 @@ public class DocumentAuthorizationServiceImpl extends AbstractService implements
     @Override
     public void deleteByDocument(Long idDocument) {
         documentAuthorizationRepository.deleteByDocumentId(idDocument);
+    }
+
+    @Override
+    public List<DocumentAuthorizationDTO> updateByDocument(DocumentDTO documentDTO) {
+        log.debug("Request to save Document Authorizations : {}", documentDTO.getDocumentAuthorizations());
+
+        List<DocumentAuthorization> documentAuthorizations = documentAuthorizationRepository.findByDocumentId(documentDTO.getId());
+
+        List<Long> newsId = documentDTO.getDocumentAuthorizations().stream().filter(eP->eP.getId()!= null).map(DocumentAuthorizationDTO::getId).collect(Collectors.toList());
+        List<Long> oldsIdToDeleted = documentAuthorizations.stream().map(DocumentAuthorization::getId).collect(Collectors.toList());
+        oldsIdToDeleted.removeAll(newsId);
+
+        documentAuthorizationRepository.deleteInBatch(documentAuthorizations.stream().filter(eP->oldsIdToDeleted.contains(eP.getId())).collect(Collectors.toList()));
+
+        List<DocumentAuthorizationDTO> result = new ArrayList<>();
+        documentDTO.getDocumentAuthorizations().forEach(ep->{
+            result.add(save(ep));
+        });
+
+        return result;
     }
 }

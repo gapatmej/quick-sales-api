@@ -33,11 +33,11 @@ public class DocumentServiceImpl extends AbstractService implements DocumentServ
     @Override
     public DocumentDTO save(DocumentDTO documentDTO) {
         log.debug("Request to save Document : {}", GsonUtils.entityToJson(documentDTO));
-        final Document document = save(documentMapper.toEntity(documentDTO));
+        Document document = save(documentMapper.toEntity(documentDTO));
         DocumentDTO result = documentMapper.toDto(document);
 
         documentDTO.getDocumentAuthorizations().forEach(dA -> dA.setDocumentId(document.getId()));
-        result.setDocumentAuthorizations(documentAuthorizationService.saveAll(documentDTO.getDocumentAuthorizations()));
+        result.setDocumentAuthorizations(documentAuthorizationService.updateByDocument(documentDTO));
         return result;
     }
 
