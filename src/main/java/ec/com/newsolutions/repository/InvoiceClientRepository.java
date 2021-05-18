@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface InvoiceClientRepository extends JpaRepositoryCustom<InvoiceClient, Long> {
+public interface InvoiceClientRepository extends JpaRepositoryCustom<InvoiceClient, Long>, CustomInvoiceClientRepository {
 
     @Query(" SELECT new ec.com.newsolutions.service.dto.ReportInvoiceClientDTO( " +
         " eD.sriEnvironment, eD.emissionType, eD.accessKey, eD.receiptType, eD.sriDocumentState, " +
@@ -24,6 +24,5 @@ public interface InvoiceClientRepository extends JpaRepositoryCustom<InvoiceClie
         " JOIN ElectronicDocument eD on eD.id = iC.electronicDocument.id" +
         " WHERE iC.id = :idInvoiceClient ")
     List<ReportInvoiceClientDTO> reportInvoiceClient(@Param("idInvoiceClient") Long idInvoiceClient);
-
 
 }

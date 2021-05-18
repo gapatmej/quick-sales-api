@@ -18,6 +18,7 @@ import ec.com.newsolutions.service.InvoiceClientService;
 import ec.com.newsolutions.service.PaymentService;
 import ec.com.newsolutions.service.SRIElectronicDocumentService;
 import ec.com.newsolutions.service.TaxInvoiceService;
+import ec.com.newsolutions.service.dto.BatchElectronicDocumentDTO;
 import ec.com.newsolutions.service.dto.InvoiceClientDTO;
 import ec.com.newsolutions.service.mapper.InvoiceClientMapper;
 import ec.com.newsolutions.utils.GsonUtils;
@@ -201,6 +202,11 @@ public class InvoiceClientServiceImpl extends AbstractService implements Invoice
         detailInvoiceClientService.build(result);
         calculateTotals(result);
         return invoiceClientMapper.toDto(result);
+    }
+
+    @Override
+    public Page<BatchElectronicDocumentDTO> getPendientElectronicDocument(Pageable pageable) {
+        return invoiceClientRepository.getPendientElectronicDocument(pageable);
     }
 
 }
